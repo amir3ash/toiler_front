@@ -1,0 +1,9 @@
+/node_modules/
+/public/build/
+/.idea/
+.DS_Store
+
+commit.sh
+public/assets/vendor/*
+public/assets/styles/tailwind.css*
+public/*.html
