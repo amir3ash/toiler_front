@@ -8,6 +8,7 @@ import del from 'rollup-plugin-delete'
 import gzipPlugin from 'rollup-plugin-gzip'
 import { brotliCompress } from 'zlib'
 import { promisify } from 'util'
+import { typescript } from "svelte-preprocess";
 
 // library that helps you import in svelte with
 // absolute paths, instead of
@@ -23,7 +24,7 @@ const production = !process.env.ROLLUP_WATCH;
 
 // configure aliases for absolute imports
 const aliases = alias({
-  resolve: [".svelte", ".js"], //optional, by default this will just look for .js files or folders
+  resolve: [".svelte", ".js", ".ts"], //optional, by default this will just look for .js files or folders
   entries: [
     { find: "components", replacement: "src/components" },
     { find: "views", replacement: "src/views" },
@@ -135,7 +136,7 @@ function serve() {
 }
 
 export default {
-  input: "src/main.js",
+  input: "src/main.ts",
   output: [
     {
       sourcemap: true,
@@ -181,6 +182,7 @@ export default {
         dedupe: ['svelte']
     }),
     commonjs(),
+		typescript({ sourceMap: !production }),
 
     // In dev mode, call `npm run start` once
     // the bundle has been generated
