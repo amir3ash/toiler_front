@@ -9,10 +9,10 @@ import { createEventDispatcher } from 'svelte';
 
 	export let id;
 	export let name='Project name';
-	export let planned_start_date='2022-05-04'
-	export let planned_end_date='2022-06-01';
-	export let actual_start_date='2022-05-01'
-	export let actual_end_date
+	export let plannedStartDate='2022-05-04'
+	export let plannedEndDate='2022-06-01';
+	export let actualStartDate='2022-05-01'
+	export let actualEndDate
 	export let description="";
 
 	// export let teams=[]
@@ -35,7 +35,7 @@ import { createEventDispatcher } from 'svelte';
   }
 
   let dead_line_border = ''
-  if (!actual_end_date && new Date(planned_end_date) < new Date())
+  if (!actualEndDate && new Date(plannedEndDate) < new Date())
     dead_line_border = 'border-2 border-red-300 rounded-md'
 
 </script>
@@ -64,17 +64,17 @@ import { createEventDispatcher } from 'svelte';
             Plan:
             <div class="flex text-slate-700">
               <div class="rounded-lg px-1 mr-2 text-center text-xs border border-slate-300">
-                {planned_start_date} <small class="mx-0.5">to</small> {planned_end_date}
+                {plannedStartDate} <small class="mx-0.5">to</small> {plannedEndDate}
               </div>
             </div>
           </div>
 
           <div class="text-xs mt-2 text-slate-500">
-            {#if actual_start_date}
+            {#if actualStartDate}
               Started:
             <div class="flex text-slate-700">
               <div class="rounded-lg px-1 mr-2 text-center text-xs border border-slate-300">
-                {actual_start_date} 
+                {actualStartDate} 
               </div>
             </div>
 
@@ -85,15 +85,15 @@ import { createEventDispatcher } from 'svelte';
           </div>
 
           <div class="text-xs mt-2 text-slate-500">
-            {#if actual_end_date}
+            {#if actualEndDate}
             Finished:
             <div class="flex text-slate-700">
               <div class="rounded-lg px-1 mr-2 text-center text-xs border border-slate-300">
-                {actual_end_date} 
+                {actualEndDate} 
               </div>
             </div>
             
-            {:else if actual_start_date}
+            {:else if actualStartDate}
             Not finished yet
             {/if}
           </div>

@@ -95,7 +95,7 @@
       {:then _}
 
       {#each team_members as {user, team, role}}
-        {@const name = user.first_name + (' ' + user.last_name || '')}
+        {@const name = user.firstName + (' ' + user.lastName || '')}
 
           <div class="flex content-center w-full mx-2 my-1.5 px-2 py-1 border border-fuchsia-300 rounded-lg text-left text-base font-medium text-slate-800">
             <span class="w-8 h-8 text-sm text-white bg-blueGray-200 inline-flex items-center justify-center rounded-full">

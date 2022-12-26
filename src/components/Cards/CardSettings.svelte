@@ -1,15 +1,16 @@
-<script>
+<script lang="ts">
 import { onMount } from "svelte";
 import { send_json_data, getCookie} from "../../utils/get_cookie"
 import { showAlert } from '../../utils/errors'
 import { user } from '../../stores'
+import type { UserUser } from "../../gql/graphql";
   
   const account_url = "/user/account";
   let username = "";
-  let first_name = "";
-  let last_name = "";
+  let firstName = "";
+  let lastName = "";
   let email = "";
-  let updated_values = {};
+  let updated_values: UserUser|{'email': string} = {};
   let files = null;
 
   $: if (files) try {
@@ -37,10 +38,10 @@ import { user } from '../../stores'
     .then(d => d.json())
     .then(data => {
       username = data.username;
-      first_name = data.first_name;
-      last_name = data.last_name;
+      firstName = data.firstName;
+      lastName = data.lastName;
       email = data.email;
-      $user.avatar = data.avatar;
+      $user.avatar = data.avatar
       $user = $user;
     })
   })
@@ -54,38 +55,20 @@ import { user } from '../../stores'
     updated_values = {}
   }
 
-  function upload_avatar(e){
-    const form = e.currentTarget;
-    const url = form.action;
 
-    try {
-        const formData = new FormData(form);
-        fetch(url, {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-          showAlert('Avatar changed', 'success')
-        });
-
-    } catch (error) {
-        console.error(error);
-    }
-  }
-
-  let current_password, new_password1, new_password2;
+  let currentPassword, newPassword1, newPassword2;
   let old_password_err=[], password1_err=[], password2_err=[];
   
   function change_password(e){
     const url = '/user/change_password';
 
-    if (new_password1 !== new_password2)
+    if (newPassword1 !== newPassword2)
       return;
 
     const data = {
-      old_password: current_password,
-      new_password1: new_password1,
-      new_password2: new_password2
+      oldPassword: currentPassword,
+      newPassword1: newPassword1,
+      newPassword2: newPassword2
     }
 
     send_json_data(url, 'PUT', data, true)
@@ -97,9 +80,9 @@ import { user } from '../../stores'
         let json = await req.json();
         
         ({
-          old_password: old_password_err = [],
-          new_password1: password1_err = [],
-          new_password2: password2_err = []
+          oldPassword: old_password_err = [],
+          newPassword1: password1_err = [],
+          newPassword2: password2_err = []
         } = json);
       }
     })
@@ -133,7 +116,7 @@ import { user } from '../../stores'
         <button class="absolute w-full h-full rounded-full text-lg font-medium opacity-0 hover:opacity-100 hover:bg-white hover:bg-opacity-50"
           on:click="{e => e.target.children.avatar && e.target.children.avatar.click()}"
         >
-        <input name="avatar" hidden="hidden" type="file" accept="image/png, image/jpeg" bind:files/>
+        <input name="avatar" hidden="{true}" type="file" accept="image/png, image/jpeg" bind:files/>
           Upload
         </button>
       </div>
@@ -193,8 +176,8 @@ import { user } from '../../stores'
                 placeholder="First name"
                 type="text"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                bind:value="{first_name}"
-                on:change="{() => updated_values = {first_name: first_name, ...updated_values}}"
+                bind:value="{firstName}"
+                on:change="{() => updated_values = {firstName: firstName, ...updated_values}}"
                 minlength="1"
                 required
               />
@@ -213,8 +196,8 @@ import { user } from '../../stores'
                 placeholder="Last name"
                 type="text"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                bind:value="{last_name}"
-                on:change="{() => updated_values = {last_name: last_name, ...updated_values}}"
+                bind:value="{lastName}"
+                on:change="{() => updated_values = {lastName: lastName, ...updated_values}}"
               />
             </div>
           </div>
@@ -251,7 +234,7 @@ import { user } from '../../stores'
                 placeholder="Current Password"
                 type="password"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                bind:value="{current_password}"
+                bind:value="{currentPassword}"
                 required
               />
               {#each old_password_err as err}
@@ -277,7 +260,7 @@ import { user } from '../../stores'
                 placeholder="New Password"
                 type="password"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                bind:value="{new_password1}"
+                bind:value="{newPassword1}"
                 minlength="8"
                 required
               />
@@ -302,7 +285,7 @@ import { user } from '../../stores'
                 placeholder="Confirm Password"
                 type="password"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                bind:value="{new_password2}"
+                bind:value="{newPassword2}"
                 required
               />
               {#each password2_err as err}

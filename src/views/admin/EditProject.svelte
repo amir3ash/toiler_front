@@ -1,43 +1,49 @@
-<script>
-    import Modal from 'components/Cards/Modal.svelte'
-    import ProjectDropdown from 'components/Dropdowns/ProjectDropdown.svelte'
+<script lang="ts">
+    // import Modal from 'components/Cards/Modal.svelte'
+    // import ProjectDropdown from 'components/Dropdowns/ProjectDropdown.svelte'
     import ProjectCapsule from 'components/Cards/ProjectCapsule.svelte';
     import CardAddTeamMember from 'components/Cards/CardAddTeamMember.svelte';
     import { send_json_data } from '../../utils/get_cookie';
-    import CardAddTeam from 'components/Cards/CardAddTeam.svelte';
+    // import CardAddTeam from 'components/Cards/CardAddTeam.svelte';
     import FlatPickr from 'svelte-flatpickr'
     import Input from '../../utils/VariableSizedInput.svelte';
     import { onMount } from 'svelte';
     import { showAlert } from '../../utils/errors.js';
     import { formatedD } from '../../utils/date_util';
+    import { queryStore, getContextClient } from '@urql/svelte';
+    import type { GetProjectForEditQuery } from '../../gql/graphql';
+    import { getProjectQuery } from '../../gql/queries/editProjectQuery';
     
+    type TeamMember = GetProjectForEditQuery['teammembers'][0]
+    type Team = GetProjectForEditQuery['project']['teams'][0]
+    type Role =  GetProjectForEditQuery['project']['roles'][0]
 
-    let teams = [];
-    let roles = [];
-    let employees = [];
-    let input_value;
+    let teams: Team[]= [];
+    let roles: Role[] = [];
+    let team_members: TeamMember[] = []
 
     export let id = null
     
     let name = ''
-    let planned_start_date = ''
-	let planned_end_date = '';
-	let actual_start_date = ''
-	let actual_end_date = ''
+    let plannedStartDate = ''
+	let plannedEndDate = '';
+	let actualStartDate = ''
+	let actualEndDate = ''
 	let description = '';
     
     
     function updateOrAdd(){
         let data = {
+            id: id,
             name: name,
-            planned_start_date: formatedD(planned_start_date),
-            planned_end_date: formatedD(planned_end_date),
-            actual_start_date: formatedD(actual_start_date),
-            actual_end_date: formatedD(actual_end_date),
+            plannedDtartDate: formatedD(plannedStartDate),
+            plannedEndDate: formatedD(plannedEndDate),
+            actualStartDate: formatedD(actualStartDate),
+            actualEndDate: formatedD(actualEndDate),
             description: description
         };
         if (id !== null){
-            if(actual_end_date && !actual_start_date){
+            if(actualEndDate && !actualStartDate){
                 showAlert('Start date can not be empty')
                 return;
             }
@@ -50,16 +56,16 @@
                 showAlert('Project updated', 'success')
             })
             .catch(async res => {
-                if (! res !== 400){
+                if (res !== 400){
                     showAlert('Error!');
                     return;
                 }
                 
-                const data = await res.json().catch(() => showAlert('Error'));
-                Object.entries(data)
-                .map(([field, [error]]) => 
-                    showAlert(`${field.replaceAll('_', ' ')}: ${error}`, 'error', 5000)
-                );  
+                // const data = await res.json().catch(() => showAlert('Error'));
+                // Object.entries(data)
+                // .map(([field, [error]]) => 
+                //     showAlert(`${field.replaceAll('_', ' ')}: ${error}`, 'error', 5000)
+                // );  
             })
         }
         else {
@@ -70,16 +76,16 @@
                 id = d.id;
             })
             .catch(async res => {
-                if (! res !== 400){
+                if (res == 400){
                     showAlert('Error!');
                     return;
                 }
                 
-                const data = await res.json().catch(() => showAlert('Error'));
-                Object.entries(data)
-                .map(([field, [error]]) => 
-                    showAlert(`${field.replaceAll('_', ' ')}: ${error}`, 'error', 5000)
-                );  
+                // const data = await res.json().catch(() => showAlert('Error'));
+                // Object.entries(data)
+                // .map(([field, [error]]) => 
+                //     showAlert(`${field.replaceAll('_', ' ')}: ${error}`, 'error', 5000)
+                // );  
             })
         }
             
@@ -88,7 +94,7 @@
    
 
     function add_role(event){
-        const role_name = event.detail.value;
+        const role_name: string = event.detail.value;
         if (role_name != ''){
             send_json_data('/gantt/role/', 'POST', {project: id, name: role_name})
             .then(data => {
@@ -102,7 +108,7 @@
     }
 
     function add_team(event){
-        const team_name = event.detail.value;
+        const team_name: string = event.detail.value;
         
         if (team_name != ''){
             send_json_data('/gantt/team/', 'POST', {project: id, name: team_name})
@@ -117,33 +123,35 @@
         }
     }
 
+    let projectGql = queryStore({
+        client:getContextClient(),
+        query: getProjectQuery,
+        variables: {id: id},
+        pause: true
+    });
+
     onMount(()=>{
-        const url=`/gantt/project/${id}/`;
         if (id != null){
-            fetch(url)
-            .then(d => d.json())
-            .then(project => {
-                name = project.name;
-                planned_start_date = project.planned_start_date;
-                planned_end_date = project.planned_end_date;
-                actual_start_date = project.actual_start_date;
-                actual_end_date = project.actual_end_date;
-                description = project.description;
-            })
-            
-            fetch(`/gantt/role/?project=${id}`)
-            .then(d => d.json())
-            .then(data => roles=data)
-
-            fetch(`/gantt/team/?project=${id}`)
-            .then(d => d.json())
-            .then(data => teams=data)
-
-            // fetch('/gantt/employee/')
-            // .then(d => d.json())
-            // .then(data => employees=data)
+            projectGql.resume()
         }
     });
+
+    let canLoad = true
+    $: if (canLoad && $projectGql.data){
+        const p = $projectGql.data.project;
+        name = p.name;
+        plannedStartDate = formatedD(p.plannedStartDate);
+        plannedEndDate = formatedD(p.plannedEndDate);
+        actualStartDate = formatedD(p.actualStartDate);
+        actualEndDate = formatedD(p.actualEndDate);
+        teams = p.teams;
+        roles = p.roles;
+        team_members = $projectGql.data.teammembers
+        canLoad = false;
+    } else if ($projectGql.error){
+        showAlert("Error while getting the project")
+    }
+
     const date_options = {
         // dateFormat: 'Y',
     //     altInput: true,
@@ -182,7 +190,7 @@
                 <div class="flex text-slate-700">
                     <FlatPickr
                         class="rounded-lg p-0 mr-2 w-24 md:w-24 focus:outline-none text-center text-sm border-slate-300"
-                        bind:value={actual_start_date}
+                        bind:value={actualStartDate}
                         placeholder="Start date"
                         label="Actual Start date"
                         options="{date_options}"
@@ -190,7 +198,7 @@
                    to 
                    <FlatPickr
                         class="rounded-lg p-0 ml-2 w-24 md:w-24 focus:outline-none text-center text-sm border-slate-300"
-                        bind:value={actual_end_date}
+                        bind:value={actualEndDate}
                         placeholder="End date"
                         label="Actual end date"
                     />
@@ -201,7 +209,7 @@
             <div class="flex text-slate-700">
                 <FlatPickr
                     class="rounded-lg p-0 mr-2 w-24 md:w-24 focus:outline-none text-center text-sm border-slate-300"
-                    bind:value={planned_start_date}
+                    bind:value={plannedStartDate}
                     placeholder="Start date"
                     label="Planed Start date"
                     required
@@ -209,7 +217,7 @@
                to 
                <FlatPickr
                     class="rounded-lg p-0 ml-2 w-24 md:w-24 focus:outline-none text-center text-sm border-slate-300"
-                    bind:value={planned_end_date}
+                    bind:value={plannedEndDate}
                     placeholder="End date"
                     label="Planed end date"
                     required
@@ -344,7 +352,7 @@
                 project_id="{id}"
                 {teams}
                 {roles}
-                {employees}
+                {team_members}
             />
         </div>
     {/if}

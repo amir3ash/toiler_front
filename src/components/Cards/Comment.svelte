@@ -1,15 +1,27 @@
-<script>
+<script lang="ts">
    import ChatMessage from 'components/Cards/ChatMessage.svelte'
    import { send_json_data, getCookie } from '../../utils/get_cookie';
    import { beforeUpdate, afterUpdate, onDestroy } from 'svelte';
    import websocketStore from "svelte-websocket-store";
+   import { queryStore, getContextClient, } from '@urql/svelte';
+   import type { GetCommentsQuery } from '../../gql/graphql';
+   import { commentsQuery } from '../../gql/queries/commentQuery';
 
-   export let activity_id;
-   let text;
+   type Comment = GetCommentsQuery['activityComments'][0]
+   type Author = Comment['author']
+   type GroupComment = {'author': Author, 'messages': Omit<Comment, 'author'>[]}
 
-   let comments_dates;
-   let group_comments = [];
+   export let activity_id: number;
+   let text: string;
+
+   let group_comments: GroupComment[] = [];
    let last_author=null;
+
+   let commentsGql = queryStore({
+      client: getContextClient(),
+      query: commentsQuery,
+      variables: {id: activity_id}
+    });
 
 
    function sendComment(){
@@ -24,10 +36,11 @@
          })
    }
 
-   function addComment(comment){
-      let {activity, author, ...comment_data} = comment;
-      let last_group_comment;
-      comment_data.created_at = new Date(comment_data.created_at);
+   function addComment(comment: Comment){
+      let {author, ...comment_data} = comment;
+      let last_group_comment: GroupComment;
+
+      comment_data.createdAt = new Date(comment_data.createdAt);
 
       if (!last_author || last_author.id !== author.id){
          last_author = author;
@@ -42,21 +55,25 @@
 
    }
 
-   function getComments(){
-      fetch(`/gantt/${activity_id}/comment/`)
-      .then(res => res.json())
-      .then(data => {
-         comments_dates = data.map(o => o.created_at);
-         data.forEach(comment => {
-            addComment(comment)  
-         })
-      })
+   // function getComments(){
+   //    fetch(`/gantt/${activity_id}/comment/`)
+   //    .then(res => res.json())
+   //    .then(data => {
+   //       comments_dates = data.map(o => o.created_at);
+   //       data.forEach(comment => {
+   //          addComment(comment)  
+   //       })
+   //    })
+   // }
+
+   // getComments()
+
+   $: if ($commentsGql.data) {
+      $commentsGql.data.activityComments.forEach(comment => addComment(comment))
    }
 
-   getComments()
-
    let div;
-	let autoscroll;
+	let autoscroll: boolean;
 
    beforeUpdate(() => {
 		autoscroll = div && (div.offsetHeight + div.scrollTop) > (div.scrollHeight - 20);

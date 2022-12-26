@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     // export let location;
     import { onMount } from 'svelte';
     import { user, search_text } from '../../stores'
@@ -6,40 +6,49 @@
     import SideBarDetail from 'components/Cards/SideBarDetail.svelte'
     import {showAlert} from '../../utils/errors';
     import Modal from 'components/Cards/Modal.svelte'
-   
+    import type { GetProjectQuery } from '../../gql/graphql';
+
+    type ProjectType = GetProjectQuery['project']
+    type TaskType = ProjectType['tasks'][0]
+    type ActivityType = TaskType['activities'][0]
+
+    type Common<A, B> = {
+        [P in keyof A & keyof B]: A[P] | B[P];
+    }
+
+    type CommonFields = Common<ActivityType, TaskType>
+
     export let selected_object=null;
-    export let mode;
-    export let project_id;
+    export let mode: 'task' | 'activity';
+    export let project_id: number;
 
-    let project_data;
-    const awaitable = fetch(`/gantt/all/${project_id}/`).then(r => r.json())
-    .then(data => {project_data=data; edit_object=data.tasks[0]})
+    export let project_data: ProjectType;
 
-    let edit_object=null;
-    let edit_mode; // 'task' or 'activity'
+    let edit_object: TaskType | ActivityType = null;
+    let edit_mode: 'task' | 'activity';
     let create_mode=false;
     
-    // مشترک ها
-    const default_fields = ['name', 'planned_start_date', 'planned_end_date', 'actual_start_date',
-                            'actual_end_date', 'description', 'planned_budget', 'actual_budget'];
+    const default_fields: (keyof CommonFields)[] = ['name', 'plannedStartDate', 'plannedEndDate', 'actualStartDate',
+                            'actualEndDate', 'description', 'plannedBudget', 'actualBudget'];
+    
 
+    // for on_click_save of Modal 
     function update(e){
         // console.log(edit_object); return;
         const method = create_mode ? 'POST' : 'PUT';
         const url_id = create_mode ? '' : `${edit_object.id}/`;
 
-        let data = default_fields.reduce(
-            (obj, field) => obj.length ? {[obj]: edit_object[obj], [field]: edit_object[field]}  // initial
-                                       : {...obj, [field]: edit_object[field]}  // create object with edit_object fields 
-        );
+        let data = default_fields.map(field => ({[field]: edit_object[field]}))
+        .reduce((a, b) => ({...a, ...b}));
+
         if (create_mode){
-            if (edit_mode === 'activity'){
-                data.task = edit_object.task;
-                data.state = edit_object.state;
+            if (edit_mode === 'activity' && edit_object.__typename == "GanttActivity"){
+                data.task = edit_object.taskId;
+                data.state = edit_object.state.id;
                 data.assignees = edit_object.assignees;
             }
             else if (edit_mode === 'task'){
-                data.project = project_id;
+                data.project = project_data.id;
             }
         }
 
@@ -65,14 +74,16 @@
     }
 
 
-    const default_object = {
+    const default_object: CommonFields = {
+        "__typename": "GanttTask",
+        "id": null,
         "name": "",
-        "planned_start_date": null,
-        "planned_end_date": null,
-        "planned_budget": null,
-        "actual_start_date": null,
-        "actual_end_date": null,
-        "actual_budget": null,
+        "plannedStartDate": null,
+        "plannedEndDate": null,
+        "plannedBudget": "0",
+        "actualStartDate": null,
+        "actualEndDate": null,
+        "actualBudget": "0",
         "description": ""
     }
 
@@ -84,15 +95,21 @@
         altFormat: "M j, Y at H:i",
     }
 
-    function createActivity(task_id){
-        edit_object = default_object;
-        edit_object['task'] = task_id;
+    function createActivity(task: TaskType){
+        edit_object = {...default_object, __typename: "GanttActivity"} as ActivityType;
+        edit_object['task'] = task;
         edit_object['assignees'] = [];
         edit_mode = 'activity';
         create_mode = true;
     }
 
-    function deleteTask(task_id){
+    function createTask(){
+        edit_object = default_object as TaskType
+        edit_mode = 'task';
+        create_mode = true; 
+    }
+
+    function deleteTask(task_id: number){
         send_json_data(`/gantt/task/${task_id}/`,'DELETE', '', true)
         .then(() => {
             const tasks = project_data.tasks
@@ -109,7 +126,7 @@
 
 <section class="w-full max-h-full overflow-auto">
     <div class="flex mt-4 pb-8 min-w-max flex-nowrap justify-start">
-    {#await awaitable then _}
+    <!-- {#await awaitable then _} -->
             
         
         {#each project_data.tasks as task(task.id)}
@@ -145,7 +162,7 @@
 
                 <button 
                     class="flex my-1 w-full justify-start mx-1 p-2 text-left border rounded border-slate-200 hover:bg-slate-100"
-                    on:click="{()=> createActivity(task.id)}"    
+                    on:click="{()=> createActivity(task)}"    
                 >
                    Add New Activity
                 </button>
@@ -156,71 +173,29 @@
         <div class="px-4 w-10 min-w-max">
             <button
               class="p-4 w-full flex-nowrap whitespace-nowrap mb-6 shadow-lg rounded border-2 border-dashed border-slate-500 bg-slate-50 hover:bg-slate-100"
-              on:click="{()=>{edit_object=default_object; edit_mode='task'; create_mode=true;}}"
+              on:click="{()=> createTask()}"
             >
                 Add New Task
             </button>
         </div>
 
-    {/await}
+    <!-- {/await} -->
     </div>
 </section>
 
-
-
 {#if edit_mode}
-<Modal save="true" on:click_close="{() => {edit_mode=null; edit_object=default_object}}" on:click_save="{update}">
+<Modal save="true" on:click_close="{() => {edit_mode=null; edit_object=null}}" on:click_save="{update}">
     <h1 slot="header" class="px-2 font-extralight text-3xl">
         {create_mode? 'Create':'Edit'} {edit_mode==='task'? 'Task': 'Activity'}
     </h1>
+<!-- TODO: change onDelete -->
     <SideBarDetail
         bind:object="{edit_object}"
         on:close="{() => edit_object=null}"
-        on:delete="{e => alert(e.detail.id)}"
+        on:delete="{e => alert(e.detail.id)}" 
         mode="{edit_mode}"
         modal="true"
         project_id="{project_id}"
     />
 </Modal>
 {/if}
-
-
-
-
-<!-- <div class="flex">
-    <svg viewBox="0 0 0 0" style="position: absolute; z-index: -1; opacity: 0;">
-    <defs>
-        <linearGradient id="boxGradient" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="25" y2="25">
-        <stop offset="0%" stop-color="#27FDC7"></stop>
-        <stop offset="100%" stop-color="#0FC0F5"></stop>
-        </linearGradient>
-
-        <linearGradient id="lineGradient">
-        <stop offset="0%" stop-color="#0FC0F5"></stop>
-        <stop offset="100%" stop-color="#27FDC7"></stop>
-        </linearGradient>
-        <linearGradient id="gra" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stop-color="#0FC0F5"></stop>
-        <stop offset="100%" stop-color="#27FDC7"></stop>
-        </linearGradient>
-
-        <path id="todo__line" stroke="url(#lineGradient)" d="M21 12.3h168v0.1z"></path>
-        <path id="todo__box" stroke="url(#boxGradient)" d="M21 12.7v5c0 1.3-1 2.3-2.3 2.3H8.3C7 20 6 19 6 17.7V7.3C6 6 7 5 8.3 5h10.4C20 5 21 6 21 7.3v5.4"></path>
-        <path id="todo__check" stroke="url(#boxGradient)" d="M10 13l2 2 5-5"></path>
-        <circle id="todo__circle" cx="13.5" cy="12.5" r="10"></circle>
-    </defs>
-    </svg>
-    {#each tasks as task (task.id)}
-        <div class="w-full xl:w-4/12 mb-12 xl:mb-0 px-4">
-            <Task {...task}/>
-        </div>
-    {/each}
-
-    <div class="w-full xl:w-4/12 mb-12 xl:mb-0 px-4">
-        <button
-          class="p-4 w-full break-words mb-6 shadow-lg rounded border-2 border-dashed border-slate-500 bg-slate-50 hover:bg-slate-100"
-        >
-            Add New Task
-        </button>
-    </div>
-</div> -->

@@ -1,18 +1,20 @@
-<script>
+<script lang="ts">
   import Select from 'svelte-select'
   import ProjectDropdown from 'components/Dropdowns/ProjectDropdown.svelte'
 import { escape, onMount } from 'svelte/internal';
 import { send_json_data } from '../../utils/get_cookie';
 import { showAlert } from '../../utils/errors';
 import UserItem from 'components/Cards/UserItem.svelte'
+import { queryStore, gql, getContextClient } from '@urql/svelte';
+import type { GanttTeammember } from '../../gql/graphql';
 
 
-  export let project_id;
+  export let project_id: number;
   export let teams=[];
-  export let employees=[];
   export let roles = [];
 
-  let team_members = [];
+  export let team_members: GanttTeammember[] = [];
+
   let selected_team = null;
   let selected_role = null;
   let selected_employee = null;
@@ -53,16 +55,10 @@ import UserItem from 'components/Cards/UserItem.svelte'
     fetch('/gantt/team-member/?verbose=true')
       .then(d => d.json())
       .then(data => {
-          team_members = data //.sort(
-            // (a, b) => a.employee.name.localeCompare(b.employee.name)
-            // );
+          team_members = data
       })
   }
 
-  onMount(() => {
-   get_team_members();
-  })
-  
   function uniqBy(a, key) {
     let seen = new Set();
     return a.filter(item => {

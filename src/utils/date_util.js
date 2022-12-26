@@ -1,9 +1,10 @@
 export function formatedD(date_or_str){
     if (!date_or_str)
-        return null;
-    if (date_or_str.toLocaleDateString)
-        return date_or_str.toLocaleDateString('en-CA')
-    return date_or_str
+        return null; 
+
+    const date = new Date(date_or_str)
+
+    return date.toLocaleDateString('en-CA')
 }
 
 // date or string or list

@@ -8,7 +8,10 @@ import del from 'rollup-plugin-delete'
 import gzipPlugin from 'rollup-plugin-gzip'
 import { brotliCompress } from 'zlib'
 import { promisify } from 'util'
-import { typescript } from "svelte-preprocess";
+import typescript from '@rollup/plugin-typescript';
+// import typescript from "rollup-plugin-typescript2";
+import autoPreprocess from 'svelte-preprocess';
+import sucrase from '@rollup/plugin-sucrase';
 
 // library that helps you import in svelte with
 // absolute paths, instead of
@@ -139,7 +142,7 @@ export default {
   input: "src/main.ts",
   output: [
     {
-      sourcemap: true,
+      sourcemap: !production,
       format: "es",
       name: "app",
       dir: "public/build/bundles/"
@@ -163,9 +166,10 @@ export default {
         ]
       }),
     svelte({
+      preprocess: autoPreprocess(),
       compilerOptions: {
           // enable run-time checks when not in production
-          dev: !production
+          dev: !production,
       }
     }),
     // we'll extract any component CSS out into
@@ -179,8 +183,14 @@ export default {
     // https://github.com/rollup/plugins/tree/master/packages/commonjs
     resolve({
         browser: true,
-        dedupe: ['svelte']
+        dedupe: ['svelte'],
+        extensions: ['ts', 'js', 'svelte']
     }),
+    sucrase({
+      exclude: ['node_modules/**'],
+      transforms: ['typescript']
+    }),
+
     commonjs(),
 		typescript({ sourceMap: !production }),
 

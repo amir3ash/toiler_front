@@ -1,8 +1,7 @@
-<script>
-  import { onMount } from 'svelte';
+<script lang="ts">
   import { user } from '../stores'
-
-  import {Router, Route} from "svelte-routing";
+  import { Router, Route } from "svelte-routing";
+  import { createClient, setContextClient } from '@urql/svelte';
 
   // components for this layout
   import AdminNavbar from "components/Navbars/AdminNavbar.svelte";
@@ -15,22 +14,43 @@
   import ShowError from "views/admin/ShowError.svelte";
   import AssignedView from "views/admin/AssignedView.svelte";
   import NotFound from "views/NotFound.svelte"
+  import { queryStore, gql } from '@urql/svelte';
+  import type { UserUser } from '../gql/graphql';
 
 
-  export let location;
+  export let location: string;
 
-  const isInteger = num => /^[0-9]+$/.test(num);
+  const client = createClient({
+    url: '/gql/query',
+  });
 
-  async function loadUserData(){
-    return fetch('/user/account').then(res=>{
-      if (res.ok)
-        return res.json()
-      if (res.status === 403)
-        window.location.replace("/user/login");
-    })
-    .then(data => {
-      $user = data
-    })
+  setContextClient(client);
+
+  const userGql = queryStore<{me: UserUser}>({
+      client: client,
+      query: gql(`
+        {
+          me {
+            id
+            firstName
+            lastName
+            username
+            avatar
+          }
+        }
+      `),
+    });
+
+  const isInteger = (num: string) => /^[0-9]+$/.test(num);
+
+  $: if ($userGql.data){
+    loadUserData($userGql.data.me)
+  } else if ($userGql.error){
+    window.location.replace("/user/login");
+  }
+
+  function loadUserData(u: UserUser){
+      $user = u
   }
 </script>
 
@@ -42,7 +62,7 @@
       <div class="px-4 md:px-10 mx-auto w-full mt-24">
         <ShowError/>
         <Router url="/">
-          {#await loadUserData() then _}
+          {#if $userGql.data}
             <Route path="view/:id/" let:params>
               {#if isInteger(params.id)}
                 <GanttView project_id="{params.id}"/>
@@ -57,7 +77,7 @@
                 <EditProject id="{params.id}"/>
               {/if}
             </Route>
-          {/await}
+          {/if}
           <Route component="{NotFound}" />
         </Router>
       </div>

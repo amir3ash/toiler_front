@@ -1,29 +1,51 @@
-<script>
+<script lang="ts">
   import Project from 'components/Cards/Project.svelte'
 import { onMount } from 'svelte';
 import { navigate } from 'svelte-routing';
- const url='/gantt/project/'
+import { queryStore, gql, getContextClient } from '@urql/svelte';
+import type { GanttProject } from '../../gql/graphql';
+
 
 export let location
 
-  let projects = [];
-  async function getProjects(){
-    projects = await fetch(url).then(res => res.json());
-  }
+  let projectsGql = queryStore<{projects: GanttProject[]}>({
+      client:getContextClient(),
+      query: gql(`
+        {
+          projects {
+            id
+            name
+            plannedStartDate
+            plannedEndDate
+            actualStartDate
+            actualEndDate
+            description
+          }
+        }
+      `),
+    });
+
+    let projects: GanttProject[] = []
+
+    $: if ($projectsGql.data){
+      projects = $projectsGql.data.projects
+    }
   
   function onDeleteProject(e){
     const id = e.detail.id;
-    projects = projects.filter(o => o.id !== id)
+    projects = projects.filter(o => o.id !== id);
   }
 </script>
 
 <div class="flex flex-wrap">
 
-  {#await getProjects()}
+  {#if $projectsGql.fetching}
     waiting
-  {:then _ } 
+  {:else if $projectsGql.error}
+    <p>Oh no... {$projectsGql.error.message}</p>
+  {:else} 
 
-    {#each projects.filter(p => !p.actual_end_date) as project (project.id)}
+    {#each projects.filter(p => !p.actualEndDate) as project (project.id)}
 
       <div class="w-full lg:w-4/12 px-4">
         <Project on:delete="{onDeleteProject}" {...project}/>
@@ -31,7 +53,7 @@ export let location
       
     {/each}
 
-  {/await}
+  {/if} 
     
 
   <div class="w-full lg:w-4/12 px-4">
@@ -49,7 +71,7 @@ export let location
 
 <div class="mt-6 flex flex-wrap">
   
-  {#each projects.filter(p => p.actual_end_date) as project (project.id)}
+    {#each projects.filter(p => p.actualEndDate) as project (project.id)}
 
       <div class="w-full lg:w-4/12 px-4">
         <Project on:delete="{onDeleteProject}" {...project}/>

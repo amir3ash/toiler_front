@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { escape, onMount } from 'svelte/internal';
     import { showAlert } from '../../utils/errors';
     import { send_json_data } from '../../utils/get_cookie'
@@ -9,6 +9,13 @@
     import * as ExportData from 'highcharts/modules/export-data.src'
     import * as DraggablePoints  from 'highcharts/modules/draggable-points.src';
     import * as U from 'highcharts/es-modules/Core/Utilities';
+
+    import type { GetProjectQuery } from '../../gql/graphql';
+
+    type ProjectType = GetProjectQuery['project']
+    type TaskType = ProjectType['tasks'][0]
+    type ActivityType = TaskType['activities'][0]
+
     const addEvent = U.default.addEvent;
     const objectEach = U.default.objectEach;
     DraggablePoints.default(Highcharts);
@@ -16,77 +23,78 @@
     OfflineExporting.default(Highcharts);
     ExportData.default(Highcharts);
 
-    export let project_id;
-    export let mode;
-    export let selected_object;
+    export let project_data: ProjectType;
+    export let mode: 'activity' | 'task';
+    export let selected_object: TaskType | ActivityType;
 
     let gantt;
-function get_all(project_id){
-    const url=`/gantt/all/${project_id}/`;
+function get_all(){
 
-    function normalizePlanningDate(obj){
-        obj.planned_start_date = new Date(obj.planned_start_date).getTime();
-        obj.planned_end_date = new Date(obj.planned_end_date).getTime();
+    function normalizePlanningDate(obj: ActivityType | TaskType): ActivityType|TaskType{
+        obj.plannedStartDate = new Date(obj.plannedStartDate).getTime();
+        obj.plannedEndDate = new Date(obj.plannedEndDate).getTime();
         return obj;
     }
 
-    fetch(url).then(res =>res.json())
-    .then(data => {
-        const getActivityId = ac_id => ac_id? 'activity_' + ac_id : null;
-        let list=[];
-        let min_start, max_end;
+    
+    const getActivityId = (ac_id: number) => ac_id? 'activity_' + ac_id : null;
+    let min_start:number, max_end: number;
 
-        function eachActivity(activity, parent_id){
-            let start=activity.planned_start_date,
-                end=activity.planned_end_date;
+    function eachActivity(activity: ActivityType, parent_id: string){
+        let start=activity.plannedStartDate,
+            end=activity.plannedEndDate;
 
-            min_start = (min_start < start ? min_start : start);
-            max_end = (max_end > end ? max_end : end);
-                
-            return {
-                name: activity.name,
-                id: getActivityId(activity.id),
-                start: start,
-                end: end,
-                parent: parent_id,
-                description: activity.description,
-                dependency: getActivityId(activity.dependency),
-                assignees: activity.assignees.map(o => o.user.avatar),
-            }     
-        }
-
-        data.tasks.map(task => normalizePlanningDate(task))
-        .map(task => {
-            const task_id = 'task_' + task.id;
+        min_start = (min_start < start ? min_start : start);
+        max_end = (max_end > end ? max_end : end);
             
-            task.activities.map(activity => normalizePlanningDate(activity))
-            .sort(
-                (a, b) => a.planned_start_date - b.planned_start_date
-            )
-            .map(activity => {
-                const activity_obj = eachActivity(activity, task_id);
-                list.push(activity_obj);
-            });
-            
-            list.push(
-                {
-                    name: task.name,
-                    id: task_id,
-                    start: task.planned_start_date,
-                    end: task.planned_end_date,
-                }
-            )
+        return {
+            name: activity.name,
+            id: getActivityId(activity.id),
+            start: start,
+            end: end,
+            parent: parent_id,
+            description: activity.description,
+            dependency: getActivityId(activity.dependencyId),
+            assignees: activity.assignees.map(o => o.user.avatar),
+        }     
+    }
+
+    let list: GanttData[] = [];
+
+    project_data.tasks.map(task => normalizePlanningDate(task))
+    .map((task: TaskType) => {
+        const task_id = 'task_' + task.id;
+        
+        task.activities.map(activity => normalizePlanningDate(activity))
+        .sort(
+            (a, b) => a.plannedStartDate - b.plannedStartDate
+        )
+        .map((activity: ActivityType) => {
+            const activity_obj = eachActivity(activity, task_id);
+            list.push(activity_obj);
         });
+        
+        list.push(
+            {
+                name: task.name,
+                id: task_id,
+                start: task.plannedStartDate,
+                end: task.plannedEndDate,
+            }
+        )
+    });
 
-        gantt = show_gantt(data, list, min_start, max_end);
-    })
+    gantt = show_gantt(project_data, list, min_start, max_end);
+
 }
+
+type GanttData = {id:string, name: string, start:number, end:number}
 
 const day = 1000 * 60 * 60 * 24;
 
 
-function show_gantt(project, list, min_start, max_end) {
-    let chart = Highcharts.ganttChart('gantt', {
+function show_gantt(project: ProjectType, list: GanttData[], min_start:number, max_end:number) {
+    let chart: any = Highcharts.ganttChart('gantt', {
         title: {
             text: project.name
         },
@@ -106,6 +114,7 @@ function show_gantt(project, list, min_start, max_end) {
             max: max_end + 2 * day
         },
         series: [{
+            type: 'gantt',
             name: project.name,
             data: list,
         }],
@@ -127,15 +136,15 @@ function show_gantt(project, list, min_start, max_end) {
                 point: {
                     events: {
                         drop: e => {
-                            let obj = {};
+                            let obj: Pick<ActivityType, 'plannedStartDate'|'plannedEndDate'> = {plannedStartDate: '', plannedEndDate: ''};
                             let [type, id] = e.newPointId.split('_');
-                            let {start:planned_start_date, end:planned_end_date} = e.newPoint;
+                            let {start:plannedStartDate, end:plannedEndDate} = e.newPoint as any;
 
-                            if (planned_start_date)
-                                obj.planned_start_date = new Date(planned_start_date).toISOString();
+                            if (plannedStartDate)
+                                obj.plannedStartDate = new Date(plannedStartDate).toISOString();
 
-                            if(planned_end_date)
-                                obj.planned_end_date = new Date(planned_end_date).toISOString();
+                            if(plannedEndDate)
+                                obj.plannedEndDate = new Date(plannedEndDate).toISOString();
 
                             send_json_data(`/gantt/${type}/${id}/`, 'PATCH', obj)
                             .then(data => showAlert('Updated', 'success', 700))
@@ -144,9 +153,14 @@ function show_gantt(project, list, min_start, max_end) {
                         mouseOver: showSide,
                         mouseOut: pointMouseOut,
                         click: e => {console.log(chart)
-                            let id;
-                            [mode, id] = e.point.options.id.split('_');
-                            selected_object = {id: id}
+                            const [type, strid] = e.point.options.id.split('_');
+                            const id = parseInt(strid)
+
+                            if (type == 'activity' || type == 'task')
+                                mode = type
+
+                            selected_object = project_data.tasks.map(task => task.activities)
+                            .flatMap(a => a).find(activity => activity.id === id)
                         },
                     }
                 },
@@ -345,7 +359,7 @@ function addDependency({point, dependencyId}){
         }, {passive: true});
         addEvents(chart.hello.group.element, ['touchend', 'mouseup'], function () {
             chart.selectedElement = null;
-        });
+        }, {});
         
     }
     
@@ -373,7 +387,7 @@ function removeDependency(){
 function deletePoint(){
     const series = gantt.series[0];
     const index = selectedPointIndex;
-    const id = series.points[i].id.split('_')[1];
+    const id = series.points[index].id.split('_')[1];
 
     send_json_data(`/gantt/activity/${id}/`, 'DELETE', '', true)
     .then(() => {
@@ -384,7 +398,7 @@ function deletePoint(){
 }
 
 onMount(()=>{
-    get_all(project_id)
+    get_all()
 })
 </script>
 
