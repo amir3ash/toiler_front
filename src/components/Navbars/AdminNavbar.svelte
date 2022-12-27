@@ -1,6 +1,7 @@
 <script>
   // core components
   import UserDropdown from "components/Dropdowns/UserDropdown.svelte";
+  import LL from "../../i18n/i18n-svelte";
   import { show_sidebar, search_text } from "../../stores";
 </script>
 
@@ -34,7 +35,7 @@
         <input
           type="text"
           bind:value="{$search_text}"
-          placeholder="Search here..."
+          placeholder="{$LL.mainTopbar.SEARCH_HERE()}"
           class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 relative  bg-white rounded text-sm shadow outline-none focus:outline-none focus:ring w-full pl-10"
         />
       </div>

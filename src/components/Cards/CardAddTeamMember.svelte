@@ -7,7 +7,9 @@ import { showAlert } from '../../utils/errors';
 import UserItem from 'components/Cards/UserItem.svelte'
 import { queryStore, gql, getContextClient } from '@urql/svelte';
 import type { GanttTeammember } from '../../gql/graphql';
+import LL from '../../i18n/i18n-svelte';
 
+  let TR = $LL.addTeamMembers;
 
   export let project_id: number;
   export let teams=[];
@@ -43,7 +45,7 @@ import type { GanttTeammember } from '../../gql/graphql';
     send_json_data('/gantt/team-member/', 'POST', data)
     .then(data => {
       get_team_members();
-      showAlert('Team member added', 'success')
+      showAlert(TR.TEAM_MEMBER_ADDED(), 'success')
     })
     .catch(e => {
       console.error(e);
@@ -59,8 +61,8 @@ import type { GanttTeammember } from '../../gql/graphql';
       })
   }
 
-  function uniqBy(a, key) {
-    let seen = new Set();
+  function uniqBy<T, K>(a: T[], key: (b: T)=>K) {
+    let seen = new Set<K>();
     return a.filter(item => {
         let k = key(item);
         return seen.has(k) ? false : seen.add(k);
@@ -70,7 +72,7 @@ import type { GanttTeammember } from '../../gql/graphql';
 
 <div class="p-2 m-2 bg-white rounded-md shadow-md">
     <h6 class="ml-2 mt-2 px-1 text-lg uppercase">
-        Team Members
+        {TR.TEAM_MEMBERS()}
     </h6>
     <div class="flex flex-wrap items-center">
       <div class="relative w-full max-w-full flex-grow flex-1">
@@ -78,11 +80,11 @@ import type { GanttTeammember } from '../../gql/graphql';
           <div class="text-xs mt-2 uppercase text-slate-500">
                 <div class="mt-1 flex flex-wrap text-slate-700 themed">
                     <lable class="mb-3 flex flex-col w-full lg:p-1 lg:w-1/2">
-                        Team:
+                        {TR.TEAM()}:
                         <Select
                             inputStyles="--tw-ring-color: transparent"
                             containerClasses="rounded-xl pl-1 p-1 pr-2 mr-2  text-sm"
-                            placeholder="Team name"
+                            placeholder="{TR.TEAM_NAME()}"
                             items="{teams.map(({name, ...rest}) => ({name:escape(name), ...rest}))}"
                             optionIdentifier="id"
                             labelIdentifier="name"
@@ -91,11 +93,11 @@ import type { GanttTeammember } from '../../gql/graphql';
                     </lable>
 
                     <lable class="mb-3 flex flex-col w-full lg:p-1 lg:w-1/2">
-                        Role:
+                        {TR.ROLE()}:
                         <Select
                             inputStyles="--tw-ring-color: transparent"
                             containerClasses="rounded-xl pl-1 p-1 pr-2 mr-2  text-sm"
-                            placeholder="Role name"
+                            placeholder="{TR.ROLE_NAME()}"
                             items="{roles.map(({name, ...rest}) => ({name:escape(name), ...rest}))}"
                             optionIdentifier="id"
                             labelIdentifier="name"
@@ -104,11 +106,11 @@ import type { GanttTeammember } from '../../gql/graphql';
                     </lable>
 
                     <lable class="mb-3 flex flex-col w-full lg:p-1 lg:w-1/2">
-                        Employee:
+                        {TR.EMPLOYEE()}:
                         <Select
                             inputStyles="--tw-ring-color: transparent"
                             containerClasses="rounded-xl pl-1 p-1 pr-2 mr-2  text-sm"
-                            placeholder="Employee name"
+                            placeholder="{TR.EMPLOYEE_USERNAME()}"
                             optionIdentifier="id"
                             getOptionLabel="{u => escape(u.username)}"
                             getSelectionLabel="{u => escape(u.username)}"
@@ -121,7 +123,7 @@ import type { GanttTeammember } from '../../gql/graphql';
                         <button
                             class="px-4 py-1 mb-0.5 text-center text-sm rounded-xl  shadow border border-slate-300 hover:bg-slate-50"
                             on:click="{add_team_member}"
-                        >Add</button>
+                        >{$LL.ADD()}</button>
                     </div>
                    
                 </div>
@@ -130,25 +132,27 @@ import type { GanttTeammember } from '../../gql/graphql';
           <div class="flex flex-col text-xs mt-4 text-slate-500">
             <div class="uppercase">
                 {#if selected_team}
-                    "{selected_team.name}"
+                  {TR.TEAM_TEAMMEMBERS(selected_team)}
+                {:else}
+                  {TR.TEAM_MEMBERS()}
                 {/if}
-                 Team Members:
+                 :
             </div>
             <div class="p-2 flex flex-wrap rounded-lg text-sm text-slate-700">
                 {#each uniqBy(team_members.filter(o => selected_team==null || o.team.id === selected_team.id), o => o.user.id) as {user}}
 
                 <div class=" pl-1 m-1 inline-flex rounded-xl text w-fit border border-teal-400">
                   <span class="my-1 mr-1 w-5 h-5 bg-blueGray-200 inline-flex items-center justify-center rounded-full">
-                    <img class="w-full rounded-full align-middle border-none shadow-lg" src="{user.avatar}" alt="{user.username}'s avatar">
+                    <img class="w-full rounded-full align-middle border-none shadow-lg" src="{user.avatar}" alt="">
                   </span>
                     <div class="py-1">
                         {user.username}
                     </div>
                     <ProjectDropdown 
                         toggle_classes="text-teal-500 py-1 px-2"
-                        edit_btn_name="Edit"
+                        edit_btn_name="{$LL.EDIT()}"
                         on:click_delete="{()=>{alert(3)}}"
-                        on:click_edit="{()=>{}}"
+                        on:click_edit="{()=>{alert(5)}}"
                     />
                       
                   </div>

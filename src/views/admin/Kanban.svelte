@@ -7,6 +7,7 @@
     import AvatarDropdown from 'components/Dropdowns/AvatarDropdown.svelte'
 
     import type { GetProjectQuery } from '../../gql/graphql';
+    import LL from '../../i18n/i18n-svelte';
 
     type ProjectType = GetProjectQuery['project']
     type TaskType = ProjectType['tasks'][0]
@@ -17,6 +18,7 @@
     export let selected_object: ActivityType | TaskType;
     mode = 'activity'
 
+    $: TR = $LL.kanban;
 
     function patchOrCreateState(id:number, name: string){
         if(id){
@@ -61,7 +63,7 @@
                     <h3 class="w-full uppercase">
                         <VariableSizedInput value="{state.name}" on:click_enter="{e => patchOrCreateState(state.id, e.detail.value)}"/>
                     </h3>
-                    <button on:click="{()=>deleteState(state.id)}" class="px-2 text-slate-300 hover:text-rose-700" aria-label="delete state">
+                    <button on:click="{()=>deleteState(state.id)}" class="px-2 text-slate-300 hover:text-rose-700" aria-label="{TR.DELETE_STATE(state)}">
                         <i class="fa fa-trash"></i>
                     </button>
                 </div>
@@ -95,7 +97,7 @@
             <h3 class="w-full mb-2 p-1 uppercase border-b border-slate-400  ">
                 <VariableSizedInput 
                     on:click_enter="{e => patchOrCreateState(null, e.detail.value)}"
-                    placeholder="State name"
+                    placeholder="{TR.STATE_NAME()}"
                     min_width="110px"
                     classes="bg-slate-50"
                 />

@@ -1,8 +1,11 @@
-<script>
+<script lang="ts">
     import { link } from "svelte-routing";
+    import LL from "../../i18n/i18n-svelte";
     import { show_sidebar } from "../../stores";
 
     export let location;
+
+    $: TR = $LL.navigationSidebar
 
     const urls = {
         'index': '',
@@ -12,15 +15,17 @@
         // 'tables': '/f/tables/',
         'logout': '/user/logout'
     };
-    let active = Object.entries(urls)
-                .reduce((previousValue, [name]) => ({[name]: false, ...previousValue}), {});
+    let active = Object.entries(urls).
+        map(([name, ]) => ({[name]: false}))
+        .reduce((a,b)=>({...a, ...b}))
+
     const falseActive = {...active};
 
-    function update(pathname){
+    function update(pathname: string){
         try {
             const [name, ] = Object.entries(urls)
-            .filter(([, url]) => pathname === url)
-            .at(0);
+            .find(([, url]) => pathname === url)
+            console.log('path:', pathname, 'name:', name)
 
             active = {...falseActive, [name]: true}
         } catch (e) {}
@@ -59,7 +64,7 @@
 
 <aside 
   class="fixed  lg:static z-2 lg:h-auto h-full w-64 bg-gray-100  shadow-xl transition-all -translate-x-full lg:translate-x-0"
-  aria-label="Sidebar"
+  aria-label="{TR.SIDEBAR()}"
   class:-translate-x-full="{!$show_sidebar}"
 >
     <div class="overflow-y-auto py-4 px-3 mt-14 rounded">
@@ -78,21 +83,21 @@
         <li>
             <a use:link href="{urls['projects']}" class="flex items-center p-2 uppercase text-sm font-normal text-blueGray-600 rounded-lg   hover:bg-gray-100  ">
                 <i use:handle_page class="fa fa-business-time flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75   group-hover:text-gray-900" aria-hidden="true"></i>
-                <span class="flex-1 ml-3 whitespace-nowrap">Projects</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">{TR.PROJECTS()}</span>
                 <!-- <span class="inline-flex justify-center items-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full    ">Pro</span> -->
             </a>
         </li>
         <li>
             <a use:link href="{urls['assigned']}" class="flex items-center p-2 uppercase text-sm font-normal text-blueGray-600 rounded-lg   hover:bg-gray-100  ">
                 <i use:handle_page class="fa fa-calendar-check flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75   group-hover:text-gray-900" aria-hidden="true"></i>
-                <span class="flex-1 ml-3 whitespace-nowrap">Assigned</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">{TR.ASSIGNED()}</span>
                 <!-- <span class="inline-flex justify-center items-center p-3 ml-3 w-3 h-3 text-sm font-medium text-blue-600 bg-blue-200 rounded-full    ">3</span> -->
             </a>
         </li>
         <li>
             <a use:link href="{urls['settings']}" class="flex items-center p-2 uppercase text-sm font-normal text-blueGray-600 rounded-lg   hover:bg-gray-100  ">
                 <i use:handle_page class="fa fa-cogs flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75   group-hover:text-gray-900" aria-hidden="true"></i>
-                <span class="flex-1 ml-3 whitespace-nowrap">Settings</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">{$LL.SETTINGS()}</span>
                 <!-- <span class="inline-flex justify-center items-center p-3 ml-3 w-3 h-3 text-sm font-medium text-blue-600 bg-blue-200 rounded-full    ">3</span> -->
             </a>
         </li>
@@ -118,7 +123,7 @@
         <li>
             <a href="{urls['logout']}" class="flex items-center p-2 uppercase text-sm font-normal text-blueGray-600 rounded-lg   hover:bg-gray-100  ">
                 <i class="fa fa-door-closed flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75   group-hover:text-gray-900" aria-hidden="true"></i>
-                <span class="flex-1 ml-3 whitespace-nowrap">Log out</span>
+                <span class="flex-1 ml-3 whitespace-nowrap">{TR.LOG_OUT()}</span>
             </a>
         </li>
         </ul>

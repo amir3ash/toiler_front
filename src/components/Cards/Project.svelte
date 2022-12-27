@@ -1,10 +1,10 @@
-<script>
+<script lang="ts">
   import ProjectDropdown from 'components/Dropdowns/ProjectDropdown.svelte'
   import 'flatpickr/dist/flatpickr.css';
 import { navigate } from 'svelte-routing';
 import { send_json_data } from '../../utils/get_cookie';
 import { createEventDispatcher } from 'svelte';
-
+import LL from './../../i18n/i18n-svelte'
 
 
 	export let id;
@@ -12,7 +12,7 @@ import { createEventDispatcher } from 'svelte';
 	export let plannedStartDate='2022-05-04'
 	export let plannedEndDate='2022-06-01';
 	export let actualStartDate='2022-05-01'
-	export let actualEndDate
+	export let actualEndDate: string|null
 	export let description="";
 
 	// export let teams=[]
@@ -38,6 +38,8 @@ import { createEventDispatcher } from 'svelte';
   if (!actualEndDate && new Date(plannedEndDate) < new Date())
     dead_line_border = 'border-2 border-red-300 rounded-md'
 
+  let TR = $LL.project;
+
 </script>
 
 
@@ -61,46 +63,59 @@ import { createEventDispatcher } from 'svelte';
         <div class="m-2">
           
           <div class="text-xs mt-2 text-slate-500">
-            Plan:
+            <div class="w-fit">
+              {$LL.PLAN()}:
+            </div>
             <div class="flex text-slate-700">
               <div class="rounded-lg px-1 mr-2 text-center text-xs border border-slate-300">
-                {plannedStartDate} <small class="mx-0.5">to</small> {plannedEndDate}
+                {TR.DATE({d: plannedStartDate})} <small class="mx-0.5">{$LL.TO()}</small> {TR.DATE({d:plannedEndDate})}
               </div>
             </div>
           </div>
 
           <div class="text-xs mt-2 text-slate-500">
             {#if actualStartDate}
-              Started:
+              <div class="w-fit">
+                {TR.STARTED()}:
+              </div>
             <div class="flex text-slate-700">
               <div class="rounded-lg px-1 mr-2 text-center text-xs border border-slate-300">
-                {actualStartDate} 
+                {TR.DATE({d:actualStartDate})} 
               </div>
             </div>
 
             {:else}
-              Not Started yet
+            <div class="w-fit">
+              {TR.NOT_STARTED()}
+            </div>
             {/if}
             
           </div>
 
           <div class="text-xs mt-2 text-slate-500">
             {#if actualEndDate}
-            Finished:
-            <div class="flex text-slate-700">
-              <div class="rounded-lg px-1 mr-2 text-center text-xs border border-slate-300">
-                {actualEndDate} 
+              <div class="w-fit">
+                {TR.FINISHED()}:
               </div>
-            </div>
+              
+              <div class="flex text-slate-700">
+                <div class="rounded-lg px-1 mr-2 text-center text-xs border border-slate-300">
+                  {TR.DATE({d:actualEndDate})}
+                </div>
+              </div>
             
             {:else if actualStartDate}
-            Not finished yet
+              <div class="w-fit">
+                {TR.NOT_FINISHED()}
+              </div>
             {/if}
           </div>
 
          {#if description}
           <div class="text-xs mt-2 text-slate-500">
-            Description:
+            <div class="w-fit">
+              {$LL.DESCRIPTION()}:
+            </div>
             <div class="flex text-slate-700">
               <div class="rounded-lg p-2 mr-2 w-full text-xs border border-slate-300">
                 {description}

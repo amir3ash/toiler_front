@@ -7,6 +7,8 @@
     import {showAlert} from '../../utils/errors';
     import Modal from 'components/Cards/Modal.svelte'
     import type { GetProjectQuery } from '../../gql/graphql';
+import LL from '../../i18n/i18n-svelte';
+import Task from '../../components/Cards/Task.svelte';
 
     type ProjectType = GetProjectQuery['project']
     type TaskType = ProjectType['tasks'][0]
@@ -67,7 +69,7 @@
                 }
             }
 
-            const message = create_mode ? 'Created' : 'Updated';
+            const message = create_mode ? $LL.taskView.CREATED() : $LL.taskView.UPDATED();
             showAlert(message, 'success');
         })
         .catch(e => showAlert(e))
@@ -116,9 +118,9 @@
             const index = tasks.findIndex(t => t.id === task_id);
             project_data.tasks = [...tasks.slice(0, index), ...tasks.slice(index+1)]
             project_data = project_data;
-            showAlert('Task deleted', 'error');
+            showAlert($LL.taskView.TASK_DELETED(), 'error');
         })
-        .catch((e) => {console.log(e); showAlert('Error!', 'error');})
+        .catch((e) => {console.log(e); showAlert($LL.ERROR(), 'error');})
     };
 
     function deleteActivity(){};
@@ -138,7 +140,11 @@
                         </button>
                     </h3>
                     
-                    <button on:click="{()=>deleteTask(task.id)}" class="px-2 text-slate-300 hover:text-rose-700" aria-label="delete task">
+                    <button 
+                        class="px-2 text-slate-300 hover:text-rose-700"
+                        on:click="{()=>deleteTask(task.id)}"  
+                        aria-label="{$LL.taskView.DELETE_TASK()}"
+                    >
                         <i class="fa fa-trash"></i>
                     </button>
                 </div>
@@ -164,7 +170,7 @@
                     class="flex my-1 w-full justify-start mx-1 p-2 text-left border rounded border-slate-200 hover:bg-slate-100"
                     on:click="{()=> createActivity(task)}"    
                 >
-                   Add New Activity
+                   {$LL.taskView.ADD_NEW_ACTIVITY()}
                 </button>
             
             </div>
@@ -175,7 +181,7 @@
               class="p-4 w-full flex-nowrap whitespace-nowrap mb-6 shadow-lg rounded border-2 border-dashed border-slate-500 bg-slate-50 hover:bg-slate-100"
               on:click="{()=> createTask()}"
             >
-                Add New Task
+                {$LL.taskView.ADD_NEW_TASK()}
             </button>
         </div>
 
@@ -186,7 +192,11 @@
 {#if edit_mode}
 <Modal save="true" on:click_close="{() => {edit_mode=null; edit_object=null}}" on:click_save="{update}">
     <h1 slot="header" class="px-2 font-extralight text-3xl">
-        {create_mode? 'Create':'Edit'} {edit_mode==='task'? 'Task': 'Activity'}
+        {#if create_mode}
+            {$LL.taskView.CREATE_OBJ({type: (edit_mode=='task'? $LL.taskView.TASK(): $LL.taskView.ACTIVITY())})}
+        {:else}
+            {$LL.taskView.EDIT_OBJ({type: (edit_mode=='task'? $LL.taskView.TASK(): $LL.taskView.ACTIVITY())})}
+        {/if}
     </h1>
 <!-- TODO: change onDelete -->
     <SideBarDetail

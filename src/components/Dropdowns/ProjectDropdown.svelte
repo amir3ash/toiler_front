@@ -1,14 +1,15 @@
-<script>
+<script lang="ts">
     // library for creating dropdown menu appear on click
-    import { createPopper } from "@popperjs/core";
+  import { createPopper } from "@popperjs/core";
 	import { createEventDispatcher, onDestroy } from 'svelte';
-    import { clickOutside } from "../../utils/click_outside";
+  import LL from "../../i18n/i18n-svelte";
+  import { clickOutside } from "../../utils/click_outside";
 
-    const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher();
 
-    let popperInstance = null;
+  let popperInstance = null;
 
-  export let edit_btn_name = 'Edit';
+  export let edit_btn_name = $LL.EDIT();
   export let toggle_classes = 'text-blueGray-500 py-1 px-3';
 
 	function on_delete() {
@@ -74,7 +75,7 @@
         on:click={on_delete}
         class="text-sm py-2 px-4 font-normal text-left w-full whitespace-nowrap bg-transparent text-rose-400 hover:bg-rose-50"
       >
-        Delete
+        {$LL.DELETE()}
       </button>
     </div>
   </div>

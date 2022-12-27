@@ -2,6 +2,9 @@
   import { navigate } from "svelte-routing";
   import { user } from '../../stores.js';
   import { getCookie } from '../../utils/get_cookie'
+  import LL from '../../i18n/i18n-svelte'
+
+  $: TR = $LL.settings;
 
   let projects = [];
   let team_members = [];
@@ -51,7 +54,7 @@
       <div class="w-full px-4 justify-center hidden lg:flex">
         <div class="flex relative rounded-full justify-center flex-col w-32 h-32 -m-16 -ml-20 lg:-ml-16" >
           <img
-            alt="avatar"
+            alt="{TR.YOUR_AVATAR()}"
             src="{$user.avatar}"
             class="bg-white shadow-xl rounded-full h-full text-transparent items-center align-middle border-none absolute w-32"
           />
@@ -60,7 +63,7 @@
             on:click="{e => e.target.children.avatar && e.target.children.avatar.click()}"
           >
           <input name="avatar" hidden="hidden" type="file" accept="image/png, image/jpeg" bind:files/>
-            Upload
+            {TR.UPLOAD()}
           </button>
         </div>
       </div>
@@ -68,7 +71,7 @@
     </div>
     <div class="mt-4 lg:mt-20">
       <h3 class="text-xl font-semibold leading-normal mb-2 text-blueGray-700">
-        Places you work in
+        {TR.PROJECTS_IN_SETTINGS()}
       </h3>
       {#await getProjects()}
         waiting
@@ -88,10 +91,10 @@
     </div>
     <div class="mt-8 py-7 border-t border-blueGray-200">
       <h3 class="text-xl font-semibold leading-normal mb-2 text-blueGray-700">
-        Working with
+        {TR.TEAMMATES_IN_SETTINGS()}
       </h3>
       {#await get_team_members()}
-        waiting
+        waiting...
       {:then _}
 
       {#each team_members as {user, team, role}}

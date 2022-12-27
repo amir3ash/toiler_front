@@ -4,7 +4,10 @@ import { send_json_data, getCookie} from "../../utils/get_cookie"
 import { showAlert } from '../../utils/errors'
 import { user } from '../../stores'
 import type { UserUser } from "../../gql/graphql";
+import LL from '../../i18n/i18n-svelte'
   
+let TR = $LL.settings;
+
   const account_url = "/user/account";
   let username = "";
   let firstName = "";
@@ -88,6 +91,12 @@ import type { UserUser } from "../../gql/graphql";
     })
 
   }
+
+  $: console.log($LL)
+
+  function onClick(e){
+    e.target.children.avatar && e.target.children.avatar.click()
+  }
 </script>
 
 <div
@@ -95,12 +104,13 @@ import type { UserUser } from "../../gql/graphql";
 >
   <div class="rounded-t bg-white mb-0 px-6 py-6">
     <div class="text-center flex justify-between">
-      <h6 class="text-blueGray-700 text-xl font-bold">My account</h6>
+      <h6 class="text-blueGray-700 text-xl font-bold">{TR.MyAccount()}</h6>
       <button
         class="bg-red-400 text-white active:bg-red-500 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
         type="button"
       >
-        Settings
+        {TR.SETTINGS()}
+        
       </button>
     </div>
   </div>
@@ -108,21 +118,21 @@ import type { UserUser } from "../../gql/graphql";
     <div class="flex w-full justify-center lg:hidden">
       <div class="flex relative rounded-full justify-center flex-col w-32 h-32">
         <img
-          alt="avatar"
+          alt="{TR.YOUR_AVATAR()}"
           src="{$user.avatar}"
           class="bg-white shadow-xl text-transparent rounded-full h-full align-middle border-none absolute w-32"
         />
         
         <button class="absolute w-full h-full rounded-full text-lg font-medium opacity-0 hover:opacity-100 hover:bg-white hover:bg-opacity-50"
-          on:click="{e => e.target.children.avatar && e.target.children.avatar.click()}"
+          on:click="{onClick}"
         >
         <input name="avatar" hidden="{true}" type="file" accept="image/png, image/jpeg" bind:files/>
-          Upload
+          {TR.UPLOAD()}
         </button>
       </div>
     </div>
       <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-        User Information
+        {TR.USER_INFORMATION()}
         <!-- @{username} -->
       </h6>
       <form on:submit|preventDefault="{change_info}">
@@ -133,7 +143,7 @@ import type { UserUser } from "../../gql/graphql";
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                 for="grid-username"
               >
-                Username
+                {TR.USERNAME()}
               </label>
               <input
                 id="grid-username"
@@ -150,11 +160,11 @@ import type { UserUser } from "../../gql/graphql";
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                 for="grid-email"
               >
-                Email address
+                {TR.EMAIL_ADDRESS()}
               </label>
               <input
                 id="grid-email"
-                placeholder="Email"
+                placeholder="{TR.EMAIL_PLACEHOLDER()}"
                 type="email"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{email}"
@@ -169,11 +179,11 @@ import type { UserUser } from "../../gql/graphql";
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                 for="grid-first-name"
               >
-                First Name
+                {TR.FIRSTNAME()}
               </label>
               <input
                 id="grid-first-name"
-                placeholder="First name"
+                placeholder="{TR.FIRSTNAME_PLACEHOLDER()}"
                 type="text"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{firstName}"
@@ -189,11 +199,11 @@ import type { UserUser } from "../../gql/graphql";
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                 for="grid-last-name"
               >
-                Last Name
+                {TR.LASTNAME()}
               </label>
               <input
                 id="grid-last-name"
-                placeholder="Last name"
+                placeholder="{TR.LASTNAME_PLACEHOLDER()}"
                 type="text"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{lastName}"
@@ -206,7 +216,7 @@ import type { UserUser } from "../../gql/graphql";
               class="py-1 px-3 font-bold bg-rose-500 text-white text-sm rounded-lg uppercase shadow"
               type="submit"
             >
-              Update
+              {TR.UPDATE()}
             </button>
           </div>
         </div>
@@ -217,7 +227,7 @@ import type { UserUser } from "../../gql/graphql";
 
       <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
         <!-- Contact Information -->
-        Security
+        {TR.SECURITY()}
       </h6>
       <form on:submit|preventDefault="{change_password}">
         <div class="flex flex-wrap">
@@ -227,11 +237,11 @@ import type { UserUser } from "../../gql/graphql";
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                 for="grid-current-password"
               >
-                Current Password
+                {TR.CURRENT_PASSWORD()}
               </label>
               <input
                 id="grid-current-password"
-                placeholder="Current Password"
+                placeholder="{TR.CURRENT_PASSWORD()}"
                 type="password"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{currentPassword}"
@@ -253,11 +263,11 @@ import type { UserUser } from "../../gql/graphql";
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                 for="grid-new-password"
               >
-                New Password
+                {TR.NEW_PASSWORD()}
               </label>
               <input
                 id="grid-new-password"
-                placeholder="New Password"
+                placeholder="{TR.NEW_PASSWORD()}"
                 type="password"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{newPassword1}"
@@ -278,11 +288,11 @@ import type { UserUser } from "../../gql/graphql";
                 class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                 for="grid-confirm-password"
               >
-                Confirm Password
+                {TR.CONFIRM_PASSWORD()}
               </label>
               <input
                 id="grid-new_password"
-                placeholder="Confirm Password"
+                placeholder="{TR.CONFIRM_PASSWORD()}"
                 type="password"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{newPassword2}"
@@ -297,7 +307,7 @@ import type { UserUser } from "../../gql/graphql";
           </div>
 
           <button class="mx-4 mt-5 py-1 px-3 font-bold bg-rose-500 text-white text-sm rounded-lg uppercase shadow">
-            Change
+            {TR.CHANGE()}
           </button>
         </div>
       </form>

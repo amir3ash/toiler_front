@@ -13,6 +13,7 @@
     import { queryStore, getContextClient } from '@urql/svelte';
     import type { GetProjectForEditQuery } from '../../gql/graphql';
     import { getProjectQuery } from '../../gql/queries/editProjectQuery';
+    import LL from '../../i18n/i18n-svelte';
     
     type TeamMember = GetProjectForEditQuery['teammembers'][0]
     type Team = GetProjectForEditQuery['project']['teams'][0]
@@ -21,6 +22,8 @@
     let teams: Team[]= [];
     let roles: Role[] = [];
     let team_members: TeamMember[] = []
+
+    let TR = $LL.editProject;
 
     export let id = null
     
@@ -44,7 +47,7 @@
         };
         if (id !== null){
             if(actualEndDate && !actualStartDate){
-                showAlert('Start date can not be empty')
+                showAlert(TR.ERR_EMPTY_ERR())
                 return;
             }
 
@@ -53,7 +56,7 @@
 
             send_json_data(url, 'PUT', data, true).then(res => res.json())
             .then(d => {
-                showAlert('Project updated', 'success')
+                showAlert(TR.PROJECT_UPDATED(), 'success')
             })
             .catch(async res => {
                 if (res !== 400){
@@ -101,7 +104,7 @@
                 roles = [...roles, {...data}]
             })
             .catch(e => {
-                showAlert('Error in adding role')
+                showAlert(TR.ERR_ADDING_ROLE())
             })
             
         }
@@ -117,7 +120,7 @@
                 
             })
             .catch(e => {
-                showAlert('Error in adding team')
+                showAlert(TR.ERR_ADDING_TEAM())
             })
             
         }
@@ -149,7 +152,7 @@
         team_members = $projectGql.data.teammembers
         canLoad = false;
     } else if ($projectGql.error){
-        showAlert("Error while getting the project")
+        showAlert(TR.ERR_GETTING_PROJECT())
     }
 
     const date_options = {
@@ -179,54 +182,54 @@
   <div class="p-2 m-2 bg-white rounded-md shadow-md">
     <input
           bind:value={name}
-          placeholder="Title"
+          placeholder="{$LL.TITLE()}"
           class="font-medium text-xl ml-2 mt-2 w-11/12 px-1 rounded-md bg-transparent focus:outline-none focus:border border-sky-500"
         >
     <div class="flex flex-wrap items-center">
       <div class="relative w-full max-w-full flex-grow flex-1">
         <div class="m-2">
           <div class="text-xs mt-2 text-slate-500">
-                Actual:
+                {$LL.ACTUAL()}:
                 <div class="flex text-slate-700">
                     <FlatPickr
                         class="rounded-lg p-0 mr-2 w-24 md:w-24 focus:outline-none text-center text-sm border-slate-300"
                         bind:value={actualStartDate}
-                        placeholder="Start date"
-                        label="Actual Start date"
+                        placeholder="{TR.START_DATE()}"
+                        label="{TR.ACTUAL_START_DATE()}"
                         options="{date_options}"
                     />
-                   to 
+                   {$LL.TO()} 
                    <FlatPickr
                         class="rounded-lg p-0 ml-2 w-24 md:w-24 focus:outline-none text-center text-sm border-slate-300"
                         bind:value={actualEndDate}
-                        placeholder="End date"
-                        label="Actual end date"
+                        placeholder="{TR.END_DATE()}"
+                        label="{TR.ACTUAL_END_DATE()}"
                     />
                 </div>
           </div>
           <div class="text-xs mt-2 text-slate-500">
-            Planned:
+            {$LL.PLANNED()}:
             <div class="flex text-slate-700">
                 <FlatPickr
                     class="rounded-lg p-0 mr-2 w-24 md:w-24 focus:outline-none text-center text-sm border-slate-300"
                     bind:value={plannedStartDate}
-                    placeholder="Start date"
-                    label="Planed Start date"
+                    placeholder="{TR.START_DATE()}"
+                    label="{TR.PLANNED_START_DATE()}"
                     required
                 />
-               to 
+               {$LL.TO()} 
                <FlatPickr
                     class="rounded-lg p-0 ml-2 w-24 md:w-24 focus:outline-none text-center text-sm border-slate-300"
                     bind:value={plannedEndDate}
-                    placeholder="End date"
-                    label="Planed end date"
+                    placeholder="{TR.END_DATE()}"
+                    label="{TR.PLANNED_END_DATE()}"
                     required
                 />
             </div>
           </div>
           <div class="flex flex-col text-xs mt-2 text-slate-500">
             <label for="#project-desctiption">
-                Description:
+                {$LL.DESCRIPTION()}:
             </label>
             <textarea 
                 class="rounded-lg p-2 focus:outline-none text-sm text-slate-700 border-slate-300"
@@ -237,7 +240,7 @@
           
         </div>
         <button class="px-2 m-2 rounded-md bg-rose-500 text-white" on:click="{updateOrAdd}">
-            Save
+            {$LL.SAVE()}
         </button>
         
       </div>
@@ -249,7 +252,7 @@
 
     <div class="flex flex-col text-xs mt-4 text-slate-500">
         <div class="uppercase ml-2">
-            Teams:
+            {TR.TEAMS()}:
         </div>
         <div class="p-2 flex flex-wrap rounded-lg text-sm text-slate-700">
         
@@ -267,7 +270,7 @@
                         classes="px-1 rounded-md bg-transparent focus:outline-none "
                         div_padding="8px"
                         min_width="100px"
-                        placeholder="New team"
+                        placeholder="{TR.NEW_TEAM()}"
                         on:click_enter="{add_team}"
                         
                     />
@@ -280,7 +283,7 @@
 
     <div class="flex flex-col text-xs mt-4 text-slate-500">
         <div class="uppercase ml-2">
-            Roloes:
+            {TR.ROLES()}:
         </div>
         <div class="p-2 flex flex-wrap rounded-lg text-sm text-slate-700">
             {#each roles as role}
@@ -296,7 +299,7 @@
                         classes="px-1 rounded-md bg-transparent focus:outline-none "
                         div_padding="8px"
                         min_width="85px"
-                        placeholder="New role"
+                        placeholder="{TR.NEW_ROLE()}"
                         on:click_enter="{add_role}"
                         
                     />

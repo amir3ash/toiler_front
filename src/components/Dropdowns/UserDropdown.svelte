@@ -4,6 +4,7 @@
   import { user } from "../../stores"
   import { clickOutside } from "../../utils/click_outside";
 	import { onDestroy } from 'svelte';
+import LL from "../../i18n/i18n-svelte";
 
   let dropdownPopoverShow = false;
 
@@ -59,7 +60,7 @@
       href="/f/settings"
       class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700  hover:bg-slate-100"
     >
-      Settings
+      {$LL.SETTINGS()}
     </a>
     
     <div class="h-0 my-2 border border-solid border-blueGray-100" />
@@ -67,7 +68,7 @@
       href="/user/logout"
       class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:text-red-700  hover:bg-slate-100"
     >
-      Logout
+      {$LL.LOGOUT()}
     </a>
   </div>
 </div>

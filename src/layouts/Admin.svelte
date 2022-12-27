@@ -16,7 +16,8 @@
   import NotFound from "views/NotFound.svelte"
   import { queryStore, gql } from '@urql/svelte';
   import type { UserUser } from '../gql/graphql';
-
+  import { setLocale, } from '../i18n/i18n-svelte'
+import { loadAllLocales } from '../i18n/i18n-util.sync';
 
   export let location: string;
 
@@ -45,6 +46,8 @@
 
   $: if ($userGql.data){
     loadUserData($userGql.data.me)
+    loadAllLocales()    
+    setLocale('fa')
   } else if ($userGql.error){
     window.location.replace("/user/login");
   }

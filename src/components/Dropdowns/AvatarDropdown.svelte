@@ -1,11 +1,12 @@
-<script>
+<script lang="ts">
 // library for creating dropdown menu appear on click
   import { createPopper } from "@popperjs/core";
 //   import { clickOutside } from "../../utils/click_outside";
   import { onDestroy } from 'svelte';
   import UserPopOver from 'components/Cards/UserPopOver.svelte'
+  import type { UserUser } from "../../gql/graphql";
 
-  export let user;
+  export let user: UserUser;
 
   let popperInstance = null;
 

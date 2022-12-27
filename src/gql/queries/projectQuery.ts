@@ -47,6 +47,8 @@ query GetProject($id: Int!) {
           user {
             id
             username
+            firstName
+            lastName
             avatar
           }
         }

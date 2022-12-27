@@ -1,6 +1,7 @@
-<script>
-  
-export let user;
+<script lang="ts">
+import type { UserUser } from "../../gql/graphql";
+
+export let user: UserUser;
 </script>
   
 <div class="m-2 w-80 rounded-lg shadow-lg bg-white">
@@ -15,7 +16,7 @@ export let user;
         </div>
         <div class="ml-1 text-slate-700">
             <h3 class="mt-3 pl-1 font-bold text-xl capitalize text-white">
-                {user.first_name} {user.last_name || ''}
+                {user.firstName} {user.lastName || ''}
             </h3>
             <div>
                 @{user.username}

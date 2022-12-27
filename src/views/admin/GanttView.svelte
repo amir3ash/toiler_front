@@ -5,6 +5,7 @@
     import { queryStore, getContextClient, } from '@urql/svelte';
     import type { GetProjectQuery } from '../../gql/graphql';
     import { getProjectQuery } from '../../gql/queries/projectQuery';
+import LL from '../../i18n/i18n-svelte';
 
     type ProjectType = GetProjectQuery['project']
     type TaskType = ProjectType['tasks'][0]
@@ -20,7 +21,12 @@
 		  Gantt = (await import('./Gantt.svelte')).default;
 	  };
 
-    const views = ['Tasks', 'Gantt', 'Kanban'];
+    const views = [
+      $LL.ganttView.TASKS(),
+      $LL.ganttView.GANTT(),
+      $LL.ganttView.KANBAN() 
+    ];
+
     let active_view = views[0];
 
     let selected_object: ActivityType | TaskType = null;
@@ -71,7 +77,7 @@
       <Kanban project_data="{$projectsGql.data.project}" bind:mode bind:selected_object />
   {/if}
 {:else if $projectsGql.fetching}
-  fetching...
+  {$LL.ganttView.FETCHING()} ...
 
 {:else if $projectsGql.error}
   error: {$projectsGql.error.message}

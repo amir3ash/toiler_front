@@ -1,14 +1,16 @@
-<script>
+<script lang="ts">
     import ProjectDropdown from 'components/Dropdowns/ProjectDropdown.svelte'
     import Input from '../../utils/VariableSizedInput.svelte';
     import { send_json_data } from '../../utils/get_cookie';
+import LL from '../../i18n/i18n-svelte';
 
 
     export let name = '';
-    export let id;
-    export let mode;
+    export let id: number;
+    export let mode: 'team'| 'role';
 
     let editable = false;
+    let editInputPlaceholder = ''
     
     let border_color;
     let btn_color;
@@ -19,12 +21,14 @@
             border_color = 'border-rose-400';
             btn_color = 'text-rose-500';
             update_url = `/gantt/team/${id}/`;
+            editInputPlaceholder = $LL.addTeamMembers.TEAM_NAME()
             break;
         
         case 'role':
             border_color = 'border-teal-400';
             btn_color = 'text-teal-500';
             update_url = `/gantt/role/${id}/`;
+            editInputPlaceholder = $LL.addTeamMembers.ROLE_NAME()
             break;
 
         default:
@@ -54,7 +58,7 @@
             classes="px-1 rounded-md bg-transparent focus:outline-none"
             div_padding="8px"
             min_width="100px"
-            placeholder="{mode} name"
+            placeholder="{editInputPlaceholder}"
             on:click_enter="{update}"
             value="{name}"
             on:click_outside="{() => editable=false}"
@@ -65,7 +69,7 @@
         </div>
         <ProjectDropdown
             toggle_classes="py-1 px-2 {btn_color}"
-            edit_btn_name="Edit name"
+            edit_btn_name="{$LL.editProject.EDIT_NAME()}"
             on:click_delete="{()=>{alert(3)}}"
             on:click_edit="{() => editable=true}"
         />

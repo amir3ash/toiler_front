@@ -3,12 +3,12 @@
     import { showAlert } from '../../utils/errors';
     import { send_json_data } from '../../utils/get_cookie'
     import GanttDropdown from 'components/Dropdowns/GanttDropdown.svelte'
-    import * as Highcharts from 'highcharts/highcharts-gantt.src';
-    import * as  Exporting from 'highcharts/modules/exporting.src';
-    import * as OfflineExporting from 'highcharts/modules/offline-exporting.src';
-    import * as ExportData from 'highcharts/modules/export-data.src'
-    import * as DraggablePoints  from 'highcharts/modules/draggable-points.src';
-    import * as U from 'highcharts/es-modules/Core/Utilities';
+    import * as Highcharts from '../../../node_modules/highcharts/highcharts-gantt.src';
+    import * as  Exporting from '../../../node_modules/highcharts/modules/exporting.src';
+    import * as OfflineExporting from '../../../node_modules/highcharts/modules/offline-exporting.src';
+    import * as ExportData from '../../../node_modules/highcharts/modules/export-data.src'
+    import * as DraggablePoints  from '../../../node_modules/highcharts/modules/draggable-points.src';
+    import * as U from '../../../node_modules/highcharts/es-modules/Core/Utilities';
 
     import type { GetProjectQuery } from '../../gql/graphql';
 

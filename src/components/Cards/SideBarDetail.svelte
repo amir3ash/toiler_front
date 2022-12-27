@@ -13,7 +13,11 @@
     import AssignedSelectionItem from './AssignedSelectionItem.svelte'
     import type { GanttTask, GanttActivity, GanttState, UserUser, GanttAssigned } from '../../gql/graphql'
     import { queryStore, gql, getContextClient, getOperationName } from '@urql/svelte';
-import Admin from '../../layouts/Admin.svelte';
+    import LL from '../../i18n/i18n-svelte';
+    import fa from '../../../node_modules/flatpickr/dist/l10n/fa'
+    import type { BaseOptions } from 'flatpickr/dist/types/options';
+
+    $: TR = $LL.sidebar;
 
     const dispatch = createEventDispatcher()
     const close = () => dispatch('close', {id: object.id});
@@ -28,7 +32,7 @@ import Admin from '../../layouts/Admin.svelte';
         .then(res => {
             if (res.ok){
                 dispatch('delete', {id: object.id});
-                showAlert('Deleted')
+                showAlert($LL.DELETED())
             }
         }) 
     }
@@ -90,7 +94,7 @@ import Admin from '../../layouts/Admin.svelte';
             updateObjectFromRestData(data)
 
             dispatch('update', {mode: mode, field: field, object: object}) 
-            showAlert('Updated', 'success')
+            showAlert($LL.UPDATED(), 'success')
         })
         .catch(async res => {
             if (res !== 400){
@@ -138,12 +142,13 @@ import Admin from '../../layouts/Admin.svelte';
 
     let editable: keyof (GanttActivity & GanttTask) = null
 
-    const flatpickr_options = {
+    const flatpickr_options: Partial<BaseOptions> = {
         time_24hr: true,
         enableTime: true,
         dateFormat: "Y-m-d H:i",
         altInput: true,
         altFormat: "M j, Y at H:i",
+        locale: fa.fa
     }
 
     $: if (state!==null && mode==='activity' && object.__typename == "GanttActivity"){
@@ -288,14 +293,14 @@ import Admin from '../../layouts/Admin.svelte';
         <button 
             class="bg-transparent text-slate-700 text-md mr-4 px-2 rounded-lg outline-none focus:outline-none hover:bg-red-100"
             on:click="{deleteObj}"
-            aria-label="Delete"
+            aria-label="{$LL.DELETE()}"
         >
             <i class="fas fa-trash"></i>
         </button>
         <button 
             class="bg-transparent text-slate-700 text-2xl mr-4 px-2 rounded-lg outline-none focus:outline-none hover:bg-blue-100"
             on:click="{close}"
-            aria-label="Close"
+            aria-label="{$LL.CLOSE()}"
         >
             <i class="fas fa-times"></i>
         </button>
@@ -310,7 +315,7 @@ import Admin from '../../layouts/Admin.svelte';
                 <input class="" type="text" bind:value="{object.name}" on:change="{patchObject}">
             {:else}
                 <button class="w-full text-left" on:click="{(e) => editable='name'}">
-                    {object.name || 'Enter to edit name'}
+                    {object.name || TR.ENTER_TO_EDIT()}
                 </button>
             {/if}
         </h6>
@@ -320,7 +325,7 @@ import Admin from '../../layouts/Admin.svelte';
                     inputStyles="--tw-ring-color: transparent"
                     containerClasses="flex pl-1 p-1 pr-2 mr-2  text-xs"
                     containerStyles='--height: 24px; --borderRadius: 12px; --selectedItemPadding: 0 0 0 4px; --padding: 0px 4px 0px 4px; --clearSelectBottom: 0px; --clearSelectTop: 0px'
-                    placeholder="State"
+                    placeholder="{TR.STATE()}"
                     optionIdentifier="id"
                     getOptionLabel="{s => escape(s.name)}"
                     getSelectionLabel="{s => escape(s.name)}"
@@ -331,14 +336,14 @@ import Admin from '../../layouts/Admin.svelte';
         {/if}
     <div class="flex text-xs mt-2 font-medium">
         <div class="w-1/2">
-            Planned Start Date
+            {TR.PLANNED_START_DATE()}
         </div>
         <div class="flex w-1/2 pr-4 flex-row-reverse text-slate-700 font-normal">
             <FlatPickr
                 class="rounded-lg p-0 w-32  focus:outline-none text-center text-xs border-slate-300 hover:bg-slate-100"
                 bind:value="{object.plannedStartDate}"
-                placeholder="Start date"
-                label="Planned Start date"
+                placeholder="{TR.START_DATE()}"
+                label="{TR.PLANNED_START_DATE()}"
                 options="{{...flatpickr_options, maxDate: strDateToOption(object.plannedEndDate)}}"
                 on:change="{e => patchObject(e, 'plannedStartDate')}"
                 required
@@ -347,14 +352,14 @@ import Admin from '../../layouts/Admin.svelte';
     </div>
     <div class="flex text-xs mt-2 font-medium">
         <div class="w-1/2">
-            Planned End Date
+            {TR.PLANNED_END_DATE()}
         </div>
         <div class="flex w-1/2 pr-4 flex-row-reverse text-slate-700 font-normal">
             <FlatPickr
                 class="rounded-lg p-0 w-32  focus:outline-none text-center text-xs border-slate-300 hover:bg-slate-100"
                 bind:value="{object.plannedEndDate}"
-                placeholder="End date"
-                label="Planned end date"
+                placeholder="{TR.END_DATE()}"
+                label="{TR.PLANNED_END_DATE()}"
                 options="{{...flatpickr_options, minDate: strDateToOption(object.plannedStartDate)}}"
                 on:change="{e => patchObject(e, 'plannedEndDate')}"
                 required
@@ -363,14 +368,14 @@ import Admin from '../../layouts/Admin.svelte';
     </div>
     <div class="flex text-xs mt-2 font-medium">
         <div class="w-1/2">
-            Start Date
+            {TR.START_DATE()}
         </div>
         <div class="flex w-1/2 pr-4 flex-row-reverse text-slate-700 font-normal">
             <FlatPickr
                 class="rounded-lg p-0 w-32  focus:outline-none text-center text-xs border-slate-300 hover:bg-slate-100"
                 bind:value="{object.actualStartDate}"
-                placeholder="Start date"
-                label="Start date"
+                placeholder="{TR.START_DATE()}"
+                label="{TR.START_DATE()}"
                 options="{{...flatpickr_options, maxDate: strDateToOption('now', object.actualEndDate)}}"
                 on:change="{e => patchObject(e, 'actualStartDate')}"
             />
@@ -378,14 +383,14 @@ import Admin from '../../layouts/Admin.svelte';
     </div>
     <div class="flex text-xs mt-2 font-medium">
         <div class="w-1/2">
-            End Date
+            {TR.END_DATE()}
         </div>
         <div class="flex w-1/2 pr-4 flex-row-reverse text-slate-700 font-normal">
             <FlatPickr
                 class="rounded-lg p-0 w-32  focus:outline-none text-center text-xs border-slate-300 hover:bg-slate-100"
                 bind:value="{object.actualEndDate}"
-                placeholder="End date"
-                label="End date"
+                placeholder="{TR.END_DATE()}"
+                label="{TR.END_DATE()}"
                 options="{{...flatpickr_options, minDate: strDateToOption(object.actualStartDate), maxDate: strDateToOption('now')}}"
                 on:change="{e => patchObject(e, 'actualEndDate')}"
             />
@@ -393,30 +398,30 @@ import Admin from '../../layouts/Admin.svelte';
     </div>
     <div class="flex text-xs mt-2 font-medium">
         <div class="w-1/3">
-            Planned Budget
+            {TR.PLANNED_BUDGET()}
         </div>
         <VariableSizedInput 
             classes="ml-4 px-2 text-slate-700 font-normal bg-transparent rounded-lg border border-slate-300 hover:bg-slate-100"    
             bind:value="{object.plannedBudget}"
             on:click_enter="{e => {object.plannedBudget=e.detail.value; patchObject(e, 'plannedBudget')}}"
-            placeholder="Budget"
+            placeholder="{TR.BUDGET()}"
             min_width="70px"
         />
     </div>
     <div class="flex text-xs mt-2 font-medium">
         <div class="w-1/3">
-            Budget
+            {TR.BUDGET()}
         </div>
         <VariableSizedInput 
             classes="ml-4 px-2 text-slate-700 font-normal bg-transparent rounded-lg border border-slate-300 hover:bg-slate-100"    
             bind:value="{object.actualBudget}"
             on:click_enter="{e => {object.actualBudget=e.detail.value; patchObject(e, 'actualBudget')}}"
-            placeholder="Budget"
+            placeholder="{TR.BUDGET()}"
             min_width="70px"
         />
     </div>
     <div class="text-xs mt-2 text-slate-900 font-medium">
-        Description:
+        {$LL.DESCRIPTION()}:
         <div class="flex text-slate-700">
         {#if editable === 'description'}
             <textarea 
@@ -438,7 +443,7 @@ import Admin from '../../layouts/Admin.svelte';
         
     <div class="flex text-xs mt-2 text-slate-900 font-medium">
         <div class="w-1/3">
-            Assignee
+            {TR.ASSIGNEE()}
         </div>
         <div class="px-1 w-2/3 font-normal text-slate-700 hover:bg-slate-100">
         {#if editable === 'assignees'}
@@ -446,7 +451,7 @@ import Admin from '../../layouts/Admin.svelte';
                 inputStyles="--tw-ring-color: transparent"
                 containerClasses="pl-1 p-1 pr-2 mr-2  text-sm"
                 containerStyles='--height: 34px; --borderRadius: 12px; --padding: 0px 0px 0px 4px; --clearSelectBottom: 0px; --clearSelectTop: 0px'
-                placeholder="Employee name"
+                placeholder="{TR.EMPLOYEE_NAME()}"
                 optionIdentifier="id"
                 getOptionLabel="{o => escape(o.username)}"
                 getSelectionLabel="{o => escape(o.username)}"
@@ -471,11 +476,11 @@ import Admin from '../../layouts/Admin.svelte';
                     </div>
 
                 {:else}
-                    Not assigned
+                    {TR.NOT_ASSIGNED()}
                 {/each}
 
             {:else}
-                Not assigned
+                {TR.NOT_ASSIGNED()}
             {/if}
         </button>
         {/if}
@@ -493,7 +498,7 @@ import Admin from '../../layouts/Admin.svelte';
             class:bg-slate-100="{detail_mode==='comment'}"
             on:click="{() => detail_mode='comment'}"
         >
-            Comments
+            {TR.COMMENTS()}
         </button>
         {/if}
             
