@@ -2,7 +2,7 @@ import svelte from "rollup-plugin-svelte";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import livereload from "rollup-plugin-livereload";
-import { terser } from "rollup-plugin-terser";
+import { terser } from "@rollup/plugin-terser";
 import css from 'rollup-plugin-css-only';
 import del from 'rollup-plugin-delete'
 import gzipPlugin from 'rollup-plugin-gzip'
@@ -138,6 +138,7 @@ function serve() {
   };
 }
 
+/** @type {import('rollup').RollupOptions} */
 export default {
   input: "src/main.ts",
   output: [
@@ -181,18 +182,20 @@ export default {
     // some cases you'll need additional configuration -
     // consult the documentation for details:
     // https://github.com/rollup/plugins/tree/master/packages/commonjs
+    
+    sucrase({
+      production: production,
+      
+      exclude: ['node_modules/**'],
+      transforms: ['typescript']
+    }),
     resolve({
         browser: true,
         dedupe: ['svelte'],
         extensions: ['ts', 'js', 'svelte']
     }),
-    sucrase({
-      exclude: ['node_modules/**'],
-      transforms: ['typescript']
-    }),
-
     commonjs(),
-		typescript({ sourceMap: !production }),
+		// typescript({ sourceMap: !production }),
 
     // In dev mode, call `npm run start` once
     // the bundle has been generated
