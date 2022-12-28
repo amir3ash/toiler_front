@@ -4,16 +4,16 @@
   import { createClient, setContextClient } from '@urql/svelte';
 
   // components for this layout
-  import AdminNavbar from "components/Navbars/AdminNavbar.svelte";
-  import TailwindSidebar from "components/Sidebar/TailwindSidebar.svelte";
+  import AdminNavbar from "../components/Navbars/AdminNavbar.svelte";
+  import TailwindSidebar from "../components/Sidebar/TailwindSidebar.svelte";
 
-  import Settings from "views/admin/Settings.svelte";
-  import GanttView from "views/admin/GanttView.svelte"
-  import ProjectView from "views/admin/ProjectsView.svelte"
-  import EditProject from "views/admin/EditProject.svelte"
-  import ShowError from "views/admin/ShowError.svelte";
-  import AssignedView from "views/admin/AssignedView.svelte";
-  import NotFound from "views/NotFound.svelte"
+  import Settings from "../views/admin/Settings.svelte";
+  import GanttView from "../views/admin/GanttView.svelte"
+  import ProjectView from "../views/admin/ProjectsView.svelte"
+  import EditProject from "../views/admin/EditProject.svelte"
+  import ShowError from "../views/admin/ShowError.svelte";
+  import AssignedView from "../views/admin/AssignedView.svelte";
+  import NotFound from "../views/NotFound.svelte"
   import { queryStore, gql } from '@urql/svelte';
   import type { UserUser } from '../gql/graphql';
   import { setLocale, } from '../i18n/i18n-svelte'

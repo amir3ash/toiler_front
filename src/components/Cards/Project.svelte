@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ProjectDropdown from 'components/Dropdowns/ProjectDropdown.svelte'
+  import ProjectDropdown from '../Dropdowns/ProjectDropdown.svelte'
   import 'flatpickr/dist/flatpickr.css';
 import { navigate } from 'svelte-routing';
 import { send_json_data } from '../../utils/get_cookie';

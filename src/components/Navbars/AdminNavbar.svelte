@@ -1,6 +1,6 @@
 <script>
   // core components
-  import UserDropdown from "components/Dropdowns/UserDropdown.svelte";
+  import UserDropdown from "../Dropdowns/UserDropdown.svelte";
   import LL from "../../i18n/i18n-svelte";
   import { show_sidebar, search_text } from "../../stores";
 </script>

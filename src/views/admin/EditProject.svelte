@@ -1,8 +1,8 @@
 <script lang="ts">
     // import Modal from 'components/Cards/Modal.svelte'
     // import ProjectDropdown from 'components/Dropdowns/ProjectDropdown.svelte'
-    import ProjectCapsule from 'components/Cards/ProjectCapsule.svelte';
-    import CardAddTeamMember from 'components/Cards/CardAddTeamMember.svelte';
+    import ProjectCapsule from '../../components/Cards/ProjectCapsule.svelte';
+    import CardAddTeamMember from '../../components/Cards/CardAddTeamMember.svelte';
     import { send_json_data } from '../../utils/get_cookie';
     // import CardAddTeam from 'components/Cards/CardAddTeam.svelte';
     import FlatPickr from 'svelte-flatpickr'

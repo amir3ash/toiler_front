@@ -1,14 +1,12 @@
 <script lang="ts">
     // export let location;
-    import { onMount } from 'svelte';
-    import { user, search_text } from '../../stores'
+    import { search_text } from '../../stores'
     import {send_json_data} from '../../utils/get_cookie'
-    import SideBarDetail from 'components/Cards/SideBarDetail.svelte'
-    import {showAlert} from '../../utils/errors';
-    import Modal from 'components/Cards/Modal.svelte'
+    import SideBarDetail from '../../components/Cards/SideBarDetail.svelte'
+    import { showAlert } from '../../utils/errors';
+    import Modal from '../../components/Cards/Modal.svelte'
     import type { GetProjectQuery } from '../../gql/graphql';
-import LL from '../../i18n/i18n-svelte';
-import Task from '../../components/Cards/Task.svelte';
+    import LL from '../../i18n/i18n-svelte';
 
     type ProjectType = GetProjectQuery['project']
     type TaskType = ProjectType['tasks'][0]

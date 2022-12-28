@@ -2,7 +2,7 @@
 	import { escape, onMount } from 'svelte/internal';
     import { showAlert } from '../../utils/errors';
     import { send_json_data } from '../../utils/get_cookie'
-    import GanttDropdown from 'components/Dropdowns/GanttDropdown.svelte'
+    import GanttDropdown from '../../components/Dropdowns/GanttDropdown.svelte'
     import * as Highcharts from '../../../node_modules/highcharts/highcharts-gantt.src';
     import * as  Exporting from '../../../node_modules/highcharts/modules/exporting.src';
     import * as OfflineExporting from '../../../node_modules/highcharts/modules/offline-exporting.src';

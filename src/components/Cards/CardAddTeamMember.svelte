@@ -1,11 +1,10 @@
 <script lang="ts">
   import Select from 'svelte-select'
-  import ProjectDropdown from 'components/Dropdowns/ProjectDropdown.svelte'
-import { escape, onMount } from 'svelte/internal';
+  import ProjectDropdown from '../../components/Dropdowns/ProjectDropdown.svelte'
+import { escape } from 'svelte/internal';
 import { send_json_data } from '../../utils/get_cookie';
 import { showAlert } from '../../utils/errors';
-import UserItem from 'components/Cards/UserItem.svelte'
-import { queryStore, gql, getContextClient } from '@urql/svelte';
+import UserItem from '../../components/Cards/UserItem.svelte'
 import type { GanttTeammember } from '../../gql/graphql';
 import LL from '../../i18n/i18n-svelte';
 

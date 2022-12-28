@@ -1,6 +1,6 @@
 <script lang="ts">
     import { search_text } from '../../stores'
-    import SideBarDetail from 'components/Cards/SideBarDetail.svelte'
+    import SideBarDetail from '../../components/Cards/SideBarDetail.svelte'
     import { queryStore, getContextClient, } from '@urql/svelte';
     import type { AssignedToMeQuery } from '../../gql/graphql';
     import { assignedToMeQuery } from '../../gql/queries/assigned';

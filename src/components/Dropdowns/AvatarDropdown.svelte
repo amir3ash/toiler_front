@@ -3,7 +3,7 @@
   import { createPopper } from "@popperjs/core";
 //   import { clickOutside } from "../../utils/click_outside";
   import { onDestroy } from 'svelte';
-  import UserPopOver from 'components/Cards/UserPopOver.svelte'
+  import UserPopOver from '../Cards/UserPopOver.svelte'
   import type { UserUser } from "../../gql/graphql";
 
   export let user: UserUser;

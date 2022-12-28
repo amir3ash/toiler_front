@@ -1,18 +1,17 @@
 <script lang="ts">
-    import { user } from '../../stores'
     import VariableSizedInput from '../../utils/VariableSizedInput.svelte'
     import {send_json_data} from '../../utils/get_cookie'
     import FlatPickr from 'svelte-flatpickr'
-    import UserItem from 'components/Cards/UserItem.svelte';
-    import UserIcon from 'components/Cards/UserIcon.svelte';
-    import { escape, onMount,createEventDispatcher, missing_component } from 'svelte/internal';
+    import UserItem from '../../components/Cards/UserItem.svelte';
+    import UserIcon from '../../components/Cards/UserIcon.svelte';
+    import { escape ,createEventDispatcher } from 'svelte/internal';
     import Select from 'svelte-select'
-    import Comment from 'components/Cards/Comment.svelte';
+    import Comment from '../../components/Cards/Comment.svelte';
     import { showAlert } from '../../utils/errors'
     import { formatedDateTime } from '../../utils/date_util'
     import AssignedSelectionItem from './AssignedSelectionItem.svelte'
     import type { GanttTask, GanttActivity, GanttState, UserUser, GanttAssigned } from '../../gql/graphql'
-    import { queryStore, gql, getContextClient, getOperationName } from '@urql/svelte';
+    import { queryStore, gql, getContextClient } from '@urql/svelte';
     import LL from '../../i18n/i18n-svelte';
     import fa from '../../../node_modules/flatpickr/dist/l10n/fa'
     import type { BaseOptions } from 'flatpickr/dist/types/options';

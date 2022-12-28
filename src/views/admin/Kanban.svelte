@@ -4,7 +4,7 @@
     import { user, search_text } from '../../stores'
     import { send_json_data } from '../../utils/get_cookie'
     import { showAlert } from '../../utils/errors';
-    import AvatarDropdown from 'components/Dropdowns/AvatarDropdown.svelte'
+    import AvatarDropdown from '../../components/Dropdowns/AvatarDropdown.svelte'
 
     import type { GetProjectQuery } from '../../gql/graphql';
     import LL from '../../i18n/i18n-svelte';

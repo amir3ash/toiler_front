@@ -1,5 +1,5 @@
 <script lang="ts">
-    import SideBarDetail from 'components/Cards/SideBarDetail.svelte'
+    import SideBarDetail from '../../components/Cards/SideBarDetail.svelte'
     import Kanban from './Kanban.svelte';
     import TaskView from './TaskView.svelte';
     import { queryStore, getContextClient, } from '@urql/svelte';

@@ -1,6 +1,6 @@
 <script>
   import { navigate } from "svelte-routing";
-  import { user } from '../../stores.js';
+  import { user } from '../../stores';
   import { getCookie } from '../../utils/get_cookie'
   import LL from '../../i18n/i18n-svelte'
 

@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <link rel="shortcut icon" href="/assets/img/favicon-32.png" />
+    <link rel="stylesheet" href="/build/bundles/bundle.css" />
+    <link
+      rel="stylesheet"
+      href="/assets/vendor/@fortawesome/fontawesome-free/css/min_font.css"
+    />
+    <link rel="stylesheet" href="/assets/styles/tailwind.css" />
+    <title>Toiler</title>
+
+    <script>
+      if (process === undefined) {
+        var process = { env: {} };
+      }
+    </script>
+    
+    <script defer type="module" src="/build/bundles/main.js"></script>
+    <script defer nomodule src="/build/bundle.js"></script>
+  </head>
+
+  <body class="text-blueGray-700 antialiased">
+    <noscript>
+      <strong
+        >We're sorry but it doesn't work properly without
+        JavaScript enabled. Please enable it to continue.</strong
+      >
+    </noscript>
+    <div id="app"></div>
+  </body>
+</html>

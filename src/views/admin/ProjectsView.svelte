@@ -1,6 +1,5 @@
 <script lang="ts">
-  import Project from 'components/Cards/Project.svelte'
-import { onMount } from 'svelte';
+  import Project from '../../components/Cards/Project.svelte'
 import { navigate } from 'svelte-routing';
 import { queryStore, gql, getContextClient } from '@urql/svelte';
 import type { GanttProject } from '../../gql/graphql';

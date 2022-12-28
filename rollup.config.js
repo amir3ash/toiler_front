@@ -183,12 +183,12 @@ export default {
     // consult the documentation for details:
     // https://github.com/rollup/plugins/tree/master/packages/commonjs
     
-    sucrase({
-      production: production,
+    // sucrase({
+    //   production: production,
       
-      exclude: ['node_modules/**'],
-      transforms: ['typescript']
-    }),
+    //   exclude: ['node_modules/**'],
+    //   transforms: ['typescript']
+    // }),
     resolve({
         browser: true,
         dedupe: ['svelte'],

@@ -1,5 +1,5 @@
 <script>
-    import Alert from "components/Cards/Alert.svelte"
+    import Alert from "../../components/Cards/Alert.svelte"
     import { notifications } from "../../utils/errors"
 
     function del_error(index){

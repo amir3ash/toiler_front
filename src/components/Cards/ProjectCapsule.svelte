@@ -1,8 +1,8 @@
 <script lang="ts">
-    import ProjectDropdown from 'components/Dropdowns/ProjectDropdown.svelte'
+    import ProjectDropdown from '../Dropdowns/ProjectDropdown.svelte'
     import Input from '../../utils/VariableSizedInput.svelte';
     import { send_json_data } from '../../utils/get_cookie';
-import LL from '../../i18n/i18n-svelte';
+    import LL from '../../i18n/i18n-svelte';
 
 
     export let name = '';
