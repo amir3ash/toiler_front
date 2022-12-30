@@ -188,7 +188,7 @@
 </section>
 
 {#if edit_mode}
-<Modal save="true" on:click_close="{() => {edit_mode=null; edit_object=null}}" on:click_save="{update}">
+<Modal save="{true}" on:click_close="{() => {edit_mode=null; edit_object=null}}" on:click_save="{update}">
     <h1 slot="header" class="px-2 font-extralight text-3xl">
         {#if create_mode}
             {$LL.taskView.CREATE_OBJ({type: (edit_mode=='task'? $LL.taskView.TASK(): $LL.taskView.ACTIVITY())})}
@@ -202,7 +202,7 @@
         on:close="{() => edit_object=null}"
         on:delete="{e => alert(e.detail.id)}" 
         mode="{edit_mode}"
-        modal="true"
+        modal="{true}"
         project_id="{project_id}"
     />
 </Modal>

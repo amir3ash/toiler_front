@@ -68,7 +68,7 @@ import { loadAllLocales } from '../i18n/i18n-util.sync';
           {#if $userGql.data}
             <Route path="view/:id/" let:params>
               {#if isInteger(params.id)}
-                <GanttView project_id="{params.id}"/>
+                <GanttView project_id="{parseInt(params.id)}"/>
               {/if}
             </Route>
             <Route path="assigned" component="{AssignedView}" />

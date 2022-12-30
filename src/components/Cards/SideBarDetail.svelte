@@ -10,18 +10,23 @@
     import { showAlert } from '../../utils/errors'
     import { formatedDateTime } from '../../utils/date_util'
     import AssignedSelectionItem from './AssignedSelectionItem.svelte'
-    import type { GanttTask, GanttActivity, GanttState, UserUser, GanttAssigned } from '../../gql/graphql'
+    import type { UserUser, GanttAssigned, GetProjectQuery } from '../../gql/graphql'
     import { queryStore, gql, getContextClient } from '@urql/svelte';
     import LL from '../../i18n/i18n-svelte';
     import fa from '../../../node_modules/flatpickr/dist/l10n/fa'
     import type { BaseOptions } from 'flatpickr/dist/types/options';
 
+    type ProjectType = GetProjectQuery['project']
+    type TaskType = ProjectType['tasks'][0]
+    type ActivityType = TaskType['activities'][0]
+    type State = ProjectType['states'][0]
+    
     $: TR = $LL.sidebar;
 
     const dispatch = createEventDispatcher()
     const close = () => dispatch('close', {id: object.id});
     
-    export let object: GanttActivity | GanttTask;
+    export let object: ActivityType | TaskType;
     export let mode: 'activity' | 'task';
     export let modal = false;
     export let project_id: number;
@@ -36,7 +41,7 @@
         }) 
     }
 
-    let dataGql = queryStore<{employees: UserUser[], states: GanttState[]}>({
+    let dataGql = queryStore<{employees: UserUser[], states: State[]}>({
       client:getContextClient(),
       query: gql(`
       query getStatesAndEmployees($id: Int!) {
@@ -57,8 +62,8 @@
       pause: true
     });
 
-    function loadGqlInto(data: {employees: UserUser[], states: GanttState[]}){
-        const obj = object as GanttActivity
+    function loadGqlInto(data: {employees: UserUser[], states: State[]}){
+        const obj = object as ActivityType
 
         states = data.states;
         employees = data.employees;
@@ -67,7 +72,7 @@
         assignees = employees.filter(em => obj.assignees.find(o => (o.user && o.user.id || o.user)=== em.id));
     }
 
-    function patchObject(e, field: keyof (GanttActivity&GanttTask)=null){
+    function patchObject(e, field: keyof (ActivityType&TaskType)=null){
         if (modal)
             return;
 
@@ -129,8 +134,8 @@
     
 
     
-    let state: GanttState = null;
-    let states: GanttState[] = [];
+    let state: State = null;
+    let states: State[] = [];
     let employees: UserUser[] = [];
     let assignees: UserUser[] = null;
 
@@ -139,7 +144,7 @@
     }
 
 
-    let editable: keyof (GanttActivity & GanttTask) = null
+    let editable: keyof (ActivityType & TaskType) = null
 
     const flatpickr_options: Partial<BaseOptions> = {
         time_24hr: true,
@@ -193,10 +198,10 @@
         const newUsers = assignees.sort((a, b) => b.id - a.id);
 
         const updateObjectAssignees = function(){
-            (object as GanttActivity).assignees = newUsers.map(user_id => ({
+            (object as ActivityType).assignees = newUsers.map(user_id => ({
                 user: user_id,
                 activityId: object.id,
-                activity: object as GanttActivity
+                activity: object as ActivityType
             }));
         }
 
