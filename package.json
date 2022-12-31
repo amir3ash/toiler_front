@@ -54,7 +54,7 @@
     "@urql/svelte": "^3.0.3",
     "flatpickr": "^4.6.13",
     "graphql": "^16.6.0",
-    "highcharts": "^10.2.0",
+    "highcharts": "^10.3.2",
     "sirv-cli": "^2.0.2",
     "svelte-flatpickr": "^3.2.6",
     "svelte-routing": "^1.6.0",

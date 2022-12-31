@@ -47,7 +47,7 @@ import { loadAllLocales } from '../i18n/i18n-util.sync';
   $: if ($userGql.data){
     loadUserData($userGql.data.me)
     loadAllLocales()    
-    setLocale('fa')
+    setLocale('en')
   } else if ($userGql.error){
     window.location.replace("/user/login");
   }

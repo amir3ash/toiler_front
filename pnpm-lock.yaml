@@ -22,7 +22,7 @@ specifiers:
   autoprefixer: ^10.4.8
   flatpickr: ^4.6.13
   graphql: ^16.6.0
-  highcharts: ^10.2.0
+  highcharts: ^10.3.2
   postcss: ^8.4.16
   rollup: ^2.78.0
   rollup-plugin-css-only: ^3.1.0
@@ -55,7 +55,7 @@ dependencies:
   '@urql/svelte': 3.0.3_smchvnpsuwxznjby6vslmblte4
   flatpickr: 4.6.13
   graphql: 16.6.0
-  highcharts: 10.2.0
+  highcharts: 10.3.2
   sirv-cli: 2.0.2
   svelte-flatpickr: 3.2.6_svelte@3.55.0
   svelte-routing: 1.6.0_niwyv7xychq2ag6arq5eqxbomm
@@ -2970,8 +2970,8 @@ packages:
       capital-case: 1.0.4
       tslib: 2.4.1
 
-  /highcharts/10.2.0:
-    resolution: {integrity: sha512-MvLo4dzR2Vo7Y85dsqJ07uabBXSSIRKRRdW4l9IGP55h2jYWNm/m9JBszVVxySH5Lda6g+Ins9NdGppZJpjNCA==}
+  /highcharts/10.3.2:
+    resolution: {integrity: sha512-uDSuAOTKXOA90WUE38KKJawzMPjeIX/4UH3fMxZdoypbGVjsbuHO6jJSdeGf1LaDpu5wRg/xjO4QXzJqXfIrkA==}
     dev: false
 
   /http-proxy-agent/5.0.0:

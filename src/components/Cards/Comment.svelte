@@ -2,7 +2,7 @@
    import ChatMessage from './ChatMessage.svelte'
    import { send_json_data, getCookie } from '../../utils/get_cookie';
    import { beforeUpdate, afterUpdate, onDestroy } from 'svelte';
-   import websocketStore from 'svelte-websocket-store/src/index.mjs';
+   import websocketStore from 'svelte-websocket-store';
    import { queryStore, getContextClient, } from '@urql/svelte';
    import type { GetCommentsQuery } from '../../gql/graphql';
    import { commentsQuery } from '../../gql/queries/commentQuery';

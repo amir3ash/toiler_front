@@ -13,7 +13,7 @@
     import type { UserUser, GanttAssigned, GetProjectQuery } from '../../gql/graphql'
     import { queryStore, gql, getContextClient } from '@urql/svelte';
     import LL from '../../i18n/i18n-svelte';
-    import fa from '../../../node_modules/flatpickr/dist/l10n/fa'
+    import fa from '../../../node_modules/flatpickr/dist/esm/l10n/fa'
     import type { BaseOptions } from 'flatpickr/dist/types/options';
 
     type ProjectType = GetProjectQuery['project']
