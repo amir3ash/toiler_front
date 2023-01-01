@@ -2,11 +2,16 @@
 import { onMount } from "svelte";
 import { send_json_data, getCookie} from "../../utils/get_cookie"
 import { showAlert } from '../../utils/errors'
-import { user } from '../../stores'
+import { user, darkTheme } from '../../stores'
 import type { UserUser } from "../../gql/graphql";
-import LL from '../../i18n/i18n-svelte'
+import LL, { locale, setLocale } from '../../i18n/i18n-svelte'
+import Select from "svelte-select";
+import { locales } from "../../i18n/i18n-util";
+import type { Locales } from "../../i18n/i18n-types";
+import { derived } from 'svelte/store';
+import { loadLocale } from "../../i18n/i18n-util.sync";
   
-let TR = $LL.settings;
+  const TR = derived(LL, $LL => $LL.settings);
 
   const account_url = "/user/account";
   let username = "";
@@ -92,24 +97,35 @@ let TR = $LL.settings;
 
   }
 
-  $: console.log($LL)
-
   function onClick(e){
     e.target.children.avatar && e.target.children.avatar.click()
   }
+
+  function changeLocale(localeLang: Locales){
+    if (localStorage.getItem('Lang') !== localeLang){
+      setLocale(localeLang) 
+      localStorage.setItem('Lang', localeLang)
+    }
+  }
+
+  const langs = [{value: 'en', label: 'English'}, {value: 'fa', label: 'Persian'}]
+  let lang = langs.find(o=> o.value === $locale);
+  $: if (lang) changeLocale(lang.value as Locales)
 </script>
 
+<!-- {#key $TR} -->
+  
 <div
   class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0 dark:bg-blueGray-900"
 >
   <div class="rounded-t bg-white mb-0 px-6 py-6 dark:bg-gray-900">
     <div class="text-center flex justify-between">
-      <h6 class="text-blueGray-700 text-xl font-bold dark:text-slate-300">{TR.MyAccount()}</h6>
+      <h6 class="text-blueGray-700 text-xl font-bold dark:text-slate-300">{$TR.MyAccount()}</h6>
       <button
         class="bg-red-400 dark:bg-red-700 text-white active:bg-red-500 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
         type="button"
       >
-        {TR.SETTINGS()}
+        {$TR.SETTINGS()}
         
       </button>
     </div>
@@ -118,7 +134,7 @@ let TR = $LL.settings;
     <div class="flex w-full justify-center lg:hidden">
       <div class="flex relative rounded-full justify-center flex-col w-32 h-32">
         <img
-          alt="{TR.YOUR_AVATAR()}"
+          alt="{$TR.YOUR_AVATAR()}"
           src="{$user.avatar}"
           class="bg-white dark:bg-gray-700 shadow-xl text-transparent rounded-full h-full align-middle border-none absolute w-32"
         />
@@ -127,12 +143,12 @@ let TR = $LL.settings;
           on:click="{onClick}"
         >
         <input name="avatar" hidden="{true}" type="file" accept="image/png, image/jpeg" bind:files/>
-          {TR.UPLOAD()}
+          {$TR.UPLOAD()}
         </button>
       </div>
     </div>
       <h6 class="text-blueGray-400 dark:text-slate-500 text-sm mt-3 mb-6 font-bold uppercase">
-        {TR.USER_INFORMATION()}
+        {$TR.USER_INFORMATION()}
         <!-- @{username} -->
       </h6>
       <form on:submit|preventDefault="{change_info}">
@@ -143,7 +159,7 @@ let TR = $LL.settings;
                 class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-username"
               >
-                {TR.USERNAME()}
+                {$TR.USERNAME()}
               </label>
               <input
                 id="grid-username"
@@ -160,11 +176,11 @@ let TR = $LL.settings;
                 class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-email"
               >
-                {TR.EMAIL_ADDRESS()}
+                {$TR.EMAIL_ADDRESS()}
               </label>
               <input
                 id="grid-email"
-                placeholder="{TR.EMAIL_PLACEHOLDER()}"
+                placeholder="{$TR.EMAIL_PLACEHOLDER()}"
                 type="email"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 dark:placeholder-slate-400 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{email}"
@@ -179,11 +195,11 @@ let TR = $LL.settings;
                 class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-first-name"
               >
-                {TR.FIRSTNAME()}
+                {$TR.FIRSTNAME()}
               </label>
               <input
                 id="grid-first-name"
-                placeholder="{TR.FIRSTNAME_PLACEHOLDER()}"
+                placeholder="{$TR.FIRSTNAME_PLACEHOLDER()}"
                 type="text"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 dark:placeholder-slate-400 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{firstName}"
@@ -199,11 +215,11 @@ let TR = $LL.settings;
                 class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-last-name"
               >
-                {TR.LASTNAME()}
+                {$TR.LASTNAME()}
               </label>
               <input
                 id="grid-last-name"
-                placeholder="{TR.LASTNAME_PLACEHOLDER()}"
+                placeholder="{$TR.LASTNAME_PLACEHOLDER()}"
                 type="text"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 dark:placeholder-slate-400 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{lastName}"
@@ -216,7 +232,7 @@ let TR = $LL.settings;
               class="py-1 px-3 font-bold bg-rose-500 dark:bg-rose-800 text-white text-sm rounded-lg uppercase shadow"
               type="submit"
             >
-              {TR.UPDATE()}
+              {$TR.UPDATE()}
             </button>
           </div>
         </div>
@@ -227,7 +243,7 @@ let TR = $LL.settings;
 
       <h6 class="text-blueGray-400 dark:text-slate-500 text-sm mt-3 mb-6 font-bold uppercase">
         <!-- Contact Information -->
-        {TR.SECURITY()}
+        {$TR.SECURITY()}
       </h6>
       <form on:submit|preventDefault="{change_password}">
         <div class="flex flex-wrap">
@@ -237,11 +253,11 @@ let TR = $LL.settings;
                 class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-current-password"
               >
-                {TR.CURRENT_PASSWORD()}
+                {$TR.CURRENT_PASSWORD()}
               </label>
               <input
                 id="grid-current-password"
-                placeholder="{TR.CURRENT_PASSWORD()}"
+                placeholder="{$TR.CURRENT_PASSWORD()}"
                 type="password"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 dark:placeholder-slate-400 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{currentPassword}"
@@ -263,11 +279,11 @@ let TR = $LL.settings;
                 class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-new-password"
               >
-                {TR.NEW_PASSWORD()}
+                {$TR.NEW_PASSWORD()}
               </label>
               <input
                 id="grid-new-password"
-                placeholder="{TR.NEW_PASSWORD()}"
+                placeholder="{$TR.NEW_PASSWORD()}"
                 type="password"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 dark:placeholder-slate-400 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{newPassword1}"
@@ -288,11 +304,11 @@ let TR = $LL.settings;
                 class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-confirm-password"
               >
-                {TR.CONFIRM_PASSWORD()}
+                {$TR.CONFIRM_PASSWORD()}
               </label>
               <input
                 id="grid-new_password"
-                placeholder="{TR.CONFIRM_PASSWORD()}"
+                placeholder="{$TR.CONFIRM_PASSWORD()}"
                 type="password"
                 class="border-0 px-3 py-3 placeholder-blueGray-300 dark:placeholder-slate-400 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{newPassword2}"
@@ -307,14 +323,28 @@ let TR = $LL.settings;
           </div>
 
           <button class="mx-4 mt-5 py-1 px-3 font-bold bg-rose-500 dark:bg-red-800 text-white text-sm rounded-lg uppercase shadow">
-            {TR.CHANGE()}
+            {$TR.CHANGE()}
           </button>
         </div>
       </form>
 
-      <!-- <hr class="mt-6 border-b-1 border-blueGray-300" />
+      <hr class="mt-6 border-b-1 border-blueGray-300 dark:border-blueGray-700" />
 
-      <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
+      <div class="w-full lg:w-6/12 px-4 flex mt-3">
+        <div class="w-1/2">
+          <Select
+              inputStyles="--tw-ring-color: transparent"
+              containerClasses="flex pl-1 p-1 pr-2 mr-2  text-xs dark:bg-slate-800"
+              containerStyles='{$darkTheme? 'background: #0f172a; border-color: #454545; --listBackground: #343434; --itemHoverBG: #505050; ': ''}; --height: 24px; --borderRadius: 12px; --selectedItemPadding: 0 0 0 4px; --padding: 0px 4px 0px 4px; --clearSelectBottom: 0px; --clearSelectTop: 0px'
+              placeholder="Language"
+              bind:value="{lang}"
+              items="{langs}"
+          />
+        </div>
+
+        
+      </div>
+      <!-- <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
         About Me
       </h6>
       <div class="flex flex-wrap">
@@ -340,3 +370,4 @@ let TR = $LL.settings;
     
   </div>
 </div>
+<!-- {/key} -->

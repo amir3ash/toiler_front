@@ -56,8 +56,12 @@
   }
 
   onMount(()=>{
-    loadAllLocales()    
-    setLocale('en')
+    loadAllLocales()
+    const lang = localStorage.getItem('Lang');
+    if (lang !== null && (lang === 'en' || lang === 'fa'))  
+      setLocale(lang)
+    else
+      setLocale('en')
   })
 </script>
 
