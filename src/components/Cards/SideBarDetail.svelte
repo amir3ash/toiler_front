@@ -12,9 +12,10 @@
     import AssignedSelectionItem from './AssignedSelectionItem.svelte'
     import type { UserUser, GanttAssigned, GetProjectQuery } from '../../gql/graphql'
     import { queryStore, gql, getContextClient } from '@urql/svelte';
-    import LL from '../../i18n/i18n-svelte';
+    import LL, { locale } from '../../i18n/i18n-svelte';
     import fa from '../../../node_modules/flatpickr/dist/esm/l10n/fa'
     import type { BaseOptions } from 'flatpickr/dist/types/options';
+    import {darkTheme} from '../../stores'
 
     type ProjectType = GetProjectQuery['project']
     type TaskType = ProjectType['tasks'][0]
@@ -73,8 +74,10 @@
     }
 
     function patchObject(e, field: keyof (ActivityType&TaskType)=null){
-        if (modal)
+        if (modal){
+            editable = null
             return;
+        }
 
         if (!isDatesValidOrShowError())
             return
@@ -152,7 +155,7 @@
         dateFormat: "Y-m-d H:i",
         altInput: true,
         altFormat: "M j, Y at H:i",
-        locale: fa.fa
+        locale: $locale === 'fa' ? fa.fa : null
     }
 
     $: if (state!==null && mode==='activity' && object.__typename == "GanttActivity"){
@@ -290,19 +293,19 @@
     
 </script>
 
-<div class="p-2 bg-white">
+<div class="p-2 bg-white dark:bg-black">
 
     {#if !modal}
     <div class="flex justify-end">
         <button 
-            class="bg-transparent text-slate-700 text-md mr-4 px-2 rounded-lg outline-none focus:outline-none hover:bg-red-100"
+            class="bg-transparent text-slate-700 dark:text-slate-400 text-md mr-4 px-2 rounded-lg outline-none focus:outline-none hover:bg-red-100 dark:hover:bg-red-800"
             on:click="{deleteObj}"
             aria-label="{$LL.DELETE()}"
         >
             <i class="fas fa-trash"></i>
         </button>
         <button 
-            class="bg-transparent text-slate-700 text-2xl mr-4 px-2 rounded-lg outline-none focus:outline-none hover:bg-blue-100"
+            class="bg-transparent text-slate-700 dark:text-slate-400 text-2xl mr-4 px-2 rounded-lg outline-none focus:outline-none hover:bg-blue-100 dark:hover:bg-blue-800"
             on:click="{close}"
             aria-label="{$LL.CLOSE()}"
         >
@@ -314,9 +317,9 @@
    
     
     
-        <h6 class="text-blueGray-700 mb-1 px-1 text-xl font-medium hover:bg-slate-100">
+        <h6 class="text-blueGray-700 dark:text-blueGray-300 mb-1 px-1 text-xl font-medium hover:bg-slate-100 dark:hover:bg-slate-800">
             {#if editable === 'name'}
-                <input class="" type="text" bind:value="{object.name}" on:change="{patchObject}">
+                <input class="dark:bg-slate-800" type="text" bind:value="{object.name}" on:change="{patchObject}">
             {:else}
                 <button class="w-full text-left" on:click="{(e) => editable='name'}">
                     {object.name || TR.ENTER_TO_EDIT()}
@@ -327,8 +330,8 @@
             <div class="w-1/3">
                 <Select
                     inputStyles="--tw-ring-color: transparent"
-                    containerClasses="flex pl-1 p-1 pr-2 mr-2  text-xs"
-                    containerStyles='--height: 24px; --borderRadius: 12px; --selectedItemPadding: 0 0 0 4px; --padding: 0px 4px 0px 4px; --clearSelectBottom: 0px; --clearSelectTop: 0px'
+                    containerClasses="flex pl-1 p-1 pr-2 mr-2  text-xs dark:bg-slate-800"
+                    containerStyles='{$darkTheme? 'background: #121212; border-color: #454545; --listBackground: #343434; --itemHoverBG: #505050; ': ''}; --height: 24px; --borderRadius: 12px; --selectedItemPadding: 0 0 0 4px; --padding: 0px 4px 0px 4px; --clearSelectBottom: 0px; --clearSelectTop: 0px'
                     placeholder="{TR.STATE()}"
                     optionIdentifier="id"
                     getOptionLabel="{s => escape(s.name)}"
@@ -344,7 +347,7 @@
         </div>
         <div class="flex w-1/2 pr-4 flex-row-reverse text-slate-700 font-normal">
             <FlatPickr
-                class="rounded-lg p-0 w-32  focus:outline-none text-center text-xs border-slate-300 hover:bg-slate-100"
+                class="rounded-lg p-0 w-32  focus:outline-none text-center text-xs border-slate-300 hover:bg-slate-100 dark:text-slate-300 dark:bg-slate-900 dark:border-slate-600 dark:hover:bg-slate-700"
                 bind:value="{object.plannedStartDate}"
                 placeholder="{TR.START_DATE()}"
                 label="{TR.PLANNED_START_DATE()}"
@@ -360,7 +363,7 @@
         </div>
         <div class="flex w-1/2 pr-4 flex-row-reverse text-slate-700 font-normal">
             <FlatPickr
-                class="rounded-lg p-0 w-32  focus:outline-none text-center text-xs border-slate-300 hover:bg-slate-100"
+                class="rounded-lg p-0 w-32  focus:outline-none text-center text-xs border-slate-300 hover:bg-slate-100 dark:text-slate-300 dark:bg-slate-900 dark:border-slate-600 dark:hover:bg-slate-700"
                 bind:value="{object.plannedEndDate}"
                 placeholder="{TR.END_DATE()}"
                 label="{TR.PLANNED_END_DATE()}"
@@ -376,7 +379,7 @@
         </div>
         <div class="flex w-1/2 pr-4 flex-row-reverse text-slate-700 font-normal">
             <FlatPickr
-                class="rounded-lg p-0 w-32  focus:outline-none text-center text-xs border-slate-300 hover:bg-slate-100"
+                class="rounded-lg p-0 w-32  focus:outline-none text-center text-xs border-slate-300 hover:bg-slate-100 dark:text-slate-300 dark:bg-slate-900 dark:border-slate-600 dark:hover:bg-slate-700"
                 bind:value="{object.actualStartDate}"
                 placeholder="{TR.START_DATE()}"
                 label="{TR.START_DATE()}"
@@ -391,7 +394,7 @@
         </div>
         <div class="flex w-1/2 pr-4 flex-row-reverse text-slate-700 font-normal">
             <FlatPickr
-                class="rounded-lg p-0 w-32  focus:outline-none text-center text-xs border-slate-300 hover:bg-slate-100"
+                class="rounded-lg p-0 w-32  focus:outline-none text-center text-xs border-slate-300 hover:bg-slate-100 dark:text-slate-300 dark:bg-slate-900 dark:border-slate-600 dark:hover:bg-slate-700"
                 bind:value="{object.actualEndDate}"
                 placeholder="{TR.END_DATE()}"
                 label="{TR.END_DATE()}"
@@ -405,7 +408,7 @@
             {TR.PLANNED_BUDGET()}
         </div>
         <VariableSizedInput 
-            classes="ml-4 px-2 text-slate-700 font-normal bg-transparent rounded-lg border border-slate-300 hover:bg-slate-100"    
+            classes="ml-4 px-2 text-slate-700 dark:text-slate-300 font-normal bg-transparent rounded-lg border border-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 dark:border-slate-600"    
             bind:value="{object.plannedBudget}"
             on:click_enter="{e => {object.plannedBudget=e.detail.value; patchObject(e, 'plannedBudget')}}"
             placeholder="{TR.BUDGET()}"
@@ -417,25 +420,25 @@
             {TR.BUDGET()}
         </div>
         <VariableSizedInput 
-            classes="ml-4 px-2 text-slate-700 font-normal bg-transparent rounded-lg border border-slate-300 hover:bg-slate-100"    
+            classes="ml-4 px-2 text-slate-700 dark:text-slate-300 font-normal bg-transparent rounded-lg border border-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 dark:border-slate-600"    
             bind:value="{object.actualBudget}"
             on:click_enter="{e => {object.actualBudget=e.detail.value; patchObject(e, 'actualBudget')}}"
             placeholder="{TR.BUDGET()}"
             min_width="70px"
         />
     </div>
-    <div class="text-xs mt-2 text-slate-900 font-medium">
+    <div class="text-xs mt-2 text-slate-900 dark:text-slate-300 font-medium">
         {$LL.DESCRIPTION()}:
         <div class="flex text-slate-700">
         {#if editable === 'description'}
             <textarea 
-                class="rounded-lg p-2 focus:outline-none text-sm text-slate-700 border-slate-300"
+                class="rounded-lg p-2 focus:outline-none text-sm text-slate-700 border-slate-300  dark:text-slate-300 dark:bg-slate-800 "
                 bind:value="{object.description}"
-                on:change="{e => patchObject}"
+                on:change="{e => patchObject(null, 'description')}"
             />
         {:else}
             <button 
-              class="text-left rounded-lg p-2 mr-2 w-full font-normal text-xs  border-slate-300 hover:bg-slate-100"
+              class="text-left rounded-lg p-2 mr-2 w-full font-normal text-xs  border-slate-300 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700"
               on:click="{()=>editable='description'}"
             >
                 {object.description}
@@ -445,16 +448,16 @@
     </div>
     {#if mode === 'activity'}
         
-    <div class="flex text-xs mt-2 text-slate-900 font-medium">
+    <div class="flex text-xs mt-2 text-slate-900 font-medium dark:text-slate-300">
         <div class="w-1/3">
             {TR.ASSIGNEE()}
         </div>
-        <div class="px-1 w-2/3 font-normal text-slate-700 hover:bg-slate-100">
+        <div class="px-1 w-2/3 font-normal text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700">
         {#if editable === 'assignees'}
             <Select
                 inputStyles="--tw-ring-color: transparent"
                 containerClasses="pl-1 p-1 pr-2 mr-2  text-sm"
-                containerStyles='--height: 34px; --borderRadius: 12px; --padding: 0px 0px 0px 4px; --clearSelectBottom: 0px; --clearSelectTop: 0px'
+                containerStyles='{$darkTheme? 'background: #121212; border-color: #454545; --listBackground: #343434; --itemHoverBG: #505050; ': ''};--height: 34px; --borderRadius: 12px; --padding: 0px 0px 0px 4px; --clearSelectBottom: 0px; --clearSelectTop: 0px'
                 placeholder="{TR.EMPLOYEE_NAME()}"
                 optionIdentifier="id"
                 getOptionLabel="{o => escape(o.username)}"
@@ -498,8 +501,9 @@
     <div class="w-full text-xs">
         {#if mode === 'activity'}
         <button 
-            class="p-1 rounded-md hover:bg-slate-100" 
+            class="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700" 
             class:bg-slate-100="{detail_mode==='comment'}"
+            class:dark:bg-slate-800="{detail_mode==='comment'}"
             on:click="{() => detail_mode='comment'}"
         >
             {TR.COMMENTS()}
@@ -512,7 +516,7 @@
 
 
     {#if detail_mode==='comment'}
-        <div class="text-xs mt-2 text-slate-900 font-medium">
+        <div class="text-xs mt-2 text-slate-900 font-medium dark:text-slate-300">
             <Comment activity_id="{object.id}"/>
         </div>
     {/if}

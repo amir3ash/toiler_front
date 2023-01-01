@@ -48,17 +48,17 @@
 
 <div class="fixed z-10 top-0 left-0 w-full h-full bg-black bg-opacity-25" on:click={close_modal}></div>
 
-<div class="absolute z-20 left-1/2 top-1/2 w-11/12 p-4 rounded-md bg-white max-w-lg max-h-screen overflow-auto transform -translate-x-1/2 -translate-y-1/2"
+<div class="absolute z-20 left-1/2 top-1/2 w-11/12 p-4 rounded-md bg-white dark:bg-black max-w-lg max-h-screen overflow-auto transform -translate-x-1/2 -translate-y-1/2"
  role="dialog" aria-modal="true" bind:this={modal}
  >
 	<slot name="header"></slot>
-	<hr>
+	<hr class="dark:border-slate-600">
 	<slot></slot>
-	<hr class="mb-2">
+	<hr class="mb-2 dark:border-slate-600">
 
 	<!-- svelte-ignore a11y-autofocus -->
 	<button
-        class="rounded-md text-red-600 px-2 mt-1 mx-1 border border-red-300"
+        class="rounded-md text-red-600 px-2 mt-1 mx-1 border border-red-300 dark:border-red-800"
         autofocus
         on:click={close_modal}
     >
@@ -66,7 +66,7 @@
     </button>
     {#if save}
     <button
-        class="rounded-md text-green-500 px-2 mt-1 border"
+        class="rounded-md text-green-500 px-2 mt-1 border dark:border-slate-600"
         on:click={handle_save}
     >
         Save

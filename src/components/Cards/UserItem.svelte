@@ -1,5 +1,5 @@
-<script>
-    export let item = undefined;	
+<script lang="ts">
+    export let item: {avatar: string, username: string};	
 	export let isActive = false;
     export let isFirst = false;
 	export let isHover = false;
@@ -23,7 +23,7 @@
 </script>
 
 <div class="flex items-center h-12 px-4 text-ellipsis overflow-hidden whitespace-nowrap {itemClasses}">
-    <span class="w-6 h-6 bg-blueGray-200 inline-flex items-center justify-center rounded-full">
+    <span class="w-6 h-6 bg-blueGray-200 dark:bg-blueGray-700 inline-flex items-center justify-center rounded-full">
         <img class="w-full rounded-full align-middle border-none shadow-lg" src="{item.avatar}">
     </span>
     <div class="overflow-hidden text-ellipsis whitespace-nowrap">

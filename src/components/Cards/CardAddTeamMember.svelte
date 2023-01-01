@@ -7,6 +7,7 @@ import { showAlert } from '../../utils/errors';
 import UserItem from '../../components/Cards/UserItem.svelte'
 import type { GanttTeammember } from '../../gql/graphql';
 import LL from '../../i18n/i18n-svelte';
+import {darkTheme} from '../../stores'
 
   let TR = $LL.addTeamMembers;
 
@@ -69,20 +70,21 @@ import LL from '../../i18n/i18n-svelte';
   }
 </script>
 
-<div class="p-2 m-2 bg-white rounded-md shadow-md">
+<div class="p-2 m-2 bg-white rounded-md shadow-md dark:bg-slate-900">
     <h6 class="ml-2 mt-2 px-1 text-lg uppercase">
         {TR.TEAM_MEMBERS()}
     </h6>
     <div class="flex flex-wrap items-center">
       <div class="relative w-full max-w-full flex-grow flex-1">
         <div class="m-2">
-          <div class="text-xs mt-2 uppercase text-slate-500">
-                <div class="mt-1 flex flex-wrap text-slate-700 themed">
+          <div class="text-xs mt-2 uppercase text-slate-500 dark:text-slate-400">
+                <div class="mt-1 flex flex-wrap text-slate-700 dark:text-slate-300 themed">
                     <lable class="mb-3 flex flex-col w-full lg:p-1 lg:w-1/2">
                         {TR.TEAM()}:
                         <Select
                             inputStyles="--tw-ring-color: transparent"
                             containerClasses="rounded-xl pl-1 p-1 pr-2 mr-2  text-sm"
+                            containerStyles="{$darkTheme? 'background: #121212; border-color: #606060; --listBackground: #343434; --itemHoverBG: #303030; ': ''};"
                             placeholder="{TR.TEAM_NAME()}"
                             items="{teams.map(({name, ...rest}) => ({name:escape(name), ...rest}))}"
                             optionIdentifier="id"
@@ -96,6 +98,7 @@ import LL from '../../i18n/i18n-svelte';
                         <Select
                             inputStyles="--tw-ring-color: transparent"
                             containerClasses="rounded-xl pl-1 p-1 pr-2 mr-2  text-sm"
+                            containerStyles="{$darkTheme? 'background: #121212; border-color: #606060; --listBackground: #343434; --itemHoverBG: #303030; ': ''};"
                             placeholder="{TR.ROLE_NAME()}"
                             items="{roles.map(({name, ...rest}) => ({name:escape(name), ...rest}))}"
                             optionIdentifier="id"
@@ -109,6 +112,7 @@ import LL from '../../i18n/i18n-svelte';
                         <Select
                             inputStyles="--tw-ring-color: transparent"
                             containerClasses="rounded-xl pl-1 p-1 pr-2 mr-2  text-sm"
+                            containerStyles="{$darkTheme? 'background: #121212; border-color: #606060; --listBackground: #202020; --itemHoverBG: #303030; ': ''};"
                             placeholder="{TR.EMPLOYEE_USERNAME()}"
                             optionIdentifier="id"
                             getOptionLabel="{u => escape(u.username)}"
@@ -120,7 +124,7 @@ import LL from '../../i18n/i18n-svelte';
                     </lable>
                     <div class="mb-3 flex flex-col-reverse  lg:p-1 ">
                         <button
-                            class="px-4 py-1 mb-0.5 text-center text-sm rounded-xl  shadow border border-slate-300 hover:bg-slate-50"
+                            class="px-4 py-1 mb-0.5 text-center text-sm rounded-xl  shadow border border-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
                             on:click="{add_team_member}"
                         >{$LL.ADD()}</button>
                     </div>
@@ -128,7 +132,7 @@ import LL from '../../i18n/i18n-svelte';
                 </div>
           </div>
           
-          <div class="flex flex-col text-xs mt-4 text-slate-500">
+          <div class="flex flex-col text-xs mt-4 text-slate-500 dark:text-slate-400">
             <div class="uppercase">
                 {#if selected_team}
                   {TR.TEAM_TEAMMEMBERS(selected_team)}
@@ -137,11 +141,11 @@ import LL from '../../i18n/i18n-svelte';
                 {/if}
                  :
             </div>
-            <div class="p-2 flex flex-wrap rounded-lg text-sm text-slate-700">
+            <div class="p-2 flex flex-wrap rounded-lg text-sm text-slate-700 dark:text-slate-300">
                 {#each uniqBy(team_members.filter(o => selected_team==null || o.team.id === selected_team.id), o => o.user.id) as {user}}
 
                 <div class=" pl-1 m-1 inline-flex rounded-xl text w-fit border border-teal-400">
-                  <span class="my-1 mr-1 w-5 h-5 bg-blueGray-200 inline-flex items-center justify-center rounded-full">
+                  <span class="my-1 mr-1 w-5 h-5 bg-blueGray-200 dark:bg-blueGray-700 inline-flex items-center justify-center rounded-full">
                     <img class="w-full rounded-full align-middle border-none shadow-lg" src="{user.avatar}" alt="">
                   </span>
                     <div class="py-1">

@@ -44,7 +44,7 @@
 </script>
 
 {#if selected_object}
-    <div class="absolute mt-24 w-80 z-2 right-0 top-0 rounded-lg shadow-lg bg-white transition-all duration-500 translate-x-0">
+    <div class="absolute mt-24 w-80 z-2 right-0 top-0 rounded-lg shadow-lg bg-white dark:bg-slate-900 transition-all duration-500 translate-x-0">
         <SideBarDetail
             bind:object="{selected_object}"
             on:close="{() => selected_object=null}"
@@ -64,20 +64,20 @@
     {:else}
         {#each assignededToMeActivities.filter(o=>o.name.includes($search_text) || o.task.project.name.includes($search_text)) as activity(activity.id)}
             <div class="w-full lg:w-1/2">
-                <div class="flex flex-wrap m-2 p-2 rounded-lg shadow-lg bg-white">
-                    <h3 class="text-lg text-slate-700">
+                <div class="flex flex-wrap m-2 p-2 rounded-lg shadow-lg bg-white dark:bg-slate-900">
+                    <h3 class="text-lg text-slate-700 dark:text-slate-300">
                         <button
-                            class="text-left"
+                            class="text-left px-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"
                             on:click="{()=>{selected_object=activity; project_id=activity.task.project.id;}}"
                         >
                             {activity.name}
                         </button>
                     </h3>
                     <div class="ml-auto flex flex-wrap">
-                        <span class="inline-block h-6 px-2 max-w-[10rem] text-ellipsis overflow-hidden rounded-full border border-zinc-300">
+                        <span class="inline-block h-6 px-2 max-w-[10rem] text-ellipsis overflow-hidden rounded-full border border-zinc-300 dark:border-zinc-700">
                             {activity.task.project.name}
                         </span>
-                        <span class="inline-block h-6 ml-1 px-2 rounded-full whitespace-nowrap border {activity.redStatus?'border-red-300':'border-sky-300'}">
+                        <span class="inline-block h-6 ml-1 px-2 rounded-full whitespace-nowrap border {activity.redStatus?'border-red-300 dark:border-red-700':'border-sky-300 dark:border-sky-700'}">
                             {activity.plannedEndDate}
                         </span>
                     </div>

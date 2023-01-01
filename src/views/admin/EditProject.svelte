@@ -179,7 +179,7 @@
 </Modal> -->
 <div class="relative flex flex-wrap">
     <div class="xl:w-1/2">
-  <div class="p-2 m-2 bg-white rounded-md shadow-md">
+  <div class="p-2 m-2 bg-white rounded-md shadow-md dark:bg-slate-900">
     <input
           bind:value={name}
           placeholder="{$LL.TITLE()}"
@@ -188,11 +188,11 @@
     <div class="flex flex-wrap items-center">
       <div class="relative w-full max-w-full flex-grow flex-1">
         <div class="m-2">
-          <div class="text-xs mt-2 text-slate-500">
+          <div class="text-xs mt-2 text-slate-500 dark:text-slate-300">
                 {$LL.ACTUAL()}:
-                <div class="flex text-slate-700">
+                <div class="flex text-slate-700 dark:text-slate-300">
                     <FlatPickr
-                        class="rounded-lg p-0 mr-2 w-24 md:w-24 focus:outline-none text-center text-sm border-slate-300"
+                        class="rounded-lg p-0 mr-2 w-24 md:w-24 focus:outline-none text-center text-sm border-slate-300 dark:border-slate-600 dark:bg-slate-800"
                         bind:value={actualStartDate}
                         placeholder="{TR.START_DATE()}"
                         label="{TR.ACTUAL_START_DATE()}"
@@ -200,18 +200,18 @@
                     />
                    {$LL.TO()} 
                    <FlatPickr
-                        class="rounded-lg p-0 ml-2 w-24 md:w-24 focus:outline-none text-center text-sm border-slate-300"
+                        class="rounded-lg p-0 ml-2 w-24 md:w-24 focus:outline-none text-center text-sm border-slate-300 dark:border-slate-600 dark:bg-slate-800"
                         bind:value={actualEndDate}
                         placeholder="{TR.END_DATE()}"
                         label="{TR.ACTUAL_END_DATE()}"
                     />
                 </div>
           </div>
-          <div class="text-xs mt-2 text-slate-500">
+          <div class="text-xs mt-2 text-slate-500 dark:text-slate-300">
             {$LL.PLANNED()}:
-            <div class="flex text-slate-700">
+            <div class="flex text-slate-700 dark:text-slate-300">
                 <FlatPickr
-                    class="rounded-lg p-0 mr-2 w-24 md:w-24 focus:outline-none text-center text-sm border-slate-300"
+                    class="rounded-lg p-0 mr-2 w-24 md:w-24 focus:outline-none text-center text-sm border-slate-300 dark:border-slate-600 dark:bg-slate-800"
                     bind:value={plannedStartDate}
                     placeholder="{TR.START_DATE()}"
                     label="{TR.PLANNED_START_DATE()}"
@@ -219,7 +219,7 @@
                 />
                {$LL.TO()} 
                <FlatPickr
-                    class="rounded-lg p-0 ml-2 w-24 md:w-24 focus:outline-none text-center text-sm border-slate-300"
+                    class="rounded-lg p-0 ml-2 w-24 md:w-24 focus:outline-none text-center text-sm border-slate-300 dark:border-slate-600 dark:bg-slate-800"
                     bind:value={plannedEndDate}
                     placeholder="{TR.END_DATE()}"
                     label="{TR.PLANNED_END_DATE()}"
@@ -227,19 +227,19 @@
                 />
             </div>
           </div>
-          <div class="flex flex-col text-xs mt-2 text-slate-500">
+          <div class="flex flex-col text-xs mt-2 text-slate-500 dark:text-slate-300">
             <label for="#project-desctiption">
                 {$LL.DESCRIPTION()}:
             </label>
             <textarea 
-                class="rounded-lg p-2 focus:outline-none text-sm text-slate-700 border-slate-300"
+                class="rounded-lg p-2 focus:outline-none text-sm text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-600 dark:bg-slate-800"
                 bind:value="{description}"
                 id="project-desctiption"
             />
           </div>
           
         </div>
-        <button class="px-2 m-2 rounded-md bg-rose-500 text-white" on:click="{updateOrAdd}">
+        <button class="px-2 m-2 rounded-md bg-rose-500 text-white dark:bg-rose-700" on:click="{updateOrAdd}">
             {$LL.SAVE()}
         </button>
         
@@ -250,11 +250,11 @@
     
     <hr class="my-6">
 
-    <div class="flex flex-col text-xs mt-4 text-slate-500">
+    <div class="flex flex-col text-xs mt-4 text-slate-500 dark:text-slate-300">
         <div class="uppercase ml-2">
             {TR.TEAMS()}:
         </div>
-        <div class="p-2 flex flex-wrap rounded-lg text-sm text-slate-700">
+        <div class="p-2 flex flex-wrap rounded-lg text-sm text-slate-700 dark:text-slate-300">
         
             {#each teams as team}
                 <ProjectCapsule
@@ -267,12 +267,11 @@
             <div class="py-0 pl-2 m-1 inline-flex rounded-xl w-fit border border-rose-400">
                 <div class="py-1" >
                     <Input
-                        classes="px-1 rounded-md bg-transparent focus:outline-none "
+                        classes="px-1 rounded-md bg-transparent focus:outline-none placeholder-red-500"
                         div_padding="8px"
                         min_width="100px"
                         placeholder="{TR.NEW_TEAM()}"
                         on:click_enter="{add_team}"
-                        
                     />
                 </div>
             </div>
@@ -281,11 +280,11 @@
     
     <hr class="my-6">
 
-    <div class="flex flex-col text-xs mt-4 text-slate-500">
+    <div class="flex flex-col text-xs mt-4 text-slate-500 dark:text-slate-300">
         <div class="uppercase ml-2">
             {TR.ROLES()}:
         </div>
-        <div class="p-2 flex flex-wrap rounded-lg text-sm text-slate-700">
+        <div class="p-2 flex flex-wrap rounded-lg text-sm text-slate-700 dark:text-slate-300">
             {#each roles as role}
                 <ProjectCapsule
                     bind:name="{role.name}"
@@ -296,7 +295,7 @@
             <div class="py-0 pl-2 m-1 inline-flex rounded-xl w-fit border border-teal-400">
                 <div class="py-1" >
                     <Input
-                        classes="px-1 rounded-md bg-transparent focus:outline-none "
+                        classes="px-1 rounded-md bg-transparent focus:outline-none placeholder-teal-500"
                         div_padding="8px"
                         min_width="85px"
                         placeholder="{TR.NEW_ROLE()}"

@@ -62,18 +62,18 @@
     
     <div
       bind:this="{popoverDropdownRef}"
-      class="bg-white text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48 {dropdownPopoverShow ? 'block':'hidden'}"
+      class="bg-white dark:bg-black text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48 {dropdownPopoverShow ? 'block':'hidden'}"
     >
       <button
         on:click={on_edit}
-        class="text-sm py-2 px-4 font-normal text-left w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-slate-50"
+        class="text-sm py-2 px-4 font-normal text-left w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-slate-50 dark:text-blueGray-300 dark:hover:bg-slate-700"
       >
         {edit_btn_name}
       </button>
       
       <button
         on:click={on_delete}
-        class="text-sm py-2 px-4 font-normal text-left w-full whitespace-nowrap bg-transparent text-rose-400 hover:bg-rose-50"
+        class="text-sm py-2 px-4 font-normal text-left w-full whitespace-nowrap bg-transparent text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900"
       >
         {$LL.DELETE()}
       </button>

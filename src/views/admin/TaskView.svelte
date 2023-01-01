@@ -44,7 +44,7 @@
         if (create_mode){
             if (edit_mode === 'activity' && edit_object.__typename == "GanttActivity"){
                 data.task = edit_object.taskId;
-                data.state = edit_object.state.id;
+                data.state = edit_object.state && edit_object.state.id || null;
                 data.assignees = edit_object.assignees;
             }
             else if (edit_mode === 'task'){
@@ -96,9 +96,13 @@
     }
 
     function createActivity(task: TaskType){
-        edit_object = {...default_object, __typename: "GanttActivity"} as ActivityType;
-        edit_object['task'] = task;
-        edit_object['assignees'] = [];
+        edit_object = {
+            ...default_object,
+            __typename: "GanttActivity",
+            taskId: task.id,
+            assignees: []
+        };
+        
         edit_mode = 'activity';
         create_mode = true;
     }
@@ -130,7 +134,7 @@
             
         
         {#each project_data.tasks as task(task.id)}
-            <div class="text-left mx-2 p-2 w-72 rounded-lg bg-white shadow">
+            <div class="text-left mx-2 p-2 w-72 rounded-lg bg-white shadow dark:bg-gray-900">
                 <div class="flex p-1 mb-2 border-b border-slate-400">
                     <h3 class="w-full text-lg">
                         <button on:click="{() => {mode='task'; selected_object=task}}">
@@ -150,7 +154,7 @@
                 
 
                 {#each task.activities.filter(o => o.name.includes($search_text)) as activity(activity.id)}
-                    <div class="flex my-1 justify-start mx-1 p-2 text-left shadow border rounded border-amber-200">
+                    <div class="flex my-1 justify-start mx-1 p-2 text-left shadow border rounded border-amber-200 dark:border-amber-900">
                         <button on:click="{() => {mode='activity'; selected_object=activity}}">
                             {activity.name}
                         </button>
@@ -165,7 +169,7 @@
                 {/each}
 
                 <button 
-                    class="flex my-1 w-full justify-start mx-1 p-2 text-left border rounded border-slate-200 hover:bg-slate-100"
+                    class="flex my-1 w-full justify-start mx-1 p-2 text-left border rounded border-slate-200 hover:bg-slate-100 dark:border-slate-800 dark:hover:bg-slate-700"
                     on:click="{()=> createActivity(task)}"    
                 >
                    {$LL.taskView.ADD_NEW_ACTIVITY()}
@@ -176,7 +180,7 @@
 
         <div class="px-4 w-10 min-w-max">
             <button
-              class="p-4 w-full flex-nowrap whitespace-nowrap mb-6 shadow-lg rounded border-2 border-dashed border-slate-500 bg-slate-50 hover:bg-slate-100"
+              class="p-4 w-full flex-nowrap whitespace-nowrap mb-6 shadow-lg rounded border-2 border-dashed border-slate-500 bg-slate-50 hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800"
               on:click="{()=> createTask()}"
             >
                 {$LL.taskView.ADD_NEW_TASK()}

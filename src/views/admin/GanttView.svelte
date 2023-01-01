@@ -58,8 +58,10 @@ import LL from '../../i18n/i18n-svelte';
 <div>
     {#each views as view}
     <button
-      class="py-1 px-2 mx-1 bg-white rounded-lg border border-cyan-300"
+      class="py-1 px-2 mx-1 bg-white rounded-lg border border-cyan-300 dark:border-cyan-600 dark:bg-slate-800"
       class:bg-cyan-100="{view === active_view}"
+      class:dark:bg-slate-700="{view === active_view}"
+      class:dark:text-cyan-500="{view === active_view}"
       on:click="{() => active_view=view}"
     >
         {view}

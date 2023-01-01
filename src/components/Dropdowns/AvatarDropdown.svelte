@@ -36,7 +36,7 @@
 </script>
 
 <span 
-    class="w-8 h-8 ml-auto bg-blueGray-200 inline-flex items-center justify-center rounded-full"
+    class="w-8 h-8 ml-auto bg-blueGray-200 dark:bg-blueGray-800 inline-flex items-center justify-center rounded-full"
     on:mouseenter="{() => toggleDropdown()}"
     on:mouseleave="{() => toggleDropdown()}"
     bind:this="{spanRef}"

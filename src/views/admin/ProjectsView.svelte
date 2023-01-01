@@ -58,7 +58,7 @@ export let location
 
   <div class="w-full lg:w-4/12 px-4">
     <button 
-      class="p-4 break-words w-full mb-6 shadow-lg rounded-lg bg-slate-50 text-blueGray-700 text-xl font-medium border-2 border-slate-500 border-dashed hover:bg-slate-100"
+      class="p-4 break-words w-full mb-6 shadow-lg rounded-lg bg-slate-50 dark:bg-gray-900 text-blueGray-700 dark:text-blueGray-400 text-xl font-medium border-2 border-slate-500 border-dashed hover:bg-slate-100 dark:hover:bg-slate-900"
       on:click="{() => navigate('/f/projects/new')}"
       >
       {$LL.project.ADD_PROJECT()} 

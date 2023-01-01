@@ -45,13 +45,13 @@ import LL from './../../i18n/i18n-svelte'
 
 
 <div
-  class="relative flex flex-col min-w-0 break-words w-full mb-6 text-left shadow-lg rounded bg-white {dead_line_border}">
+  class="relative flex flex-col min-w-0 break-words w-full mb-6 text-left shadow-lg rounded bg-white dark:bg-gray-900 {dead_line_border}">
   <div class="rounded-t mb-0 px-4 py-3 bg-transparent">
     <div class="flex flex-wrap items-center">
       <div class="relative w-full max-w-full flex-grow flex-1">
         <div class="flex">
-          <h6 class="mb-1 mr-1 w-full text-blueGray-700 text-xl font-medium ">
-            <button class="w-full rounded-md text-left hover:bg-slate-100" on:click="{() => navigate(`view/${id}/`)}">
+          <h6 class="mb-1 mr-1 w-full text-blueGray-700 dark:text-blueGray-300 text-xl font-medium ">
+            <button class="w-full rounded-md text-left hover:bg-slate-100 dark:hover:bg-slate-700" on:click="{() => navigate(`view/${id}/`)}">
               {name}
             </button>
           </h6>
@@ -62,24 +62,24 @@ import LL from './../../i18n/i18n-svelte'
         </div>
         <div class="m-2">
           
-          <div class="text-xs mt-2 text-slate-500">
+          <div class="text-xs mt-2 text-slate-500 dark:text-slate-400">
             <div class="w-fit">
               {$LL.PLAN()}:
             </div>
-            <div class="flex text-slate-700">
-              <div class="rounded-lg px-1 mr-2 text-center text-xs border border-slate-300">
+            <div class="flex text-slate-700 dark:text-slate-300">
+              <div class="rounded-lg px-1 mr-2 text-center text-xs border border-slate-300 dark:border-slate-600">
                 {TR.DATE({d: plannedStartDate})} <small class="mx-0.5">{$LL.TO()}</small> {TR.DATE({d:plannedEndDate})}
               </div>
             </div>
           </div>
 
-          <div class="text-xs mt-2 text-slate-500">
+          <div class="text-xs mt-2 text-slate-500 dark:text-slate-400">
             {#if actualStartDate}
               <div class="w-fit">
                 {TR.STARTED()}:
               </div>
-            <div class="flex text-slate-700">
-              <div class="rounded-lg px-1 mr-2 text-center text-xs border border-slate-300">
+            <div class="flex text-slate-700 dark:text-slate-300">
+              <div class="rounded-lg px-1 mr-2 text-center text-xs border border-slate-300 dark:border-slate-600">
                 {TR.DATE({d:actualStartDate})} 
               </div>
             </div>
@@ -92,14 +92,14 @@ import LL from './../../i18n/i18n-svelte'
             
           </div>
 
-          <div class="text-xs mt-2 text-slate-500">
+          <div class="text-xs mt-2 text-slate-500 dark:text-slate-400">
             {#if actualEndDate}
               <div class="w-fit">
                 {TR.FINISHED()}:
               </div>
               
-              <div class="flex text-slate-700">
-                <div class="rounded-lg px-1 mr-2 text-center text-xs border border-slate-300">
+              <div class="flex text-slate-700 dark:text-slate-300">
+                <div class="rounded-lg px-1 mr-2 text-center text-xs border border-slate-300 dark:border-slate-600">
                   {TR.DATE({d:actualEndDate})}
                 </div>
               </div>
@@ -112,12 +112,12 @@ import LL from './../../i18n/i18n-svelte'
           </div>
 
          {#if description}
-          <div class="text-xs mt-2 text-slate-500">
+          <div class="text-xs mt-2 text-slate-500 dark:text-slate-400">
             <div class="w-fit">
               {$LL.DESCRIPTION()}:
             </div>
-            <div class="flex text-slate-700">
-              <div class="rounded-lg p-2 mr-2 w-full text-xs border border-slate-300">
+            <div class="flex text-slate-700 dark:text-slate-300">
+              <div class="rounded-lg p-2 mr-2 w-full text-xs border border-slate-300 dark:border-slate-600">
                 {description}
               </div>
             </div>

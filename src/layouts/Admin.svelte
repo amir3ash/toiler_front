@@ -17,9 +17,10 @@
   import { queryStore, gql } from '@urql/svelte';
   import type { UserUser } from '../gql/graphql';
   import { setLocale, } from '../i18n/i18n-svelte'
-import { loadAllLocales } from '../i18n/i18n-util.sync';
+  import { loadAllLocales } from '../i18n/i18n-util.sync';
+  import { onMount } from 'svelte';
 
-  export let location: string;
+  export let location;
 
   const client = createClient({
     url: '/gql/query',
@@ -46,8 +47,6 @@ import { loadAllLocales } from '../i18n/i18n-util.sync';
 
   $: if ($userGql.data){
     loadUserData($userGql.data.me)
-    loadAllLocales()    
-    setLocale('en')
   } else if ($userGql.error){
     window.location.replace("/user/login");
   }
@@ -55,11 +54,16 @@ import { loadAllLocales } from '../i18n/i18n-util.sync';
   function loadUserData(u: UserUser){
       $user = u
   }
+
+  onMount(()=>{
+    loadAllLocales()    
+    setLocale('en')
+  })
 </script>
 
 <div class="flex flex-1">
   <TailwindSidebar {location}/>
-  <div class="w-full lg:w-[calc(100%-16rem)] bg-blueGray-100">
+  <div class="w-full lg:w-[calc(100%-16rem)] bg-blueGray-100 dark:bg-blueGray-800">
     <AdminNavbar />
     <div class="min-h-screen">
       <div class="px-4 md:px-10 mx-auto w-full mt-24">

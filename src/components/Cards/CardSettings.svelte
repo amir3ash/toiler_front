@@ -100,13 +100,13 @@ let TR = $LL.settings;
 </script>
 
 <div
-  class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0"
+  class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0 dark:bg-blueGray-900"
 >
-  <div class="rounded-t bg-white mb-0 px-6 py-6">
+  <div class="rounded-t bg-white mb-0 px-6 py-6 dark:bg-gray-900">
     <div class="text-center flex justify-between">
-      <h6 class="text-blueGray-700 text-xl font-bold">{TR.MyAccount()}</h6>
+      <h6 class="text-blueGray-700 text-xl font-bold dark:text-slate-300">{TR.MyAccount()}</h6>
       <button
-        class="bg-red-400 text-white active:bg-red-500 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
+        class="bg-red-400 dark:bg-red-700 text-white active:bg-red-500 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
         type="button"
       >
         {TR.SETTINGS()}
@@ -120,10 +120,10 @@ let TR = $LL.settings;
         <img
           alt="{TR.YOUR_AVATAR()}"
           src="{$user.avatar}"
-          class="bg-white shadow-xl text-transparent rounded-full h-full align-middle border-none absolute w-32"
+          class="bg-white dark:bg-gray-700 shadow-xl text-transparent rounded-full h-full align-middle border-none absolute w-32"
         />
         
-        <button class="absolute w-full h-full rounded-full text-lg font-medium opacity-0 hover:opacity-100 hover:bg-white hover:bg-opacity-50"
+        <button class="absolute w-full h-full rounded-full text-lg font-medium opacity-0 hover:opacity-100 hover:bg-white hover:bg-opacity-50 dark:hover:bg-black"
           on:click="{onClick}"
         >
         <input name="avatar" hidden="{true}" type="file" accept="image/png, image/jpeg" bind:files/>
@@ -131,7 +131,7 @@ let TR = $LL.settings;
         </button>
       </div>
     </div>
-      <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
+      <h6 class="text-blueGray-400 dark:text-slate-500 text-sm mt-3 mb-6 font-bold uppercase">
         {TR.USER_INFORMATION()}
         <!-- @{username} -->
       </h6>
@@ -140,7 +140,7 @@ let TR = $LL.settings;
           <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-username"
               >
                 {TR.USERNAME()}
@@ -148,7 +148,7 @@ let TR = $LL.settings;
               <input
                 id="grid-username"
                 type="text"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{username}"
                 disabled
               />
@@ -157,7 +157,7 @@ let TR = $LL.settings;
           <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-email"
               >
                 {TR.EMAIL_ADDRESS()}
@@ -166,7 +166,7 @@ let TR = $LL.settings;
                 id="grid-email"
                 placeholder="{TR.EMAIL_PLACEHOLDER()}"
                 type="email"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                class="border-0 px-3 py-3 placeholder-blueGray-300 dark:placeholder-slate-400 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{email}"
                 on:change="{() => updated_values = {email: email, ...updated_values}}"
                 required
@@ -176,7 +176,7 @@ let TR = $LL.settings;
           <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-first-name"
               >
                 {TR.FIRSTNAME()}
@@ -185,7 +185,7 @@ let TR = $LL.settings;
                 id="grid-first-name"
                 placeholder="{TR.FIRSTNAME_PLACEHOLDER()}"
                 type="text"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                class="border-0 px-3 py-3 placeholder-blueGray-300 dark:placeholder-slate-400 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{firstName}"
                 on:change="{() => updated_values = {firstName: firstName, ...updated_values}}"
                 minlength="1"
@@ -196,7 +196,7 @@ let TR = $LL.settings;
           <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-last-name"
               >
                 {TR.LASTNAME()}
@@ -205,7 +205,7 @@ let TR = $LL.settings;
                 id="grid-last-name"
                 placeholder="{TR.LASTNAME_PLACEHOLDER()}"
                 type="text"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                class="border-0 px-3 py-3 placeholder-blueGray-300 dark:placeholder-slate-400 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{lastName}"
                 on:change="{() => updated_values = {lastName: lastName, ...updated_values}}"
               />
@@ -213,7 +213,7 @@ let TR = $LL.settings;
           </div>
           <div class="px-4 mt-5">
             <button 
-              class="py-1 px-3 font-bold bg-rose-500 text-white text-sm rounded-lg uppercase shadow"
+              class="py-1 px-3 font-bold bg-rose-500 dark:bg-rose-800 text-white text-sm rounded-lg uppercase shadow"
               type="submit"
             >
               {TR.UPDATE()}
@@ -223,9 +223,9 @@ let TR = $LL.settings;
       </form>
       
       
-      <hr class="mt-6 border-b-1 border-blueGray-300" />
+      <hr class="mt-6 border-b-1 border-blueGray-300 dark:border-blueGray-700" />
 
-      <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
+      <h6 class="text-blueGray-400 dark:text-slate-500 text-sm mt-3 mb-6 font-bold uppercase">
         <!-- Contact Information -->
         {TR.SECURITY()}
       </h6>
@@ -234,7 +234,7 @@ let TR = $LL.settings;
           <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-current-password"
               >
                 {TR.CURRENT_PASSWORD()}
@@ -243,7 +243,7 @@ let TR = $LL.settings;
                 id="grid-current-password"
                 placeholder="{TR.CURRENT_PASSWORD()}"
                 type="password"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                class="border-0 px-3 py-3 placeholder-blueGray-300 dark:placeholder-slate-400 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{currentPassword}"
                 required
               />
@@ -260,7 +260,7 @@ let TR = $LL.settings;
           <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-new-password"
               >
                 {TR.NEW_PASSWORD()}
@@ -269,7 +269,7 @@ let TR = $LL.settings;
                 id="grid-new-password"
                 placeholder="{TR.NEW_PASSWORD()}"
                 type="password"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                class="border-0 px-3 py-3 placeholder-blueGray-300 dark:placeholder-slate-400 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{newPassword1}"
                 minlength="8"
                 required
@@ -285,7 +285,7 @@ let TR = $LL.settings;
           <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
-                class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-confirm-password"
               >
                 {TR.CONFIRM_PASSWORD()}
@@ -294,7 +294,7 @@ let TR = $LL.settings;
                 id="grid-new_password"
                 placeholder="{TR.CONFIRM_PASSWORD()}"
                 type="password"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                class="border-0 px-3 py-3 placeholder-blueGray-300 dark:placeholder-slate-400 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{newPassword2}"
                 required
               />
@@ -306,7 +306,7 @@ let TR = $LL.settings;
             </div>
           </div>
 
-          <button class="mx-4 mt-5 py-1 px-3 font-bold bg-rose-500 text-white text-sm rounded-lg uppercase shadow">
+          <button class="mx-4 mt-5 py-1 px-3 font-bold bg-rose-500 dark:bg-red-800 text-white text-sm rounded-lg uppercase shadow">
             {TR.CHANGE()}
           </button>
         </div>

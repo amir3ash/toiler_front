@@ -1,131 +1,78 @@
 <script lang="ts">
-    import { link } from "svelte-routing";
+    import { Link, link } from "svelte-routing";
+    import type { RouteLocation } from "svelte-routing/types/Route";
     import LL from "../../i18n/i18n-svelte";
     import { show_sidebar } from "../../stores";
 
-    export let location;
+    export let location: RouteLocation;
 
-    $: TR = $LL.navigationSidebar
+    type UrlName = 'index'|'projects'|'assigned'|'settings'|'logout'
 
-    const urls = {
-        'index': '',
-        'projects': '/f/projects',
-        'assigned': '/f/assigned',
-        'settings': '/f/settings',
-        // 'tables': '/f/tables/',
-        'logout': '/user/logout'
-    };
-    let active = Object.entries(urls).
-        map(([name, ]) => ({[name]: false}))
-        .reduce((a,b)=>({...a, ...b}))
-
-    const falseActive = {...active};
-
-    function update(pathname: string){
-        try {
-            const [name, ] = Object.entries(urls)
-            .find(([, url]) => pathname === url)
-            console.log('path:', pathname, 'name:', name)
-
-            active = {...falseActive, [name]: true}
-        } catch (e) {}
+    type Url = {
+        name: UrlName,
+        url: string,
+        renderedTitle: () =>string,
+        icon: string,
+        isActive: boolean
     }
 
-    $: update(location.pathname)
+    let urls: Url[] = [];
 
-    function handle_page(node){
-        // const handleClick = (event) => {
-        //     let tag_a;
-        //     if (node.tagName === 'A')
-        //         tag_a = node;
-        //     else if (node.parentNode.tagName === 'A')
-        //         tag_a = node.parentNode;
-        //     else
-        //         return;
+    $: urls = [
+        {name:'projects', url: '/f/projects', renderedTitle: $LL.navigationSidebar.PROJECTS, icon: 'fa-business-time', isActive: false},
+        {name:'assigned', url: '/f/assigned', renderedTitle: $LL.navigationSidebar.ASSIGNED, icon: 'fa-calendar-check', isActive: false},
+        {name:'settings', url: '/f/settings', renderedTitle: $LL.SETTINGS, icon: 'fa-cogs', isActive: false},
+        {name:'logout', url: '/user/logout', renderedTitle: $LL.navigationSidebar.LOG_OUT, icon: 'fa-door-closed', isActive: false},
+    ];
+    
 
-        //     if (location.href.indexOf(tag_a.href) == 0){
-        //         tag_a.classList.remove('text-gray-900');
-        //         tag_a.classList.add('text-red-500');
-
-        //         node.classList.remove('text-gray-500');
-        //         node.classList.add('text-red-500');
-        //     }
+    function getProps({ location, href, isPartiallyCurrent, isCurrent }) {
+        const isActive = href === "/" ? isCurrent : isPartiallyCurrent || isCurrent;
+        // console.log('loc:',location,'href:', href,'part:', isPartiallyCurrent, isCurrent,'active:', isActive)
+        urls = urls.map(o => {
+            if (o.url === href)
+                o.isActive = isActive
+            return o
+        })
+        // The object returned here is spread on the anchor element's attributes
+        // if (isActive) {
+        //     // return { style: "color: #121212;" };
         // }
-        
-        // document.addEventListener("click", handleClick, true);
-
-        // return {
-        //     destroy() {
-        //         document.removeEventListener("click", handleClick, true);
-        //     }
-	    // }
+        return {};
     }
 </script>
 
 <aside 
-  class="fixed  lg:static z-2 lg:h-auto h-full w-64 bg-gray-100  shadow-xl transition-all -translate-x-full lg:translate-x-0"
-  aria-label="{TR.SIDEBAR()}"
+  class="fixed  lg:static z-2 lg:h-auto h-full w-64 bg-gray-100 dark:bg-gray-800 shadow-xl transition-all -translate-x-full lg:translate-x-0"
+  aria-label="{$LL.navigationSidebar.SIDEBAR()}"
   class:-translate-x-full="{!$show_sidebar}"
 >
     <div class="overflow-y-auto py-4 px-3 mt-14 rounded">
+        
         <div class="flex justify-end lg:hidden">
-            <button class="bg-gray-200 rounded-full py-0 px-1.5" on:click="{() => $show_sidebar=false}">
+            <button class="bg-gray-200 dark:bg-gray-600 rounded-full py-0 px-1.5" on:click="{() => $show_sidebar=false}">
                 <i class="fas fa-arrow-left"></i>
             </button>
         </div>
+
         <ul class="space-y-2 mt-2 lg:mt-0">
-        <!-- <li>
-            <a use:link href="{urls['dashboard']}" class="flex items-center p-2 uppercase text-sm font-normal  text-blueGray-600 rounded-lg  hover:bg-gray-100 ">
-                <svg use:handle_page class="w-6 h-6 text-gray-500 transition duration-75 op group-hover:text-gray-900 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
-                <span class="ml-3">Dashboard</span>
-            </a>
-        </li> -->
-        <li>
-            <a use:link href="{urls['projects']}" class="flex items-center p-2 uppercase text-sm font-normal text-blueGray-600 rounded-lg   hover:bg-gray-100  ">
-                <i use:handle_page class="fa fa-business-time flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75   group-hover:text-gray-900" aria-hidden="true"></i>
-                <span class="flex-1 ml-3 whitespace-nowrap">{TR.PROJECTS()}</span>
-                <!-- <span class="inline-flex justify-center items-center px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full    ">Pro</span> -->
-            </a>
-        </li>
-        <li>
-            <a use:link href="{urls['assigned']}" class="flex items-center p-2 uppercase text-sm font-normal text-blueGray-600 rounded-lg   hover:bg-gray-100  ">
-                <i use:handle_page class="fa fa-calendar-check flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75   group-hover:text-gray-900" aria-hidden="true"></i>
-                <span class="flex-1 ml-3 whitespace-nowrap">{TR.ASSIGNED()}</span>
-                <!-- <span class="inline-flex justify-center items-center p-3 ml-3 w-3 h-3 text-sm font-medium text-blue-600 bg-blue-200 rounded-full    ">3</span> -->
-            </a>
-        </li>
-        <li>
-            <a use:link href="{urls['settings']}" class="flex items-center p-2 uppercase text-sm font-normal text-blueGray-600 rounded-lg   hover:bg-gray-100  ">
-                <i use:handle_page class="fa fa-cogs flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75   group-hover:text-gray-900" aria-hidden="true"></i>
-                <span class="flex-1 ml-3 whitespace-nowrap">{$LL.SETTINGS()}</span>
-                <!-- <span class="inline-flex justify-center items-center p-3 ml-3 w-3 h-3 text-sm font-medium text-blue-600 bg-blue-200 rounded-full    ">3</span> -->
-            </a>
-        </li>
+
+            {#each urls as url}
+                <li>
+                    <Link to="{url.url}" getProps="{getProps}" class="flex items-center p-2 uppercase text-sm font-normal text-blueGray-600 rounded-lg dark:text-blueGray-400 hover:bg-gray-300 dark:hover:bg-gray-600">
+                        <i class="fa {url.icon} flex flex-shrink-0 w-6 h-6 text-gray-500  items-center transition duration-75   group-hover:text-gray-900"
+                            aria-hidden="true"
+                            class:dark:text-slate-400="{url.isActive}"
+                        ></i>
+                        <span class="flex-1 ml-3 whitespace-nowrap"
+                            class:dark:text-slate-200="{url.isActive}"
+                        >
+                            {url.renderedTitle()}
+                        </span>
+                    </Link>
+                </li>
+            {/each}
        
-        <!-- <li>
-            <a use:link href="{urls['tasks']}" class="flex items-center p-2 uppercase text-sm font-normal text-blueGray-600 rounded-lg   hover:bg-gray-100  ">
-                <svg use:handle_page class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75   group-hover:text-gray-900  " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
-                <span class="flex-1 ml-3 whitespace-nowrap">Tasks</span>
-            </a>
-        </li> -->
-        <!-- <li>
-            <a use:link href="#" class="flex items-center p-2 uppercase text-sm font-normal text-blueGray-600 rounded-lg   hover:bg-gray-100  ">
-                <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75   group-hover:text-gray-900  " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path></svg>
-                <span class="flex-1 ml-3 whitespace-nowrap">Products</span>
-            </a>
-        </li> -->
-        <!-- <li>
-            <a use:link href="#" class="flex items-center p-2 uppercase text-sm font-normal text-blueGray-600 rounded-lg   hover:bg-gray-100  ">
-                <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75   group-hover:text-gray-900  " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"></path></svg>
-                <span class="flex-1 ml-3 whitespace-nowrap">Sign In</span>
-            </a>
-        </li> -->
-        <li>
-            <a href="{urls['logout']}" class="flex items-center p-2 uppercase text-sm font-normal text-blueGray-600 rounded-lg   hover:bg-gray-100  ">
-                <i class="fa fa-door-closed flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75   group-hover:text-gray-900" aria-hidden="true"></i>
-                <span class="flex-1 ml-3 whitespace-nowrap">{TR.LOG_OUT()}</span>
-            </a>
-        </li>
         </ul>
     </div>
 </aside>

@@ -137,7 +137,7 @@ import LL from '../../i18n/i18n-svelte';
        {/each}
        
     </div>
-    <div class="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
+    <div class="border-t-2 border-gray-200 dark:border-slate-700 px-4 pt-4 mb-2 sm:mb-0">
        <div class="relative flex">
           <!-- <span class="absolute inset-y-0 flex items-center">
              <button type="button" class="inline-flex items-center justify-center rounded-full h-12 w-12 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none">
@@ -147,7 +147,7 @@ import LL from '../../i18n/i18n-svelte';
              </button>
           </span> -->
           <form on:submit|preventDefault="{sendComment}">
-          <input bind:value="{text}" type="text" placeholder="{$LL.sidebar.WRITE_YOUR_MESSAGE()}" class="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 bg-gray-200 rounded-lg">
+          <input bind:value="{text}" type="text" placeholder="{$LL.sidebar.WRITE_YOUR_MESSAGE()}" class="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 bg-gray-200 rounded-lg dark:text-slate-300 dark:placeholder-gray-500 dark:bg-slate-800">
           <div class="absolute right-0 items-center inset-y-0 hidden sm:flex">
              <!-- <button type="button" class="inline-flex items-center justify-center rounded-full h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6 text-gray-600">
