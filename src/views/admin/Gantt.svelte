@@ -9,8 +9,9 @@
     import * as ExportData from '../../../node_modules/highcharts/modules/export-data.src'
     import * as DraggablePoints  from '../../../node_modules/highcharts/modules/draggable-points.src';
     import * as U from '../../../node_modules/highcharts/es-modules/Core/Utilities';
-
+    import * as Dark from '../../../node_modules/highcharts/themes/high-contrast-dark.src';
     import type { GetProjectQuery } from '../../gql/graphql';
+    import { darkTheme } from '../../stores'
 
     type ProjectType = GetProjectQuery['project']
     type TaskType = ProjectType['tasks'][0]
@@ -22,6 +23,9 @@
     Exporting.default(Highcharts);
     OfflineExporting.default(Highcharts);
     ExportData.default(Highcharts);
+
+    if ($darkTheme)
+        Dark.default(Highcharts)
 
     export let project_data: ProjectType;
     export let mode: 'activity' | 'task';
@@ -403,7 +407,7 @@ onMount(()=>{
 </script>
 
 <div class="relative mt-4 shadow-lg">
-    <div id="gantt" class="rounded-md px-1 pt-6 bg-white"></div>
+    <div id="gantt" class="rounded-md px-1 pt-6 bg-white dark:bg-[#1f1f20]"></div>
 </div>
 
 <GanttDropdown 
