@@ -1,10 +1,11 @@
 <script lang="ts">
   import ProjectDropdown from '../Dropdowns/ProjectDropdown.svelte'
   import 'flatpickr/dist/flatpickr.css';
-import { navigate } from 'svelte-routing';
-import { send_json_data } from '../../utils/get_cookie';
-import { createEventDispatcher } from 'svelte';
-import LL from './../../i18n/i18n-svelte'
+  import { navigate } from 'svelte-routing';
+  import { send_json_data } from '../../utils/get_cookie';
+  import { createEventDispatcher } from 'svelte';
+  import LL from './../../i18n/i18n-svelte'
+  import type { UserUser } from '../../gql/graphql';
 
 
 	export let id;
@@ -14,9 +15,8 @@ import LL from './../../i18n/i18n-svelte'
 	export let actualStartDate='2022-05-01'
 	export let actualEndDate: string|null
 	export let description="";
+  export let projectManager: UserUser = null;
 
-	// export let teams=[]
-	// export let roles=[]
   
   const dispatch = createEventDispatcher();
 
@@ -36,7 +36,7 @@ import LL from './../../i18n/i18n-svelte'
 
   let dead_line_border = ''
   if (!actualEndDate && new Date(plannedEndDate) < new Date())
-    dead_line_border = 'border-2 border-red-300 rounded-md'
+    dead_line_border = 'border-2 border-red-300 rounded-md dark:border-red-800'
 
   let TR = $LL.project;
 
@@ -123,7 +123,15 @@ import LL from './../../i18n/i18n-svelte'
             </div>
           </div>
          {/if}
-          
+
+          <hr class="my-2 dark:border-slate-700">
+
+          <div class="inline-flex text-sm items-center text-slate-700 dark:text-slate-200">
+            <span class="w-6 h-6 bg-blueGray-200 dark:bg-blueGray-700 inline-flex items-center justify-center rounded-full" aria-hidden="true">
+              <img class="w-full rounded-full align-middle border-none shadow-lg" src="{projectManager.avatar}" alt="">
+            </span>
+            <div class="p-1">{projectManager.firstName} {projectManager.lastName}</div>
+          </div>
 
         </div>
       </div>

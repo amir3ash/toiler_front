@@ -351,7 +351,7 @@
                 bind:value="{object.plannedStartDate}"
                 placeholder="{TR.START_DATE()}"
                 label="{TR.PLANNED_START_DATE()}"
-                options="{{...flatpickr_options, maxDate: strDateToOption(object.plannedEndDate)}}"
+                options="{{...flatpickr_options, maxDate: strDateToOption(object.plannedEndDate)}}" 
                 on:change="{e => patchObject(e, 'plannedStartDate')}"
                 required
             />

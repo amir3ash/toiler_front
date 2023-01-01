@@ -20,6 +20,13 @@ export let location
             actualStartDate
             actualEndDate
             description
+            projectManager {
+              id
+              username
+              firstName
+              lastName
+              avatar
+            }
           }
         }
       `),
