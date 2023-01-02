@@ -5,6 +5,7 @@
   import { clickOutside } from "../../utils/click_outside";
 	import { onDestroy } from 'svelte';
   import LL from "../../i18n/i18n-svelte";
+  import { Link } from "svelte-routing";
 
   let dropdownPopoverShow = false;
 
@@ -57,12 +58,12 @@
     on:outclick="{()=>{if(dropdownPopoverShow) dropdownPopoverShow = false}}"
     class="bg-white dark:bg-black text-base z-50 float-left py-2 list-none text-left rounded shadow-lg min-w-48 {dropdownPopoverShow ? 'block':'hidden'}"
   >
-    <a
-      href="/f/settings"
+    <Link
+      to="/f/settings"
       class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700  hover:bg-slate-100 dark:text-blueGray-300 dark:hover:bg-slate-800"
     >
       {$LL.SETTINGS()}
-    </a>
+    </Link>
     
     <div class="h-0 my-2 border border-solid border-blueGray-100 dark:border-blueGray-700" />
     <a

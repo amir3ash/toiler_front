@@ -14,6 +14,7 @@
     import type { GetProjectForEditQuery } from '../../gql/graphql';
     import { getProjectQuery } from '../../gql/queries/editProjectQuery';
     import LL from '../../i18n/i18n-svelte';
+import { dir } from '../../stores';
     
     type TeamMember = GetProjectForEditQuery['teammembers'][0]
     type Team = GetProjectForEditQuery['project']['teams'][0]
@@ -243,7 +244,7 @@
         hello
     </div>
 </Modal> -->
-<div class="relative flex flex-wrap">
+<div class="relative flex flex-wrap" dir="{$dir}">
     <div class="xl:w-1/2">
   <div class="p-2 m-2 bg-white rounded-md shadow-md dark:bg-slate-900">
     <input

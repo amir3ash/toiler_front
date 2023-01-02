@@ -4,6 +4,7 @@ import { navigate } from 'svelte-routing';
 import { queryStore, gql, getContextClient } from '@urql/svelte';
 import type { GanttProject } from '../../gql/graphql';
 import LL from '../../i18n/i18n-svelte';
+import { dir } from '../../stores';
 
 
 export let location
@@ -54,7 +55,7 @@ export let location
 
     {#each projects.filter(p => !p.actualEndDate) as project (project.id)}
 
-      <div class="w-full lg:w-4/12 px-4">
+      <div class="w-full lg:w-4/12 px-4"  dir="{$dir}">
         <Project on:delete="{onDeleteProject}" {...project}/>
       </div>
       
@@ -74,9 +75,9 @@ export let location
 
 </div>
 
-<hr class="mt-6 border-b-1 border-blueGray-300" />
+<hr class="mt-6 border-b-1 border-blueGray-300 dark:border-blueGray-600" />
 
-<div class="mt-6 flex flex-wrap">
+<div class="mt-6 flex flex-wrap" dir="{$dir}">
   
     {#each projects.filter(p => p.actualEndDate) as project (project.id)}
 

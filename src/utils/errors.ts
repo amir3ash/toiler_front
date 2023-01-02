@@ -3,7 +3,7 @@ import { writable, derived } from "svelte/store"
 
 const TIMEOUT = 3000
 
-function createNotificationStore (timeout) {
+function createNotificationStore () {
     const _notifications = writable([])
 
     function send (message, type = "default", timeout) {

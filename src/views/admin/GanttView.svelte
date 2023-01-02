@@ -5,7 +5,9 @@
     import { queryStore, getContextClient, } from '@urql/svelte';
     import type { GetProjectQuery } from '../../gql/graphql';
     import { getProjectQuery } from '../../gql/queries/projectQuery';
-import LL from '../../i18n/i18n-svelte';
+    import LL from '../../i18n/i18n-svelte';
+    import { user } from '../../stores';
+    import { navigate } from 'svelte-routing';
 
     type ProjectType = GetProjectQuery['project']
     type TaskType = ProjectType['tasks'][0]
@@ -15,16 +17,20 @@ import LL from '../../i18n/i18n-svelte';
     // export let location;
     export let project_id: number
 
-    let Gantt;
+    let Gantt, PerEmployee;
 
     const loadGantt =  async () => {
 		  Gantt = (await import('./Gantt.svelte')).default;
 	  };
+    const loadPerEmployee = async () => {
+      PerEmployee = (await import('./PerEmployee.svelte')).default;
+    }
 
     const views = [
       $LL.ganttView.TASKS(),
       $LL.ganttView.GANTT(),
-      $LL.ganttView.KANBAN() 
+      $LL.ganttView.KANBAN(),
+      $LL.ganttView.EMPLOYEES(),
     ];
 
     let active_view = views[0];
@@ -34,6 +40,7 @@ import LL from '../../i18n/i18n-svelte';
 
     
     $: if (!Gantt && active_view === views[1]) loadGantt();
+    $: if (!PerEmployee && active_view === views[3]) loadPerEmployee();
 
     let projectsGql = queryStore({
       client:getContextClient(),
@@ -55,20 +62,34 @@ import LL from '../../i18n/i18n-svelte';
     </div>
 {/if}
 
-<div>
+<div class="inline-flex w-full">
     {#each views as view}
-    <button
-      class="py-1 px-2 mx-1 bg-white rounded-lg border border-cyan-300 dark:border-cyan-600 dark:bg-slate-800"
-      class:bg-cyan-100="{view === active_view}"
-      class:dark:bg-slate-700="{view === active_view}"
-      class:dark:text-cyan-500="{view === active_view}"
-      on:click="{() => active_view=view}"
-    >
-        {view}
-    </button>
+      <button
+        class="py-1 px-2 mx-1 shadow bg-white rounded-lg border border-cyan-300 dark:border-cyan-600 dark:bg-slate-800"
+        class:bg-cyan-100="{view === active_view}"
+        class:dark:bg-slate-700="{view === active_view}"
+        class:dark:text-cyan-500="{view === active_view}"
+        on:click="{() => active_view=view}"
+      >
+          {view}
+      </button>
     {/each}
-    
-    
+
+    {#if $projectsGql.data}
+      {#if $projectsGql.data.project.projectManagerId === $user.id}
+        <button
+          class="w-fit py-1 px-2 mx-1 ml-auto font-bold shadow-md bg-white rounded-lg border border-teal-400 dark:border-teal-300 dark:bg-slate-800 dark:hover:bg-slate-600 hover:bg-slate-100"
+          aria-label="edit project"
+          on:click="{()=>navigate(`/f/projects/${$projectsGql.data.project.id}/`)}"
+        >
+          {$projectsGql.data.project.name}
+        </button>
+      {:else}
+        <div aria-label="project's name" class="w-fit py-1 px-2 mx-1 ml-auto font-bold shadow-md bg-white rounded-lg border border-teal-400 dark:border-teal-300 dark:bg-slate-800">
+          {$projectsGql.data.project.name}
+        </div>
+      {/if} 
+    {/if}
 </div>
 {#if $projectsGql.data}
   {#if active_view === views[0]}
@@ -77,6 +98,8 @@ import LL from '../../i18n/i18n-svelte';
       <svelte:component this={Gantt} project_data="{$projectsGql.data.project}" bind:mode bind:selected_object/>
   {:else if active_view === views[2]}
       <Kanban project_data="{$projectsGql.data.project}" bind:mode bind:selected_object />
+  {:else if active_view === views[3]}
+      <svelte:component this={PerEmployee} project_data="{$projectsGql.data.project}" bind:mode bind:selected_object/>
   {/if}
 {:else if $projectsGql.fetching}
   {$LL.ganttView.FETCHING()} ...

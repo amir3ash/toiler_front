@@ -306,6 +306,10 @@ type RootTranslation = {
 		 */
 		KANBAN: string
 		/**
+		 * E​m​p​l​o​y​e​e​s
+		 */
+		EMPLOYEES: string
+		/**
 		 * f​e​t​c​h​i​n​g
 		 */
 		FETCHING: string
@@ -747,6 +751,10 @@ export type TranslationFunctions = {
 		 * Kanban
 		 */
 		KANBAN: () => LocalizedString
+		/**
+		 * Employees
+		 */
+		EMPLOYEES: () => LocalizedString
 		/**
 		 * fetching
 		 */

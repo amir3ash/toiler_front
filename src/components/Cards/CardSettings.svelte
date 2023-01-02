@@ -2,7 +2,7 @@
 import { onMount } from "svelte";
 import { send_json_data, getCookie} from "../../utils/get_cookie"
 import { showAlert } from '../../utils/errors'
-import { user, darkTheme } from '../../stores'
+import { user, darkTheme, dir } from '../../stores'
 import type { UserUser } from "../../gql/graphql";
 import LL, { locale, setLocale } from '../../i18n/i18n-svelte'
 import Select from "svelte-select";
@@ -103,8 +103,9 @@ import { loadLocale } from "../../i18n/i18n-util.sync";
 
   function changeLocale(localeLang: Locales){
     if (localStorage.getItem('Lang') !== localeLang){
-      setLocale(localeLang) 
+      setLocale(localeLang)
       localStorage.setItem('Lang', localeLang)
+      $dir = localeLang === 'fa' ? 'rtl':'ltr';
     }
   }
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { user } from '../stores'
+  import { dir, user } from '../stores'
   import { Router, Route } from "svelte-routing";
   import { createClient, setContextClient } from '@urql/svelte';
 
@@ -57,11 +57,13 @@
 
   onMount(()=>{
     loadAllLocales()
-    const lang = localStorage.getItem('Lang');
+    let lang = localStorage.getItem('Lang');
     if (lang !== null && (lang === 'en' || lang === 'fa'))  
       setLocale(lang)
     else
-      setLocale('en')
+      lang = 'en'
+
+    $dir =  lang === 'fa'? 'rtl': 'ltr'
   })
 </script>
 

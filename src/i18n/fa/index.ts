@@ -90,6 +90,7 @@ const fa: Translation = {
 		TASKS: 'تکالیف',
 		GANTT: 'گانت',
 		KANBAN: 'کانبان',
+		EMPLOYEES: 'کارمندان',
 		FETCHING: 'در حال دریافت',
 	},
 
@@ -121,7 +122,7 @@ const fa: Translation = {
 		PLANNED_END_DATE: 'زمان پایان برنامه‌ریزی شده',
 		START_DATE: 'تاریخ شروع',
 		END_DATE: 'تاریخ پایان',
-		PLANNED_BUDGET: 'بودجه برنامه‌ریزی شده',
+		PLANNED_BUDGET: 'بودجه پیشنهادی',
 		BUDGET: 'بودجه',
 		ASSIGNEE: 'مامور',
 		EMPLOYEE_NAME: 'نام کارمند',

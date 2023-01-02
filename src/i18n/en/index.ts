@@ -89,6 +89,7 @@ const en: BaseTranslation = {
 		TASKS: 'Tasks',
 		GANTT: 'Gantt',
 		KANBAN: 'Kanban',
+		EMPLOYEES: 'Employees',
 		FETCHING: 'fetching',
 	},
 

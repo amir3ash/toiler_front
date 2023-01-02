@@ -15,7 +15,7 @@
     import LL, { locale } from '../../i18n/i18n-svelte';
     import fa from '../../../node_modules/flatpickr/dist/esm/l10n/fa'
     import type { BaseOptions } from 'flatpickr/dist/types/options';
-    import {darkTheme} from '../../stores'
+    import {darkTheme, dir} from '../../stores'
 
     type ProjectType = GetProjectQuery['project']
     type TaskType = ProjectType['tasks'][0]
@@ -293,7 +293,7 @@
     
 </script>
 
-<div class="p-2 bg-white dark:bg-black">
+<div class="p-2 bg-white dark:bg-black" dir="{$dir}">
 
     {#if !modal}
     <div class="flex justify-end">

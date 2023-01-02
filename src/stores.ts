@@ -15,3 +15,6 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', eve
     const isDark = event.matches;
     darkTheme.set(isDark)
 });
+
+type Dir = 'rtl' | 'ltr'
+export const dir = writable(window.document.dir as Dir)

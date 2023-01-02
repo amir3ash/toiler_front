@@ -11,6 +11,7 @@ query GetProject($id: Int!) {
     actualStartDate
     actualEndDate
     description
+    projectManagerId
     states {
       id
       name

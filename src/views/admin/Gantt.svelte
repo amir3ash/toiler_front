@@ -59,7 +59,7 @@ function get_all(){
             parent: parent_id,
             description: activity.description,
             dependency: getActivityId(activity.dependencyId),
-            assignees: activity.assignees.map(o => o.user.avatar),
+            assignees: activity.assignees.map(o => o.user.username).join(' & '),
         }     
     }
 
@@ -130,6 +130,13 @@ function show_gantt(project: ProjectType, list: GanttData[], min_start:number, m
         
         plotOptions: {
             gantt: {
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.assignees}',
+                    style: {
+                        fontWeight: 'bold'
+                    }
+                },
                 animation: true,
                 dragDrop: {
                     draggableX: true,
@@ -140,7 +147,7 @@ function show_gantt(project: ProjectType, list: GanttData[], min_start:number, m
                 point: {
                     events: {
                         drop: e => {
-                            let obj: Pick<ActivityType, 'plannedStartDate'|'plannedEndDate'> = {plannedStartDate: '', plannedEndDate: ''};
+                            let obj: Partial<Pick<ActivityType, 'plannedStartDate'|'plannedEndDate'>> = {};
                             let [type, id] = e.newPointId.split('_');
                             let {start:plannedStartDate, end:plannedEndDate} = e.newPoint as any;
 
