@@ -40,6 +40,13 @@ function get_all(){
         return obj;
     }
 
+    function convertDescription(description: string){
+        if (!description || description === '')
+            return ''
+
+        return '</br>' + description.split('\n').join('</br>')
+    }
+
     
     const getActivityId = (ac_id: number) => ac_id? 'activity_' + ac_id : null;
     let min_start:number, max_end: number;
@@ -57,7 +64,7 @@ function get_all(){
             start: start,
             end: end,
             parent: parent_id,
-            description: activity.description,
+            description: convertDescription(activity.description),
             dependency: getActivityId(activity.dependencyId),
             assignees: activity.assignees.map(o => o.user.username).join(' & '),
         }     
@@ -84,6 +91,7 @@ function get_all(){
                 id: task_id,
                 start: task.plannedStartDate,
                 end: task.plannedEndDate,
+                description: convertDescription(task.description),
             }
         )
     });
@@ -92,7 +100,7 @@ function get_all(){
 
 }
 
-type GanttData = {id:string, name: string, start:number, end:number}
+type GanttData = {id:string, name: string, start:number, end:number, description: string}
 
 const day = 1000 * 60 * 60 * 24;
 
@@ -101,6 +109,9 @@ function show_gantt(project: ProjectType, list: GanttData[], min_start:number, m
     let chart: any = Highcharts.ganttChart('gantt', {
         title: {
             text: project.name
+        },
+        tooltip: {
+            pointFormat: '<span>Name: {point.name}</span><br/><span>From: {point.start:%e. %b}</span><br/><span>To: {point.end:%e. %b}</span><span>{point.description}</span'
         },
         yAxis: {
             uniqueNames: true,
