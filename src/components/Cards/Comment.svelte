@@ -7,6 +7,7 @@
    import type { GetCommentsQuery } from '../../gql/graphql';
    import { commentsQuery } from '../../gql/queries/commentQuery';
 import LL from '../../i18n/i18n-svelte';
+import { dir } from '../../stores';
 
    type Comment = GetCommentsQuery['activityComments'][0]
    type Author = Comment['author']
@@ -148,7 +149,7 @@ import LL from '../../i18n/i18n-svelte';
           </span> -->
           <form on:submit|preventDefault="{sendComment}">
           <input bind:value="{text}" type="text" placeholder="{$LL.sidebar.WRITE_YOUR_MESSAGE()}" class="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 bg-gray-200 rounded-lg dark:text-slate-300 dark:placeholder-gray-500 dark:bg-slate-800">
-          <div class="absolute right-0 items-center inset-y-0 hidden sm:flex">
+          <div class="absolute items-center inset-y-0 hidden sm:flex {$dir == 'ltr' ? 'right-0' : 'left-0'}">
              <!-- <button type="button" class="inline-flex items-center justify-center rounded-full h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6 text-gray-600">
                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path>

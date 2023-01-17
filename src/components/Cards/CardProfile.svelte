@@ -1,5 +1,5 @@
 <script>
-  import { navigate } from "svelte-routing";
+  import { Link } from "svelte-routing";
   import { user } from '../../stores';
   import { getCookie } from '../../utils/get_cookie'
   import LL from '../../i18n/i18n-svelte'
@@ -79,11 +79,9 @@
 
         {#each projects as {name, id}}
 
-          <button class="w-full mx-2 my-1.5 px-2 py-1 border border-fuchsia-300 dark:border-fuchsia-700 rounded-md text-left text-base font-medium text-slate-800 dark:text-slate-300"
-            on:click="{navigate(`/f/view/${id}/`)}"
-          >
+          <Link to="{`/f/view/${id}/`}" class="w-full block mx-2 my-1.5 px-2 py-1 border border-fuchsia-300 dark:border-fuchsia-700 rounded-md text-left text-base font-medium text-slate-800 dark:text-slate-300">
             {name}
-          </button>
+          </Link>
           
         {/each}
 

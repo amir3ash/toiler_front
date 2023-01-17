@@ -1,6 +1,7 @@
 <script lang="ts">
     import { user } from '../../stores';
     import type { GetCommentsQuery } from '../../gql/graphql';
+    import { locale } from '../../i18n/i18n-svelte';
 
     type Comment = GetCommentsQuery['activityComments'][0]
     type Author = Comment['author']
@@ -15,9 +16,9 @@
     const lastMessageClass = isMine ? 'rounded-br-none' : 'rounded-bl-none';
     
     const dateOptions = {};
-    const timeFormatter = new Intl.DateTimeFormat('en', {hour: "2-digit", minute: "2-digit", hour12: false,})
+    const timeFormatter = new Intl.DateTimeFormat($locale, {hour: "2-digit", minute: "2-digit", hour12: false,})
 
-    const dateFormatter = new Intl.DateTimeFormat('en', {year: 'numeric',month: 'short', day: "2-digit"})
+    const dateFormatter = new Intl.DateTimeFormat($locale, {year: 'numeric',month: 'short', day: "2-digit"})
     
     let last_date_text: string = null;
     function getDateText(date: Date){
@@ -63,7 +64,7 @@
                 </div>
             {/each}
         </div> 
-        <img class="w-6 h-6 rounded-full sticky bottom-1 overflow-hidden text-transparent bg-blueGray-200 {isMine ? 'order-2' : 'order-1'}"
+        <img class="w-6 h-6 rounded-full sticky bottom-1 overflow-hidden text-transparent bg-blueGray-200 dark:bg-blueGray-700 {isMine ? 'order-2' : 'order-1'}"
             src="{isMine ? $user.avatar : author.avatar}"   
             alt="{isMine ? 'my avatar' : `${author.username}'s avatar`}"
         >
