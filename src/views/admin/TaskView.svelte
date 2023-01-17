@@ -67,6 +67,8 @@
                 }
             }
 
+            edit_mode = null;
+            edit_object = null;
             const message = create_mode ? $LL.taskView.CREATED() : $LL.taskView.UPDATED();
             showAlert(message, 'success');
         })
@@ -108,7 +110,11 @@
     }
 
     function createTask(){
-        edit_object = default_object as TaskType
+        edit_object = {
+            ...default_object,
+            __typename: 'GanttTask',
+            activities: []
+        };
         edit_mode = 'task';
         create_mode = true; 
     }
