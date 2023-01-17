@@ -57,12 +57,17 @@
 
   onMount(()=>{
     loadAllLocales()
+    const defaultLang = 'en';
     let lang = localStorage.getItem('Lang');
-    if (lang !== null && (lang === 'en' || lang === 'fa'))  
+    
+    if (lang !== null && (lang === 'en' || lang === 'fa'))
       setLocale(lang)
-    else
-      lang = 'en'
-
+    else {
+      lang = defaultLang
+      localStorage.setItem('Lang', defaultLang)
+      setLocale(defaultLang)
+    }
+    
     $dir =  lang === 'fa'? 'rtl': 'ltr'
   })
 </script>

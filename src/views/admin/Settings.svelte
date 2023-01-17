@@ -6,6 +6,10 @@
   export let location;
 </script>
 
+<svelte:head>
+  <title>Toiler - Settings</title>
+</svelte:head>
+
 <div class="flex flex-wrap">
   <div class="w-full lg:w-8/12 px-4" dir="{$dir}">
     <CardSettings />

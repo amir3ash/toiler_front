@@ -50,6 +50,12 @@
 
 </script>
 
+<svelte:head>
+  <title>
+    Toiler -  Project "{$projectsGql.data && $projectsGql.data.project.name}"
+  </title>
+</svelte:head>
+
 {#if selected_object}
     <div class="absolute mt-24 w-80 z-2 right-0 top-0 rounded-lg shadow-lg bg-white transition-all duration-500 translate-x-0">
         <SideBarDetail

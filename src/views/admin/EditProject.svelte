@@ -14,7 +14,7 @@
     import type { GetProjectForEditQuery } from '../../gql/graphql';
     import { getProjectQuery } from '../../gql/queries/editProjectQuery';
     import LL from '../../i18n/i18n-svelte';
-import { dir } from '../../stores';
+    import { dir } from '../../stores';
     
     type TeamMember = GetProjectForEditQuery['teammembers'][0]
     type Team = GetProjectForEditQuery['project']['teams'][0]
@@ -229,6 +229,11 @@ import { dir } from '../../stores';
     // dateFormat: "U",
     }
 </script>
+
+<svelte:head>
+    <title>Toiler - Edit Project "{name}"</title>
+</svelte:head>
+
 <!-- <FlatPickr
               class="rounded-lg p-0 ml-2 w-24 md:w-20 focus:outline-none text-center text-xs border-slate-300"
               bind:value={planned_end_date}

@@ -45,6 +45,10 @@ export let location
   }
 </script>
 
+<svelte:head>
+  <title>Toiler - Projects</title>
+</svelte:head>
+
 <div class="flex flex-wrap">
 
   {#if $projectsGql.fetching}
