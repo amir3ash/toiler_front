@@ -132,6 +132,10 @@ const fa: Translation = {
 		SEND: 'ارسال'
 	},
 
+	assignedToMe: {
+		DATE: '{d|shortDate}'
+	},
+	
 	navigationSidebar: {
 		SIDEBAR: 'فهرست کناری',
 		PROJECTS: 'پروژه‌ها',

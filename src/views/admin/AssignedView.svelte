@@ -1,14 +1,14 @@
 <script lang="ts">
-    import { search_text } from '../../stores'
+    import { dir, search_text } from '../../stores'
     import SideBarDetail from '../../components/Cards/SideBarDetail.svelte'
     import { queryStore, getContextClient, } from '@urql/svelte';
     import type { AssignedToMeQuery } from '../../gql/graphql';
     import { assignedToMeQuery } from '../../gql/queries/assigned';
+    import LL from '../../i18n/i18n-svelte';
 
     type AssignedType = AssignedToMeQuery['assignedToMe'][0]
     type ActivityType = AssignedType['activity'] & {'redStatus': boolean}
 
-    const formatter = Intl.DateTimeFormat('en', {year: "numeric", day: "numeric", month: "short"});
     const now = new Date();
 
     let assignededToMeActivities: ActivityType[] = [];
@@ -25,9 +25,7 @@
         assignededToMeActivities = $assignedToMeGql.data.assignedToMe.map(a=> a.activity).map(
             (activity: ActivityType) => {
                 const end_date = new Date(activity.plannedEndDate);
-        
-                activity.plannedEndDate = formatter.format(end_date);
-                
+                activity.plannedEndDate = end_date
                 activity.redStatus = end_date < now;
 
                 return activity;
@@ -81,8 +79,8 @@
                         <span class="inline-block h-6 px-2 max-w-[10rem] text-ellipsis overflow-hidden rounded-full border border-zinc-300 dark:border-zinc-700">
                             {activity.task.project.name}
                         </span>
-                        <span class="inline-block h-6 ml-1 px-2 rounded-full whitespace-nowrap border {activity.redStatus?'border-red-300 dark:border-red-700':'border-sky-300 dark:border-sky-700'}">
-                            {activity.plannedEndDate}
+                        <span dir="{$dir}" class="inline-block h-6 ml-1 px-2 rounded-full whitespace-nowrap border {activity.redStatus?'border-red-300 dark:border-red-700':'border-sky-300 dark:border-sky-700'}">
+                            {$LL.assignedToMe.DATE({d:activity.plannedEndDate})}
                         </span>
                     </div>
                 </div>

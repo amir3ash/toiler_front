@@ -130,6 +130,10 @@ const en: BaseTranslation = {
 		SEND: 'Send',
 	},
 
+	assignedToMe: {
+		DATE: '{d|shortDate}'
+	},
+
 	navigationSidebar: {
 		SIDEBAR: 'Sidebar',
 		PROJECTS: 'Projects',

@@ -435,6 +435,13 @@ type RootTranslation = {
 		 */
 		SEND: string
 	}
+	assignedToMe: {
+		/**
+		 * {​d​|​s​h​o​r​t​D​a​t​e​}
+		 * @param {unknown} d
+		 */
+		DATE: RequiredParams<'d|shortDate'>
+	}
 	navigationSidebar: {
 		/**
 		 * S​i​d​e​b​a​r
@@ -878,6 +885,12 @@ export type TranslationFunctions = {
 		 */
 		SEND: () => LocalizedString
 	}
+	assignedToMe: {
+		/**
+		 * {d|shortDate}
+		 */
+		DATE: (arg: { d: unknown }) => LocalizedString
+	}
 	navigationSidebar: {
 		/**
 		 * Sidebar
@@ -906,4 +919,5 @@ export type TranslationFunctions = {
 
 export type Formatters = {
 	dateFormatter: (value: string) => unknown
+	shortDate: (value: unknown) => unknown
 }
