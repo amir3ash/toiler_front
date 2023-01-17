@@ -237,13 +237,19 @@ function addEvents(el, types, fn, options) {
 }
 
 function addDependency({point, dependencyId}){
-    let series = gantt.series[0], chart= series.chart;
+    let series = gantt.series[0];
         
-    let [, getActivityId] = point.id.split('_');
-    let [, activity_dependency_id] = dependencyId.split('_')
+    let [type, activityId] = point.id.split('_');
+    let [dependencyType, activityDependencyId] = dependencyId.split('_')
+    
+    if (type !== dependencyType || dependencyId !== 'activity'){
+        showAlert('Can not create dependency on Task.', 'error')
+        return
+    }
 
-    send_json_data(`/gantt/activity/${getActivityId}/`, 'PATCH', {
-        dependency: activity_dependency_id
+
+    send_json_data(`/gantt/activity/${activityId}/`, 'PATCH', {
+        dependency: activityDependencyId
     })
     .then(data => showAlert('Updated', 'success'))
     .catch(e => showAlert(e))

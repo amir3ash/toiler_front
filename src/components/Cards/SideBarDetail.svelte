@@ -22,7 +22,7 @@
     type ActivityType = TaskType['activities'][0]
     type State = ProjectType['states'][0]
     
-    $: TR = $LL.sidebar;
+    const TR = $LL.sidebar;
 
     const dispatch = createEventDispatcher()
     const close = () => dispatch('close', {id: object.id});
@@ -158,7 +158,19 @@
         locale: $locale === 'fa' ? fa.fa : null
     }
 
-    $: if (state!==null && mode==='activity' && object.__typename == "GanttActivity"){
+    $: if (state!==null && mode==='activity'){
+        updateState()
+    }
+
+    $: if (assignees!==null && mode==='activity'){
+        updateAssignees()
+    }
+
+    $: if ($dataGql.data) loadGqlInto($dataGql.data)
+    
+    function updateState(){
+        if (object.__typename !== "GanttActivity")
+            return
 
         if (state === undefined && object.state !== null){
             object.state = null;
@@ -169,13 +181,6 @@
             patchObject(null, 'state');
         }
     }
-
-    $: if (assignees!==null && mode==='activity' && object.__typename =="GanttActivity"){
-        updateAssignees()
-    }
-
-    $: if ($dataGql.data) loadGqlInto($dataGql.data)
-    
 
     function updateAssignees(){
         if (object.__typename != "GanttActivity")
