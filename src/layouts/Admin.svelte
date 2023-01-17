@@ -68,7 +68,10 @@
       setLocale(defaultLang)
     }
     
-    $dir =  lang === 'fa'? 'rtl': 'ltr'
+    $dir =  lang === 'fa'? 'rtl': 'ltr';
+    
+    if (lang === 'fa')
+      document.body.style.fontFamily = 'IranSans';
   })
 </script>
 
