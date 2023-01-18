@@ -20,6 +20,7 @@ specifiers:
   '@tsconfig/svelte': ^1.0.10
   '@urql/svelte': ^3.0.3
   autoprefixer: ^10.4.8
+  codegen-graphql-scalar-locations: 1.0.1-0
   flatpickr: ^4.6.13
   graphql: ^16.6.0
   highcharts: ^10.3.2
@@ -43,6 +44,7 @@ specifiers:
   tslib: ^2.1.0
   typesafe-i18n: ^5.18.0
   typescript: ^4.9.4
+  urql-serialize-scalars-exchange: ^1.0.8
   vite: ^4.0.3
 
 dependencies:
@@ -53,6 +55,7 @@ dependencies:
   '@rollup/plugin-alias': 3.1.9_rollup@2.79.1
   '@tailwindcss/forms': 0.5.2_tailwindcss@3.2.4
   '@urql/svelte': 3.0.3_smchvnpsuwxznjby6vslmblte4
+  codegen-graphql-scalar-locations: 1.0.1-0
   flatpickr: 4.6.13
   graphql: 16.6.0
   highcharts: 10.3.2
@@ -62,6 +65,7 @@ dependencies:
   svelte-select: 4.4.7
   svelte-websocket-store: 1.1.33
   typesafe-i18n: 5.18.0_typescript@4.9.4
+  urql-serialize-scalars-exchange: 1.0.8_graphql@16.6.0
 
 devDependencies:
   '@graphql-codegen/cli': 2.16.1_fi2unsm2uqmoikyi4dmwfwvz5i
@@ -1894,6 +1898,16 @@ packages:
       '@types/node': 17.0.23
     dev: true
 
+  /@urql/core/2.6.1_graphql@16.6.0:
+    resolution: {integrity: sha512-gYrEHy3tViJhwIhauK6MIf2Qp09QTsgNHZRd0n71rS+hF6gdwjspf1oKljl4m25+272cJF7fPjBUGmjaiEr7Kg==}
+    peerDependencies:
+      graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+    dependencies:
+      '@graphql-typed-document-node/core': 3.1.1_graphql@16.6.0
+      graphql: 16.6.0
+      wonka: 4.0.15
+    dev: false
+
   /@urql/core/3.1.1_graphql@16.6.0:
     resolution: {integrity: sha512-Mnxtq4I4QeFJsgs7Iytw+HyhiGxISR6qtyk66c9tipozLZ6QVxrCiUPF2HY4BxNIabaxcp+rivadvm8NAnXj4Q==}
     peerDependencies:
@@ -2345,6 +2359,13 @@ packages:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
     engines: {node: '>=0.8'}
     dev: true
+
+  /codegen-graphql-scalar-locations/1.0.1-0:
+    resolution: {integrity: sha512-yx30AfgCsyeCHuWadBOBCklPwFESra1DyWdpR2awCLmnom1N8falbgfUWg4RbhPNOGNiOsRAGwxdKyCBZh5rwQ==}
+    engines: {node: '>=10'}
+    dependencies:
+      lodash: 4.17.21
+    dev: false
 
   /color-convert/1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}
@@ -4630,6 +4651,15 @@ packages:
     dependencies:
       tslib: 2.4.1
 
+  /urql-serialize-scalars-exchange/1.0.8_graphql@16.6.0:
+    resolution: {integrity: sha512-srGQuP2bpALVHb86l7/HMBzWbfu10p1hyBEeEhWfPX9/N9rjT4VzxkrOg1Dhy9TlLzckpcWVcLVaVtMPLpc9Cw==}
+    engines: {node: '>=10'}
+    dependencies:
+      '@urql/core': 2.6.1_graphql@16.6.0
+    transitivePeerDependencies:
+      - graphql
+    dev: false
+
   /util-deprecate/1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
@@ -4727,6 +4757,10 @@ packages:
 
   /which-module/2.0.0:
     resolution: {integrity: sha512-B+enWhmw6cjfVC7kS8Pj9pCrKSc5txArRyaYGe088shv/FGWH+0Rjx/xPgtsWfsUtS27FkP697E4DDhgrgoc0Q==}
+
+  /wonka/4.0.15:
+    resolution: {integrity: sha512-U0IUQHKXXn6PFo9nqsHphVCE5m3IntqZNB9Jjn7EB1lrR7YTDY3YWgFvEvwniTzXSvOH/XMzAZaIfJF/LvHYXg==}
+    dev: false
 
   /wonka/6.1.2:
     resolution: {integrity: sha512-zNrXPMccg/7OEp9tSfFkMgTvhhowqasiSHdJ3eCZolXxVTV/aT6HUTofoZk9gwRbGoFey/Nss3JaZKUMKMbofg==}

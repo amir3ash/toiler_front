@@ -1,7 +1,7 @@
 <script lang="ts">
   import { dir, user } from '../stores'
   import { Router, Route } from "svelte-routing";
-  import { createClient, setContextClient } from '@urql/svelte';
+  import { cacheExchange, createClient, dedupExchange, fetchExchange, setContextClient } from '@urql/svelte';
 
   // components for this layout
   import AdminNavbar from "../components/Navbars/AdminNavbar.svelte";
@@ -16,14 +16,27 @@
   import NotFound from "../views/NotFound.svelte"
   import { queryStore, gql } from '@urql/svelte';
   import type { UserUser } from '../gql/graphql';
+  import { scalarLocations } from '../gql/graphql';
   import { setLocale, } from '../i18n/i18n-svelte'
   import { loadAllLocales } from '../i18n/i18n-util.sync';
   import { onMount } from 'svelte';
-
+  import createSerializeScalarsExchange from 'urql-serialize-scalars-exchange'
   export let location;
+
+  const scalarsExchange = createSerializeScalarsExchange(
+    scalarLocations,
+    {
+      DateTime: {
+        serialize: (v: Date) => typeof v === 'string' ? v : v.toISOString(),
+        deserialize: (v: string) => new Date(v),
+      },
+    }
+  );
+
 
   const client = createClient({
     url: '/gql/query',
+    exchanges: [scalarsExchange as any, dedupExchange, cacheExchange, fetchExchange]
   });
 
   setContextClient(client);

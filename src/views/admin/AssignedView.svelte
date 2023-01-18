@@ -24,10 +24,7 @@
     $: if ($assignedToMeGql.data){
         assignededToMeActivities = $assignedToMeGql.data.assignedToMe.map(a=> a.activity).map(
             (activity: ActivityType) => {
-                const end_date = new Date(activity.plannedEndDate);
-                activity.plannedEndDate = end_date
-                activity.redStatus = end_date < now;
-
+                activity.redStatus = activity.plannedEndDate < now;
                 return activity;
             }
         )

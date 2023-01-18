@@ -268,3 +268,95 @@ export const AssignedToMeDocument = {"kind":"Document","definitions":[{"kind":"O
 export const GetCommentsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getComments"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"activityComments"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"activityPk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"}}]}}]}}]}}]} as unknown as DocumentNode<GetCommentsQuery, GetCommentsQueryVariables>;
 export const GetProjectForEditDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getProjectForEdit"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"project"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"plannedStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"plannedEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"actualStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"actualEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"roles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"teams"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","alias":{"kind":"Name","value":"teammembers"},"name":{"kind":"Name","value":"projectTeamMembers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"project"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"role"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"team"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"}}]}}]}}]}}]} as unknown as DocumentNode<GetProjectForEditQuery, GetProjectForEditQueryVariables>;
 export const GetProjectDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetProject"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"project"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"plannedStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"plannedEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"actualStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"actualEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"projectManagerId"}},{"kind":"Field","name":{"kind":"Name","value":"states"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"tasks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"plannedStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"plannedEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"actualStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"actualEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"plannedBudget"}},{"kind":"Field","name":{"kind":"Name","value":"actualBudget"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"activities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"plannedStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"plannedEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"actualStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"actualEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"plannedBudget"}},{"kind":"Field","name":{"kind":"Name","value":"actualBudget"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"taskId"}},{"kind":"Field","name":{"kind":"Name","value":"dependencyId"}},{"kind":"Field","name":{"kind":"Name","value":"state"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"assignees"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"activityId"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetProjectQuery, GetProjectQueryVariables>;
+
+export type ObjectFieldTypes = {
+    [key: string]: { [key: string]: string | string[] }
+};
+
+export type OpTypes = {
+    [key: string]: string | string[]
+};
+
+export type ScalarLocations = {
+ scalars: string[],
+ inputObjectFieldTypes: ObjectFieldTypes;
+ outputObjectFieldTypes: ObjectFieldTypes;
+ operationMap: OpTypes;
+};
+
+export const scalarLocations : ScalarLocations = {
+  "inputObjectFieldTypes": {},
+  "outputObjectFieldTypes": {
+    "GanttActivity": {
+      "actualEndDate": "DateTime",
+      "actualStartDate": "DateTime",
+      "assignees": "GanttAssigned",
+      "plannedEndDate": "DateTime",
+      "plannedStartDate": "DateTime",
+      "state": "GanttState",
+      "task": "GanttTask"
+    },
+    "GanttAssigned": {
+      "activity": "GanttActivity",
+      "user": "UserUser"
+    },
+    "GanttComment": {
+      "author": "UserUser",
+      "createdAt": "DateTime",
+      "updatedAt": "DateTime"
+    },
+    "GanttProject": {
+      "actualEndDate": "DateTime",
+      "actualStartDate": "DateTime",
+      "plannedEndDate": "DateTime",
+      "plannedStartDate": "DateTime",
+      "projectManager": "UserUser",
+      "roles": "GanttRole",
+      "states": "GanttState",
+      "tasks": "GanttTask",
+      "teams": "GanttTeam"
+    },
+    "GanttTask": {
+      "activities": "GanttActivity",
+      "actualEndDate": "DateTime",
+      "actualStartDate": "DateTime",
+      "plannedEndDate": "DateTime",
+      "plannedStartDate": "DateTime",
+      "project": "GanttProject"
+    },
+    "GanttTeam": {
+      "project": "GanttProject"
+    },
+    "GanttTeammember": {
+      "role": "GanttRole",
+      "team": "GanttTeam",
+      "user": "UserUser"
+    },
+    "Query": {
+      "activity": "GanttActivity",
+      "activityComments": "GanttComment",
+      "assigned": "GanttAssigned",
+      "assignedToMe": "GanttAssigned",
+      "me": "UserUser",
+      "project": "GanttProject",
+      "projectActivities": "GanttActivity",
+      "projectAssigned": "GanttAssigned",
+      "projectEmployees": "UserUser",
+      "projectRoles": "GanttRole",
+      "projectStates": "GanttState",
+      "projectTasks": "GanttTask",
+      "projectTeamMembers": "GanttTeammember",
+      "projectTeams": "GanttTeam",
+      "projects": "GanttProject",
+      "role": "GanttRole",
+      "state": "GanttState",
+      "task": "GanttTask",
+      "team": "GanttTeam",
+      "userSearchUsers": "UserUser"
+    }
+  },
+  "operationMap": {},
+  "scalars": [
+    "DateTime"
+  ]
+};

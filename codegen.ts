@@ -10,7 +10,8 @@ const config: CodegenConfig = {
   generates: {
     'src/gql/': {
       preset: 'gql-tag-operations-preset',
-      plugins: [],
+      plugins: ['graphql-scalar-locations'],
+      // config : {scalars: ['DateTime']}
         // 'typescript',
         // 'typescript-operations',
       // ]
