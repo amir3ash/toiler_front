@@ -22,10 +22,9 @@
         {name:'projects', url: '/f/projects', renderedTitle: $LL.navigationSidebar.PROJECTS, icon: 'fa-business-time', isActive: false},
         {name:'assigned', url: '/f/assigned', renderedTitle: $LL.navigationSidebar.ASSIGNED, icon: 'fa-calendar-check', isActive: false},
         {name:'settings', url: '/f/settings', renderedTitle: $LL.SETTINGS, icon: 'fa-cogs', isActive: false},
-        {name:'logout', url: '/user/logout', renderedTitle: $LL.navigationSidebar.LOG_OUT, icon: 'fa-door-closed', isActive: false},
+        // {name:'logout', url: '/user/logout', renderedTitle: $LL.navigationSidebar.LOG_OUT, icon: 'fa-door-closed', isActive: false},
     ];
     
-
     function getProps({ location, href, isPartiallyCurrent, isCurrent }) {
         const isActive = href === "/" ? isCurrent : isPartiallyCurrent || isCurrent;
         // console.log('loc:',location,'href:', href,'part:', isPartiallyCurrent, isCurrent,'active:', isActive)
@@ -72,6 +71,17 @@
                     </Link>
                 </li>
             {/each}
+
+            <li>
+                <a href="/user/logout" class="flex items-center p-2 uppercase text-sm font-normal text-blueGray-600 rounded-lg dark:text-blueGray-400 hover:bg-gray-300 dark:hover:bg-gray-600">
+                    <i class="fa fa-door-closed flex flex-shrink-0 w-6 h-6 text-gray-500  items-center transition duration-75   group-hover:text-gray-900"
+                        aria-hidden="true"
+                    ></i>
+                    <span class="flex-1 ml-3 whitespace-nowrap">
+                        {$LL.navigationSidebar.LOG_OUT()}
+                    </span>
+                </a>
+            </li>
        
         </ul>
     </div>

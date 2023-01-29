@@ -253,7 +253,7 @@ function addDependency({point, dependencyId}){
     let [type, activityId] = point.id.split('_');
     let [dependencyType, activityDependencyId] = dependencyId.split('_')
     
-    if (type !== dependencyType || dependencyId !== 'activity'){
+    if (type !== dependencyType || dependencyType !== 'activity'){
         showAlert('Can not create dependency on Task.', 'error')
         return
     }
