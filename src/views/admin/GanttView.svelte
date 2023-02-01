@@ -17,7 +17,7 @@
     // export let location;
     export let project_id: number
 
-    let Gantt, PerEmployee;
+    let Gantt, PerEmployee, Budget;
 
     const loadGantt =  async () => {
 		  Gantt = (await import('./Gantt.svelte')).default;
@@ -25,12 +25,16 @@
     const loadPerEmployee = async () => {
       PerEmployee = (await import('./PerEmployee.svelte')).default;
     }
+    const loadBudget = async () => {
+      Budget = (await import('./BudgetView.svelte')).default;
+    }
 
     const views = [
       $LL.ganttView.TASKS(),
       $LL.ganttView.GANTT(),
       $LL.ganttView.KANBAN(),
       $LL.ganttView.EMPLOYEES(),
+      "budget"
     ];
 
     let active_view = views[0];
@@ -41,6 +45,8 @@
     
     $: if (!Gantt && active_view === views[1]) loadGantt();
     $: if (!PerEmployee && active_view === views[3]) loadPerEmployee();
+    $: if (!Budget && active_view === views[4]) loadBudget();
+
 
     let projectsGql = queryStore({
       client:getContextClient(),
@@ -106,6 +112,8 @@
       <Kanban project_data="{$projectsGql.data.project}" bind:mode bind:selected_object />
   {:else if active_view === views[3]}
       <svelte:component this={PerEmployee} project_data="{$projectsGql.data.project}" bind:mode bind:selected_object/>
+  {:else if active_view === views[4]}
+      <svelte:component this={Budget} project_data="{$projectsGql.data.project}"/>
   {/if}
 {:else if $projectsGql.fetching}
   {$LL.ganttView.FETCHING()} ...

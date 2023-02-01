@@ -169,12 +169,36 @@ function show_gantt(project: ProjectType, list: GanttData[], min_start:number, m
                                 obj.plannedEndDate = new Date(plannedEndDate).toISOString();
 
                             send_json_data(`/gantt/${type}/${id}/`, 'PATCH', obj)
-                            .then(data => showAlert('Updated', 'success', 700))
+                            .then(data => {
+                                showAlert('Updated', 'success', 700)
+                                
+                                const start = new Date(data.plannedStartDate);
+                                const end = new Date(data.plannedEndDate);
+                                const objId = parseInt(id);
+                                
+                                if (type === 'task'){
+                                    let index = project_data.tasks.findIndex(t => t.id === objId);
+                                    if (index < 0) return;
+                                    project_data.tasks[index].plannedStartDate = start;
+                                    project_data.tasks[index].plannedEndDate = end;
+                                }
+
+                                if (type !== 'activity')
+                                    return
+
+                                for (const task of project_data.tasks) {
+                                    let index = task.activities.findIndex(a => a.id === objId);
+                                    if (index < 0) continue;
+                                    task.activities[index].plannedStartDate = start;
+                                    task.activities[index].plannedEndDate = end;
+                                    break;
+                                }
+                            })
                             .catch(e => showAlert(e, 'error'))
                         },
                         mouseOver: showSide,
                         mouseOut: pointMouseOut,
-                        click: e => {console.log(chart)
+                        click: e => {
                             const [type, strid] = e.point.options.id.split('_');
                             const id = parseInt(strid)
 

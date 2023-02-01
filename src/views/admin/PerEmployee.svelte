@@ -104,7 +104,31 @@ function show_employees() {
                   obj.plannedEndDate = new Date(plannedEndDate).toISOString();
 
               send_json_data(`/gantt/${type}/${id}/`, 'PATCH', obj)
-              .then(data => showAlert('Updated', 'success', 700))
+              .then(data => {
+                showAlert('Updated', 'success', 700)
+                
+                let start = new Date(data.plannedStartDate);
+                let end = new Date(data.plannedEndDate);
+                let objId = parseInt(id);
+
+                if (type !== 'activity')
+                    return
+
+                for (const task of project_data.tasks) {
+                    let index = task.activities.findIndex(a => a.id === objId);
+                    if (index < 0) continue;
+                    task.activities[index].plannedStartDate = start;
+                    task.activities[index].plannedEndDate = end;
+                    break;
+                }
+
+                const newSeries = generateSeries();
+                chart.update({
+                  // @ts-ignore 
+                  series: newSeries
+                }, true, true, true)
+                  
+              })
               .catch(e => showAlert(e, 'error'))
             },
             click: e => {
