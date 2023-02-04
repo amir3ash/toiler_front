@@ -8,11 +8,13 @@
     import LL from '../../i18n/i18n-svelte';
     import { user } from '../../stores';
     import { navigate } from 'svelte-routing';
+    import { onMount } from 'svelte';
 
     type ProjectType = GetProjectQuery['project']
     type TaskType = ProjectType['tasks'][0]
     type ActivityType = TaskType['activities'][0]
     
+    const activeKey = 'activeView'; // localStorege key
    
     // export let location;
     export let project_id: number
@@ -34,10 +36,11 @@
       $LL.ganttView.GANTT(),
       $LL.ganttView.KANBAN(),
       $LL.ganttView.EMPLOYEES(),
-      "budget"
+      $LL.ganttView.BUDGET(),
     ];
 
-    let active_view = views[0];
+    let active_view: string;
+
 
     let selected_object: ActivityType | TaskType = null;
     let mode: 'activity' | 'task' = null;
@@ -53,6 +56,20 @@
       query: getProjectQuery,
       variables: {id: project_id}
     });
+    
+    function changeActiveView(view: string){
+      active_view = view;
+      localStorage.setItem(activeKey, view)
+    }
+
+    onMount(() => {
+      let storedView = localStorage.getItem(activeKey);
+      if (!storedView){
+        storedView = views[0];
+        localStorage.setItem(activeKey, storedView);
+      }
+      active_view = storedView;
+    })
 
 </script>
 
@@ -81,7 +98,7 @@
         class:bg-cyan-100="{view === active_view}"
         class:dark:bg-slate-700="{view === active_view}"
         class:dark:text-cyan-500="{view === active_view}"
-        on:click="{() => active_view=view}"
+        on:click="{() => changeActiveView(view)}"
       >
           {view}
       </button>
