@@ -90,6 +90,7 @@ const en: BaseTranslation = {
 		GANTT: 'Gantt',
 		KANBAN: 'Kanban',
 		EMPLOYEES: 'Employees',
+		BUDGET: 'Budget',
 		FETCHING: 'fetching',
 	},
 

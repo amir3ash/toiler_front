@@ -91,6 +91,7 @@ const fa: Translation = {
 		GANTT: 'گانت',
 		KANBAN: 'کانبان',
 		EMPLOYEES: 'کارمندان',
+		BUDGET: 'بودجه',
 		FETCHING: 'در حال دریافت',
 	},
 

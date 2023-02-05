@@ -310,6 +310,10 @@ type RootTranslation = {
 		 */
 		EMPLOYEES: string
 		/**
+		 * B​u​d​g​e​t
+		 */
+		BUDGET: string
+		/**
 		 * f​e​t​c​h​i​n​g
 		 */
 		FETCHING: string
@@ -762,6 +766,10 @@ export type TranslationFunctions = {
 		 * Employees
 		 */
 		EMPLOYEES: () => LocalizedString
+		/**
+		 * Budget
+		 */
+		BUDGET: () => LocalizedString
 		/**
 		 * fetching
 		 */
