@@ -5,7 +5,7 @@
     import CardAddTeamMember from '../../components/Cards/CardAddTeamMember.svelte';
     import { send_json_data } from '../../utils/get_cookie';
     // import CardAddTeam from 'components/Cards/CardAddTeam.svelte';
-    import FlatPickr from 'svelte-flatpickr'
+    import FlatPickr from '../../components/Cards/FlatPickr.svelte'
     import Input from '../../utils/VariableSizedInput.svelte';
     import { onMount } from 'svelte';
     import { showAlert } from '../../utils/errors.js';
@@ -13,8 +13,11 @@
     import { queryStore, getContextClient } from '@urql/svelte';
     import type { GetProjectForEditQuery } from '../../gql/graphql';
     import { getProjectQuery } from '../../gql/queries/editProjectQuery';
-    import LL from '../../i18n/i18n-svelte';
+    import LL, { locale } from '../../i18n/i18n-svelte';
     import { dir } from '../../stores';
+    import fa from '../../../node_modules/flatpickr/dist/esm/l10n/fa'
+    import type { BaseOptions } from 'flatpickr/dist/types/options';
+    import { hijriCalendarPlugin } from '../../utils/persian_cal';
     
     type TeamMember = GetProjectForEditQuery['teammembers'][0]
     type Team = GetProjectForEditQuery['project']['teams'][0]
@@ -222,11 +225,15 @@
         showAlert(TR.ERR_GETTING_PROJECT())
     }
 
-    const date_options = {
+    const date_options: Partial<BaseOptions> = {
         // dateFormat: 'Y',
     //     altInput: true,
     // altFormat: "H:i K",
     // dateFormat: "U",
+        locale: $locale === 'fa' ? fa.fa : null,
+        plugins:  [
+            hijriCalendarPlugin({justDate: true}),  
+        ]
     }
 </script>
 
@@ -234,21 +241,6 @@
     <title>Toiler - Edit Project "{name}"</title>
 </svelte:head>
 
-<!-- <FlatPickr
-              class="rounded-lg p-0 ml-2 w-24 md:w-20 focus:outline-none text-center text-xs border-slate-300"
-              bind:value={planned_end_date}
-              placeholder="End date"
-              label="Planed end date"
-              required
-            /> -->
-<!-- <Modal>
-    <h6 slot="header" class="text-lg m-2 font-medium">
-        Edit the name of employee
-    </h6>
-    <div class="p-2">
-        hello
-    </div>
-</Modal> -->
 <div class="relative flex flex-wrap" dir="{$dir}">
     <div class="xl:w-1/2">
   <div class="p-2 m-2 bg-white rounded-md shadow-md dark:bg-slate-900">

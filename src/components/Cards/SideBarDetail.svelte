@@ -1,7 +1,7 @@
 <script lang="ts">
     import VariableSizedInput from '../../utils/VariableSizedInput.svelte'
     import {send_json_data} from '../../utils/get_cookie'
-    import FlatPickr from 'svelte-flatpickr'
+    import FlatPickr from './FlatPickr.svelte';
     import UserItem from '../../components/Cards/UserItem.svelte';
     import UserIcon from '../../components/Cards/UserIcon.svelte';
     import { escape ,createEventDispatcher } from 'svelte/internal';
@@ -16,6 +16,7 @@
     import fa from '../../../node_modules/flatpickr/dist/esm/l10n/fa'
     import type { BaseOptions } from 'flatpickr/dist/types/options';
     import {darkTheme, dir} from '../../stores'
+    import { hijriCalendarPlugin } from '../../utils/persian_cal';
 
     type ProjectType = GetProjectQuery['project']
     type TaskType = ProjectType['tasks'][0]
@@ -155,7 +156,10 @@
         dateFormat: "Y-m-d H:i",
         altInput: true,
         altFormat: "M j, Y at H:i",
-        locale: $locale === 'fa' ? fa.fa : null
+        locale: $locale === 'fa' ? fa.fa : null,
+        plugins:  [
+            hijriCalendarPlugin({}),
+        ]
     }
 
     $: if (state!==null && mode==='activity'){
