@@ -309,11 +309,16 @@ function show_gantt(project: ProjectType, list: GanttData[], min_start:number, m
                             const [type, strid] = e.point.options.id.split('_');
                             const id = parseInt(strid)
 
-                            if (type == 'activity' || type == 'task')
-                                mode = type
-
-                            selected_object = project_data.tasks.map(task => task.activities)
-                            .flatMap(a => a).find(activity => activity.id === id)
+                            if (type == 'activity')
+                                selected_object = project_data.tasks.map(task => task.activities)
+                                .flatMap(a => a).find(activity => activity.id === id)
+                            
+                            else if (type == 'task')
+                                selected_object = project_data.tasks.find(task => task.id === id)
+                            
+                            else return;
+                            
+                            mode=type
                         },
                     }
                 },
