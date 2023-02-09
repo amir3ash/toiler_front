@@ -206,7 +206,7 @@ function show_gantt(project: ProjectType, list: GanttData[], min_start:number, m
             text: project.name
         },
         tooltip: {
-            pointFormat: '<span>Name: {point.name}</span><br/><span>From: {point.start:%e. %b}</span><br/><span>To: {point.end:%e. %b}</span><span>{point.description}</span><br/><span style="color: yellow;">{point.warnings}</span>'
+            pointFormat: `<span>Name: {point.name}</span><br/><span>From: {point.start:%e. %b}</span><br/><span>To: {point.end:%e. %b}</span><span>{point.description}</span><br/><span style="color: ${$darkTheme?"yellow":"red"};">{point.warnings}</span>`
         },
         yAxis: {
             uniqueNames: true,
@@ -243,7 +243,8 @@ function show_gantt(project: ProjectType, list: GanttData[], min_start:number, m
                         style: {
                             fontWeight: 'bold',
                             height: 10,
-                            textOverflow: 'hidden'
+                            textOverflow: 'hidden',
+                            color: 'contrast',
                         },
                         align: 'left',
                     },
@@ -254,7 +255,8 @@ function show_gantt(project: ProjectType, list: GanttData[], min_start:number, m
                         align: 'right',
                         style: {
                             height: 10,
-                            textOverflow: 'hidden'
+                            textOverflow: 'hidden',
+                            color: 'contrast'
                         }
                     }
                 ],
