@@ -32,7 +32,93 @@
     export let selected_object: TaskType | ActivityType;
 
     let gantt;
+    
 function get_all(){
+    let allActivities: Record<number, ActivityType> = {}; // activity_id => activity
+    let overloadedUsernames: Record<number, string[]> = {}; // activity_id => usernames[]
+
+    project_data.tasks.map(task => task.activities)
+    .flat()
+    .map(o => allActivities[o.id] = o);
+
+    function generateAssigneesWarnings(){
+
+        function addAssigneeError(username: string, activityId: number){
+            if (overloadedUsernames[activityId] && -1 !== overloadedUsernames[activityId].findIndex(o => o===username)){
+                overloadedUsernames[activityId].push(username)
+            }
+            else
+                overloadedUsernames[activityId] = [username]
+        }
+
+        const uidToActivityIds = Object.values(allActivities).map(activity => activity.assignees)
+        .flat()
+        .map(assigned => ({[assigned.user.id]: [assigned.activityId]}))
+        .reduce((a,b) => {
+            let [user_id, activity_ids] = Object.entries(b)[0];
+            if (a[user_id])
+                a[user_id].push(...activity_ids);
+            else 
+                a[user_id] = [...activity_ids];
+            return a
+        });
+
+        Object.entries(uidToActivityIds)
+        .map(([userId, acIds]) => ({userID:userId, activities:acIds.map(id => allActivities[id])}))
+        .map(({userID, activities}) => ({userID:userID, activities:activities.sort((a, b) => a.plannedStartDate - b.plannedStartDate)}))
+        .map(({userID, activities}) => {
+            let username: string
+            let lastActivity = activities[0];
+
+            activities.slice(1).forEach(activity => {
+                if (activity.plannedStartDate < lastActivity.plannedEndDate){
+                    if (!username)
+                        username = activity.assignees.map(o => o.user).find(u => u.id===parseInt(userID)).username;
+                    
+                    addAssigneeError(username, activity.id) 
+                    addAssigneeError(username, lastActivity.id)
+                }
+                
+                lastActivity = activity;
+            });
+        })
+    }
+
+    generateAssigneesWarnings();
+    
+    function generateTaskWarnings(task: TaskType){
+        let errors: string[] = [];
+        if (task.plannedStartDate < project_data.plannedStartDate)
+            errors.push("task is planned before project start-date")
+        if (task.plannedEndDate > project_data.plannedEndDate)
+            errors.push("task is planned after project end-date")
+        
+        if (errors.length === 0)
+            return ''
+        return '</br>' + errors.join('</br>')
+    }
+
+    function generateActivityWarnings(activity: ActivityType, parentTask: TaskType){
+        let errors: string[] = [];
+        if (activity.plannedStartDate < parentTask.plannedStartDate)
+            errors.push("activity is planned before task start-date")
+        if (activity.plannedEndDate > parentTask.plannedEndDate)
+            errors.push("activity is planned after task end-date")
+        
+        if (activity.dependencyId){
+            let dependencyActivity = allActivities[activity.dependencyId];
+            if (activity.plannedStartDate < dependencyActivity.plannedEndDate)
+                errors.push("activity is planned before dependency end-date")
+        }
+        
+        const usernames = overloadedUsernames[activity.id]
+        if (usernames)
+            errors.push(...usernames.map(username => 'user "' + username + '" is overloaded'))
+
+        if (errors.length === 0)
+            return ''
+        return '</br>' + errors.join('</br>')
+    }
 
     function normalizePlanningDate(obj: ActivityType | TaskType): ActivityType|TaskType{
         obj.plannedStartDate = new Date(obj.plannedStartDate).getTime();
@@ -51,13 +137,14 @@ function get_all(){
     const getActivityId = (ac_id: number) => ac_id? 'activity_' + ac_id : null;
     let min_start:number, max_end: number;
 
-    function eachActivity(activity: ActivityType, parent_id: string){
+    function eachActivity(activity: ActivityType, parent_id: string, task: TaskType){
         let start=activity.plannedStartDate,
             end=activity.plannedEndDate;
 
         min_start = (min_start < start ? min_start : start);
         max_end = (max_end > end ? max_end : end);
-            
+        
+        const warnings = generateActivityWarnings(activity, task);
         return {
             name: activity.name,
             id: getActivityId(activity.id),
@@ -67,6 +154,8 @@ function get_all(){
             description: convertDescription(activity.description),
             dependency: getActivityId(activity.dependencyId),
             assignees: activity.assignees.map(o => o.user.username).join(' & '),
+            warnings: warnings,
+            fontSymbol: warnings.length == 0 ? null : 'fa-exclamation',
         }     
     }
 
@@ -81,10 +170,11 @@ function get_all(){
             (a, b) => a.plannedStartDate - b.plannedStartDate
         )
         .map((activity: ActivityType) => {
-            const activity_obj = eachActivity(activity, task_id);
+            const activity_obj = eachActivity(activity, task_id, task);
             list.push(activity_obj);
         });
         
+        const warnings = generateTaskWarnings(task)
         list.push(
             {
                 name: task.name,
@@ -92,6 +182,8 @@ function get_all(){
                 start: task.plannedStartDate,
                 end: task.plannedEndDate,
                 description: convertDescription(task.description),
+                warnings: warnings,
+                fontSymbol: warnings.length == 0 ? null : 'fa-exclamation',
             }
         )
     });
@@ -100,7 +192,7 @@ function get_all(){
 
 }
 
-type GanttData = {id:string, name: string, start:number, end:number, description: string}
+type GanttData = {id:string, name: string, start:number, end:number, description: string, warnings: string, fontSymbol?: string}
 
 const day = 1000 * 60 * 60 * 24;
 
@@ -111,7 +203,7 @@ function show_gantt(project: ProjectType, list: GanttData[], min_start:number, m
             text: project.name
         },
         tooltip: {
-            pointFormat: '<span>Name: {point.name}</span><br/><span>From: {point.start:%e. %b}</span><br/><span>To: {point.end:%e. %b}</span><span>{point.description}</span'
+            pointFormat: '<span>Name: {point.name}</span><br/><span>From: {point.start:%e. %b}</span><br/><span>To: {point.end:%e. %b}</span><span>{point.description}</span><br/><span style="color: yellow;">{point.warnings}</span>'
         },
         yAxis: {
             uniqueNames: true,
@@ -141,13 +233,28 @@ function show_gantt(project: ProjectType, list: GanttData[], min_start:number, m
         
         plotOptions: {
             gantt: {
-                dataLabels: {
-                    enabled: true,
-                    format: '{point.assignees}',
-                    style: {
-                        fontWeight: 'bold'
+                dataLabels: [
+                    {
+                        enabled: true,
+                        format: '{point.assignees}',
+                        style: {
+                            fontWeight: 'bold',
+                            height: 10,
+                            textOverflow: 'hidden'
+                        },
+                        align: 'left',
+                    },
+                    {
+                        enabled: true,
+                        format: '<i class="fa {point.fontSymbol}"></i>',
+                        useHTML: true,
+                        align: 'right',
+                        style: {
+                            height: 10,
+                            textOverflow: 'hidden'
+                        }
                     }
-                },
+                ],
                 animation: true,
                 dragDrop: {
                     draggableX: true,
