@@ -50,9 +50,12 @@ function get_all(){
             else
                 overloadedUsernames[activityId] = [username]
         }
+        const assignees = Object.values(allActivities).map(activity => activity.assignees).flat()
+        
+        if (assignees.length === 0)
+            return
 
-        const uidToActivityIds = Object.values(allActivities).map(activity => activity.assignees)
-        .flat()
+        const uidToActivityIds = assignees
         .map(assigned => ({[assigned.user.id]: [assigned.activityId]}))
         .reduce((a,b) => {
             let [user_id, activity_ids] = Object.entries(b)[0];
