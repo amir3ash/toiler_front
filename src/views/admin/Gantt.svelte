@@ -11,7 +11,7 @@
     import * as U from '../../../node_modules/highcharts/es-modules/Core/Utilities';
     import * as Dark from '../../../node_modules/highcharts/themes/high-contrast-dark.src';
     import type { GetProjectQuery } from '../../gql/graphql';
-    import { darkTheme } from '../../stores'
+    import { darkTheme, dir } from '../../stores'
     import LL from '../../i18n/i18n-svelte';
 
     type ProjectType = GetProjectQuery['project']
@@ -226,7 +226,7 @@ function get_all(){
         
         const usernames = overloadedUsernames[activity.id]
         if (usernames)
-            errors.push(...usernames.map(username => 'user "' + username + '" is overloaded'))
+            errors.push(...usernames.map(username => 'user "' + escape(username) + '" is overloaded'))
 
         if (errors.length === 0)
             return ''
@@ -243,7 +243,7 @@ function get_all(){
         if (!description || description === '')
             return ''
 
-        return description.split('\n').join('<br>')
+        return escape(description).split('\n').join('<br>')
     }
 
     
@@ -323,19 +323,23 @@ function show_gantt(project: ProjectType, list: GanttData[], min_start:number, m
             text: project.name
         },
         tooltip: {
+            useHTML: true,
+            style: {
+                direction: $dir
+            },
             formatter: function () { 
                 const point = this.point as Highcharts.Point & GanttData & CP;
                 const T = $LL.gantt
 
-                let res = `<span>${T.NAME({name: point.name})}</span><br>`+
-                    `<span>${T.FROM({start: point.start})}</span><br>`+
-                    `<span>${T.TO({end: point.end})}</span><br>`;
+                let res = `<div class="flex">${T.NAME()}: <span class="px-1">${escape(point.name)}</span></div>`+
+                    `<div class="flex">${T.FROM()}: <span class="px-1">${T.DATE({d: point.start})}</span></div>`+
+                    `<div class="flex">${T.TO()}: <span class="px-1">${T.DATE({d: point.end})}</span></div>`;
                
                 if (point.earlyStart)
-                    res += `<br><span>${T.EARLYSTART({earlyStart: point.earlyStart})}</span><br>`+
-                        `<span>${T.EARLYFINAL({earlyFinal: point.earlyFinal})}</span><br>`+
-                        `<span>${T.LATELYSTART({latelyStart: point.latelyStart})}</span><br>`+
-                        `<span>${T.LATELYFINAL({latelyFinal: point.latelyFinal})}</span><br>`;
+                    res += `<br><div class="flex">${T.EARLYSTART()}: <span class="px-1">${T.DATE({d: point.earlyStart})}</span></div>`+
+                        `<div class="flex">${T.EARLYFINAL()}: <span class="px-1">${T.DATE({d: point.earlyFinal})}</span></div>`+
+                        `<div class="flex">${T.LATELYSTART()}: <span class="px-1">${T.DATE({d: point.latelyStart})}</span></div>`+
+                        `<div class="flex">${T.LATELYFINAL()}: <span class="px-1">  ${T.DATE({d: point.latelyFinal})}</span></div>`;
                 
                 if (point.description)
                     res += '<br><span>" ' + point.description + ' "</span>';
@@ -343,7 +347,7 @@ function show_gantt(project: ProjectType, list: GanttData[], min_start:number, m
                 if (point.warnings)
                     res += `<br><span style="color: ${$darkTheme?"yellow":"red"};">${point.warnings}</span>`;
                 
-                return `<span direction=rtl>${res}</span>`
+                return `<div class="flex flex-col">${res}</div>`
             },
         },
         yAxis: {

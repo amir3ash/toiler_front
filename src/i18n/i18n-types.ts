@@ -472,40 +472,38 @@ type RootTranslation = {
 	}
 	gantt: {
 		/**
-		 * N​a​m​e​:​ ​{​n​a​m​e​}
-		 * @param {string} name
+		 * N​a​m​e
 		 */
-		NAME: RequiredParams<'name'>
+		NAME: string
 		/**
-		 * F​r​o​m​:​ ​{​s​t​a​r​t​|​t​o​o​l​t​i​p​D​a​t​e​}
-		 * @param {number} start
+		 * F​r​o​m
 		 */
-		FROM: RequiredParams<'start|tooltipDate'>
+		FROM: string
 		/**
-		 * T​o​:​ ​{​e​n​d​|​t​o​o​l​t​i​p​D​a​t​e​}
-		 * @param {number} end
+		 * T​o
 		 */
-		TO: RequiredParams<'end|tooltipDate'>
+		TO: string
 		/**
-		 * E​a​r​l​y​S​t​a​r​t​:​ ​{​e​a​r​l​y​S​t​a​r​t​|​t​o​o​l​t​i​p​D​a​t​e​}
-		 * @param {number} earlyStart
+		 * E​a​r​l​y​S​t​a​r​t
 		 */
-		EARLYSTART: RequiredParams<'earlyStart|tooltipDate'>
+		EARLYSTART: string
 		/**
-		 * E​a​r​l​y​F​i​n​a​l​:​ ​{​e​a​r​l​y​F​i​n​a​l​|​t​o​o​l​t​i​p​D​a​t​e​}
-		 * @param {number} earlyFinal
+		 * E​a​r​l​y​F​i​n​a​l
 		 */
-		EARLYFINAL: RequiredParams<'earlyFinal|tooltipDate'>
+		EARLYFINAL: string
 		/**
-		 * L​a​t​e​l​y​S​t​a​r​t​:​ ​{​l​a​t​e​l​y​S​t​a​r​t​|​t​o​o​l​t​i​p​D​a​t​e​}
-		 * @param {number} latelyStart
+		 * L​a​t​e​l​y​S​t​a​r​t
 		 */
-		LATELYSTART: RequiredParams<'latelyStart|tooltipDate'>
+		LATELYSTART: string
 		/**
-		 * L​a​t​e​l​y​F​i​n​a​l​:​ ​{​l​a​t​e​l​y​F​i​n​a​l​|​t​o​o​l​t​i​p​D​a​t​e​}
-		 * @param {number} latelyFinal
+		 * L​a​t​e​l​y​F​i​n​a​l
 		 */
-		LATELYFINAL: RequiredParams<'latelyFinal|tooltipDate'>
+		LATELYFINAL: string
+		/**
+		 * {​d​|​t​o​o​l​t​i​p​D​a​t​e​}
+		 * @param {number} d
+		 */
+		DATE: RequiredParams<'d|tooltipDate'>
 	}
 }
 
@@ -962,33 +960,37 @@ export type TranslationFunctions = {
 	}
 	gantt: {
 		/**
-		 * Name: {name}
+		 * Name
 		 */
-		NAME: (arg: { name: string }) => LocalizedString
+		NAME: () => LocalizedString
 		/**
-		 * From: {start|tooltipDate}
+		 * From
 		 */
-		FROM: (arg: { start: number }) => LocalizedString
+		FROM: () => LocalizedString
 		/**
-		 * To: {end|tooltipDate}
+		 * To
 		 */
-		TO: (arg: { end: number }) => LocalizedString
+		TO: () => LocalizedString
 		/**
-		 * EarlyStart: {earlyStart|tooltipDate}
+		 * EarlyStart
 		 */
-		EARLYSTART: (arg: { earlyStart: number }) => LocalizedString
+		EARLYSTART: () => LocalizedString
 		/**
-		 * EarlyFinal: {earlyFinal|tooltipDate}
+		 * EarlyFinal
 		 */
-		EARLYFINAL: (arg: { earlyFinal: number }) => LocalizedString
+		EARLYFINAL: () => LocalizedString
 		/**
-		 * LatelyStart: {latelyStart|tooltipDate}
+		 * LatelyStart
 		 */
-		LATELYSTART: (arg: { latelyStart: number }) => LocalizedString
+		LATELYSTART: () => LocalizedString
 		/**
-		 * LatelyFinal: {latelyFinal|tooltipDate}
+		 * LatelyFinal
 		 */
-		LATELYFINAL: (arg: { latelyFinal: number }) => LocalizedString
+		LATELYFINAL: () => LocalizedString
+		/**
+		 * {d|tooltipDate}
+		 */
+		DATE: (arg: { d: number }) => LocalizedString
 	}
 }
 

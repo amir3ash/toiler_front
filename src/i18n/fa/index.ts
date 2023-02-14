@@ -149,13 +149,14 @@ const fa: Translation = {
 	},
 
 	gantt: {
-		NAME: 'نام: {name}',
-		FROM: 'از: {start|tooltipDate}',
-		TO: 'تا: {end|tooltipDate}',
-		EARLYSTART: 'شروع زودهنگام: {earlyStart|tooltipDate}',
-		EARLYFINAL: 'پایان زودهنگام: {earlyFinal|tooltipDate}',
-		LATELYSTART: 'شروع دیرهنگام: {latelyStart|tooltipDate}',
-		LATELYFINAL: 'پایان دیرهنگام: {latelyFinal|tooltipDate}'
+		NAME: 'نام',
+		FROM: 'از',
+		TO: 'تا',
+		EARLYSTART: 'شروع زودهنگام',
+		EARLYFINAL: 'پایان زودهنگام',
+		LATELYSTART: 'شروع دیرهنگام',
+		LATELYFINAL: 'پایان دیرهنگام',
+		DATE: '{d|tooltipDate}'
 	}
 }
 
