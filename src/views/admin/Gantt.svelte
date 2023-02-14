@@ -16,9 +16,10 @@
     type ProjectType = GetProjectQuery['project']
     type TaskType = ProjectType['tasks'][0]
     type ActivityType = TaskType['activities'][0]
+    type CP =  { earlyStart:number, earlyFinal:number, latelyStart:number,
+        latelyFinal:number, critical: boolean}
 
     const addEvent = U.default.addEvent;
-    const objectEach = U.default.objectEach;
     DraggablePoints.default(Highcharts);
     Exporting.default(Highcharts);
     OfflineExporting.default(Highcharts);
@@ -36,10 +37,117 @@
 function get_all(){
     let allActivities: Record<number, ActivityType> = {}; // activity_id => activity
     let overloadedUsernames: Record<number, string[]> = {}; // activity_id => usernames[]
+    let criticalPathInfo: Record<number, CP> = {}; // activity_id => info
 
     project_data.tasks.map(task => task.activities)
     .flat()
     .map(o => allActivities[o.id] = o);
+
+    function genCriticalPath(activities: ActivityType[], project: ProjectType){
+
+        function topologicalSort<T extends ActivityType>(objects: T[]): T[]{
+            let stack: T[] = []
+            let visited: Record<number, boolean> = {}
+
+            function traverse(obj: T){
+                if (visited[obj.id]) return;
+
+                if (obj.dependencyId || obj.dependencyId === 0){
+                    const dependency = objects.find(o => o.id === obj.dependencyId)
+                    traverse(dependency)
+                }
+
+                stack.push(obj)
+                visited[obj.id] = true
+            }
+
+            for (const obj of objects) {
+                traverse(obj)
+            }
+
+            return stack
+        }
+
+        const mappingDates: Record<number, ActivityType & CP> = {};
+        const reverseDependency: Record<number, (ActivityType & CP)[]> = {}
+        project = normalizePlanningDate(project)
+        const projectStart = project.plannedStartDate;
+
+        let cpActivities = topologicalSort(activities)
+        .map(activity => normalizePlanningDate(activity))
+        .map(activity => ({obj:{...activity, earlyStart:0, earlyFinal:0, latelyStart:0, latelyFinal:0, critical:false }}))
+        .map(o => {
+            mappingDates[o.obj.id]= o.obj
+
+            if (reverseDependency[o.obj.dependencyId])
+                reverseDependency[o.obj.dependencyId].push(o.obj)
+            else
+                reverseDependency[o.obj.dependencyId] = [o.obj]
+            return o
+        });
+
+        let maxEarlyFinal = 0
+        // forwart
+        cpActivities = cpActivities.map(o => {
+            const activity = o.obj
+            const {plannedStartDate: start, plannedEndDate: end} = activity
+            const duration = end - start;
+
+            let earlyStart = projectStart,
+             earlyFinal = projectStart + duration;
+
+            if (activity.dependencyId) {
+                const {earlyFinal: dependencyEF} = mappingDates[activity.dependencyId];
+
+                earlyStart = dependencyEF
+                earlyFinal = dependencyEF + duration
+            }
+
+            activity.earlyStart = earlyStart
+            activity.earlyFinal = earlyFinal
+
+            if (maxEarlyFinal < earlyFinal)
+                maxEarlyFinal = earlyFinal
+
+            return o
+        })
+
+        // backward
+        cpActivities = cpActivities
+        .reverse()
+        .map(o => {
+            const activity = o.obj
+            const {earlyFinal, plannedStartDate, plannedEndDate} = activity
+            const duration = plannedEndDate - plannedStartDate
+
+            let latelyStart = maxEarlyFinal - duration,
+                latelyFinal = maxEarlyFinal;
+            
+            const consequences = reverseDependency[activity.id]
+
+            if (consequences) { // if an activity depends on this activity
+                let minLS = consequences[0].latelyStart;
+                for (const consequence of consequences) {
+                    if (consequence.latelyStart < minLS)
+                        minLS = consequence.latelyStart
+                }
+
+                latelyStart = minLS - duration
+                latelyFinal = minLS
+            }
+
+            activity.latelyStart = latelyStart
+            activity.latelyFinal = latelyFinal
+            activity.critical = latelyFinal ===  earlyFinal
+
+            return o
+        });
+
+        cpActivities.forEach(o => {
+            const {earlyStart, earlyFinal, latelyStart, latelyFinal, critical} = o.obj;
+            criticalPathInfo[o.obj.id] = {earlyStart, earlyFinal, latelyStart, latelyFinal, critical}
+        })
+    }
 
     function generateAssigneesWarnings(){
 
@@ -87,6 +195,7 @@ function get_all(){
         })
     }
 
+    genCriticalPath(Object.values(allActivities), project_data)
     generateAssigneesWarnings();
     
     function generateTaskWarnings(task: TaskType){
@@ -123,7 +232,7 @@ function get_all(){
         return '</br>' + errors.join('</br>')
     }
 
-    function normalizePlanningDate(obj: ActivityType | TaskType): ActivityType|TaskType{
+    function normalizePlanningDate<T extends ActivityType | TaskType | ProjectType>(obj: T): T{
         obj.plannedStartDate = new Date(obj.plannedStartDate).getTime();
         obj.plannedEndDate = new Date(obj.plannedEndDate).getTime();
         return obj;
@@ -133,7 +242,7 @@ function get_all(){
         if (!description || description === '')
             return ''
 
-        return '</br>' + description.split('\n').join('</br>')
+        return '<span>" ' + description.split('\n').join('<br>') + ' "</span><br>'
     }
 
     
@@ -148,7 +257,8 @@ function get_all(){
         max_end = (max_end > end ? max_end : end);
         
         const warnings = generateActivityWarnings(activity, task);
-        return {
+        const criticalPathAnalizeInfo = criticalPathInfo[activity.id];
+        let res = {
             name: activity.name,
             id: getActivityId(activity.id),
             start: start,
@@ -159,7 +269,13 @@ function get_all(){
             assignees: activity.assignees.map(o => o.user.username).join(' & '),
             warnings: warnings,
             fontSymbol: warnings.length == 0 ? null : 'fa-exclamation',
-        }     
+            ...criticalPathAnalizeInfo
+        }
+
+        if (criticalPathAnalizeInfo.critical)
+            res['color'] = 'red'
+
+        return res     
     }
 
     let list: GanttData[] = [];
@@ -206,7 +322,15 @@ function show_gantt(project: ProjectType, list: GanttData[], min_start:number, m
             text: project.name
         },
         tooltip: {
-            pointFormat: `<span>Name: {point.name}</span><br/><span>From: {point.start:%e. %b}</span><br/><span>To: {point.end:%e. %b}</span><span>{point.description}</span><br/><span style="color: ${$darkTheme?"yellow":"red"};">{point.warnings}</span>`
+            pointFormat: '<span>Name: {point.name}</span><br>'+
+                '<span>From: {point.start:%e. %b}</span><br>'+
+                '<span>To: {point.end:%e. %b}</span><br><br>'+
+                '<span>EarlyStart: {point.earlyStart:%e. %b}</span><br>'+
+                '<span>EerlyFinal: {point.earlyFinal:%e. %b}</span><br>'+
+                '<span>LatelyStart: {point.latelyStart:%e. %b}</span><br>'+
+                '<span>LatelyFinal: {point.latelyFinal:%e. %b}</span><br><br>'+
+                '{point.description}'+
+                `<span style="color: ${$darkTheme?"yellow":"red"};">{point.warnings}</span>`
         },
         yAxis: {
             uniqueNames: true,
