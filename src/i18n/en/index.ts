@@ -146,6 +146,16 @@ const en: BaseTranslation = {
 		SEARCH_HERE: 'Search here...',
 	},
 
+	gantt: {
+		NAME: 'Name: {name:string}',
+		FROM: 'From: {start: number|tooltipDate}',
+		TO: 'To: {end: number|tooltipDate}',
+		EARLYSTART: 'EarlyStart: {earlyStart: number|tooltipDate}',
+		EARLYFINAL: 'EarlyFinal: {earlyFinal: number|tooltipDate}',
+		LATELYSTART: 'LatelyStart: {latelyStart: number|tooltipDate}',
+		LATELYFINAL: 'LatelyFinal: {latelyFinal: number|tooltipDate}',
+	}
+
 }
 
 export default en

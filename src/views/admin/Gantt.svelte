@@ -12,6 +12,7 @@
     import * as Dark from '../../../node_modules/highcharts/themes/high-contrast-dark.src';
     import type { GetProjectQuery } from '../../gql/graphql';
     import { darkTheme } from '../../stores'
+    import LL from '../../i18n/i18n-svelte';
 
     type ProjectType = GetProjectQuery['project']
     type TaskType = ProjectType['tasks'][0]
@@ -207,7 +208,7 @@ function get_all(){
         
         if (errors.length === 0)
             return ''
-        return '</br>' + errors.join('</br>')
+        return errors.join('</br>')
     }
 
     function generateActivityWarnings(activity: ActivityType, parentTask: TaskType){
@@ -229,7 +230,7 @@ function get_all(){
 
         if (errors.length === 0)
             return ''
-        return '</br>' + errors.join('</br>')
+        return errors.join('</br>')
     }
 
     function normalizePlanningDate<T extends ActivityType | TaskType | ProjectType>(obj: T): T{
@@ -242,7 +243,7 @@ function get_all(){
         if (!description || description === '')
             return ''
 
-        return '<span>" ' + description.split('\n').join('<br>') + ' "</span><br>'
+        return description.split('\n').join('<br>')
     }
 
     
@@ -322,15 +323,28 @@ function show_gantt(project: ProjectType, list: GanttData[], min_start:number, m
             text: project.name
         },
         tooltip: {
-            pointFormat: '<span>Name: {point.name}</span><br>'+
-                '<span>From: {point.start:%e. %b}</span><br>'+
-                '<span>To: {point.end:%e. %b}</span><br><br>'+
-                '<span>EarlyStart: {point.earlyStart:%e. %b}</span><br>'+
-                '<span>EerlyFinal: {point.earlyFinal:%e. %b}</span><br>'+
-                '<span>LatelyStart: {point.latelyStart:%e. %b}</span><br>'+
-                '<span>LatelyFinal: {point.latelyFinal:%e. %b}</span><br><br>'+
-                '{point.description}'+
-                `<span style="color: ${$darkTheme?"yellow":"red"};">{point.warnings}</span>`
+            formatter: function () { 
+                const point = this.point as Highcharts.Point & GanttData & CP;
+                const T = $LL.gantt
+
+                let res = `<span>${T.NAME({name: point.name})}</span><br>`+
+                    `<span>${T.FROM({start: point.start})}</span><br>`+
+                    `<span>${T.TO({end: point.end})}</span><br>`;
+               
+                if (point.earlyStart)
+                    res += `<br><span>${T.EARLYSTART({earlyStart: point.earlyStart})}</span><br>`+
+                        `<span>${T.EARLYFINAL({earlyFinal: point.earlyFinal})}</span><br>`+
+                        `<span>${T.LATELYSTART({latelyStart: point.latelyStart})}</span><br>`+
+                        `<span>${T.LATELYFINAL({latelyFinal: point.latelyFinal})}</span><br>`;
+                
+                if (point.description)
+                    res += '<br><span>" ' + point.description + ' "</span>';
+                
+                if (point.warnings)
+                    res += `<br><span style="color: ${$darkTheme?"yellow":"red"};">${point.warnings}</span>`;
+                
+                return `<span direction=rtl>${res}</span>`
+            },
         },
         yAxis: {
             uniqueNames: true,

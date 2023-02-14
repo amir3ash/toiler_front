@@ -470,6 +470,43 @@ type RootTranslation = {
 		 */
 		SEARCH_HERE: string
 	}
+	gantt: {
+		/**
+		 * N​a​m​e​:​ ​{​n​a​m​e​}
+		 * @param {string} name
+		 */
+		NAME: RequiredParams<'name'>
+		/**
+		 * F​r​o​m​:​ ​{​s​t​a​r​t​|​t​o​o​l​t​i​p​D​a​t​e​}
+		 * @param {number} start
+		 */
+		FROM: RequiredParams<'start|tooltipDate'>
+		/**
+		 * T​o​:​ ​{​e​n​d​|​t​o​o​l​t​i​p​D​a​t​e​}
+		 * @param {number} end
+		 */
+		TO: RequiredParams<'end|tooltipDate'>
+		/**
+		 * E​a​r​l​y​S​t​a​r​t​:​ ​{​e​a​r​l​y​S​t​a​r​t​|​t​o​o​l​t​i​p​D​a​t​e​}
+		 * @param {number} earlyStart
+		 */
+		EARLYSTART: RequiredParams<'earlyStart|tooltipDate'>
+		/**
+		 * E​a​r​l​y​F​i​n​a​l​:​ ​{​e​a​r​l​y​F​i​n​a​l​|​t​o​o​l​t​i​p​D​a​t​e​}
+		 * @param {number} earlyFinal
+		 */
+		EARLYFINAL: RequiredParams<'earlyFinal|tooltipDate'>
+		/**
+		 * L​a​t​e​l​y​S​t​a​r​t​:​ ​{​l​a​t​e​l​y​S​t​a​r​t​|​t​o​o​l​t​i​p​D​a​t​e​}
+		 * @param {number} latelyStart
+		 */
+		LATELYSTART: RequiredParams<'latelyStart|tooltipDate'>
+		/**
+		 * L​a​t​e​l​y​F​i​n​a​l​:​ ​{​l​a​t​e​l​y​F​i​n​a​l​|​t​o​o​l​t​i​p​D​a​t​e​}
+		 * @param {number} latelyFinal
+		 */
+		LATELYFINAL: RequiredParams<'latelyFinal|tooltipDate'>
+	}
 }
 
 export type TranslationFunctions = {
@@ -923,9 +960,40 @@ export type TranslationFunctions = {
 		 */
 		SEARCH_HERE: () => LocalizedString
 	}
+	gantt: {
+		/**
+		 * Name: {name}
+		 */
+		NAME: (arg: { name: string }) => LocalizedString
+		/**
+		 * From: {start|tooltipDate}
+		 */
+		FROM: (arg: { start: number }) => LocalizedString
+		/**
+		 * To: {end|tooltipDate}
+		 */
+		TO: (arg: { end: number }) => LocalizedString
+		/**
+		 * EarlyStart: {earlyStart|tooltipDate}
+		 */
+		EARLYSTART: (arg: { earlyStart: number }) => LocalizedString
+		/**
+		 * EarlyFinal: {earlyFinal|tooltipDate}
+		 */
+		EARLYFINAL: (arg: { earlyFinal: number }) => LocalizedString
+		/**
+		 * LatelyStart: {latelyStart|tooltipDate}
+		 */
+		LATELYSTART: (arg: { latelyStart: number }) => LocalizedString
+		/**
+		 * LatelyFinal: {latelyFinal|tooltipDate}
+		 */
+		LATELYFINAL: (arg: { latelyFinal: number }) => LocalizedString
+	}
 }
 
 export type Formatters = {
 	dateFormatter: (value: string) => unknown
 	shortDate: (value: unknown) => unknown
+	tooltipDate: (value: number) => unknown
 }
