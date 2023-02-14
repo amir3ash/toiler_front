@@ -64,7 +64,7 @@
 
     onMount(() => {
       let storedView = localStorage.getItem(activeKey);
-      if (!storedView){
+      if (!storedView ||!(storedView in views)){
         storedView = views[0];
         localStorage.setItem(activeKey, storedView);
       }
