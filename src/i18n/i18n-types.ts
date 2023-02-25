@@ -317,6 +317,10 @@ type RootTranslation = {
 		 * f​e​t​c​h​i​n​g
 		 */
 		FETCHING: string
+		/**
+		 * S​c​h​e​d​u​l​e
+		 */
+		SCHEDULE: string
 	}
 	taskView: {
 		/**
@@ -809,6 +813,10 @@ export type TranslationFunctions = {
 		 * fetching
 		 */
 		FETCHING: () => LocalizedString
+		/**
+		 * Schedule
+		 */
+		SCHEDULE: () => LocalizedString
 	}
 	taskView: {
 		/**

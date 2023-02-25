@@ -9,6 +9,8 @@
     import { user } from '../../stores';
     import { navigate } from 'svelte-routing';
     import { onMount } from 'svelte';
+    import { send_json_data } from '../../utils/get_cookie';
+    import { showAlert } from '../../utils/errors';
 
     type ProjectType = GetProjectQuery['project']
     type TaskType = ProjectType['tasks'][0]
@@ -62,6 +64,12 @@
       localStorage.setItem(activeKey, view)
     }
 
+    function autoSchedule(){
+      send_json_data(`/gantt/auto-schedule/${project_id}/`, 'PUT')
+      .then(o => window.location.reload())
+      .catch(r => showAlert(r))
+    }
+
     onMount(() => {
       let storedView = localStorage.getItem(activeKey);
       if (!storedView || !views.find(o => o===storedView)){
@@ -94,7 +102,7 @@
 <div class="inline-flex w-full">
     {#each views as view}
       <button
-        class="py-1 px-2 mx-1 shadow bg-white rounded-lg border border-cyan-300 dark:border-cyan-600 dark:bg-slate-800"
+        class="py-1 px-2 mx-1 shadow bg-white rounded-lg border border-cyan-300 dark:border-cyan-600 dark:bg-slate-800 dark:hover:bg-slate-600 hover:bg-slate-100"
         class:bg-cyan-100="{view === active_view}"
         class:dark:bg-slate-700="{view === active_view}"
         class:dark:text-cyan-500="{view === active_view}"
@@ -106,13 +114,24 @@
 
     {#if $projectsGql.data}
       {#if $projectsGql.data.project.projectManagerId === $user.id}
-        <button
-          class="w-fit py-1 px-2 mx-1 ml-auto font-bold shadow-md bg-white rounded-lg border border-teal-400 dark:border-teal-300 dark:bg-slate-800 dark:hover:bg-slate-600 hover:bg-slate-100"
-          aria-label="edit project"
-          on:click="{()=>navigate(`/f/projects/${$projectsGql.data.project.id}/`)}"
-        >
-          {$projectsGql.data.project.name}
-        </button>
+        <div class="flex ml-auto">
+          {#if active_view === views[1]}
+            <button
+              class="w-fit py-1 px-2 mx-1 font-bold shadow-md bg-white rounded-lg border border-teal-200 dark:border-teal-600 dark:bg-slate-800 dark:hover:bg-slate-600 hover:bg-slate-100"
+              on:click="{()=>autoSchedule()}"
+            >
+            {$LL.ganttView.SCHEDULE()}
+            </button>
+          {/if}
+
+          <button
+            class="w-fit py-1 px-2 mx-1 font-bold shadow-md bg-white rounded-lg border border-teal-400 dark:border-teal-300 dark:bg-slate-800 dark:hover:bg-slate-600 hover:bg-slate-100"
+            aria-label="edit project"
+            on:click="{()=>navigate(`/f/projects/${$projectsGql.data.project.id}/`)}"
+          >
+            {$projectsGql.data.project.name}
+          </button>
+        </div>
       {:else}
         <div aria-label="project's name" class="w-fit py-1 px-2 mx-1 ml-auto font-bold shadow-md bg-white rounded-lg border border-teal-400 dark:border-teal-300 dark:bg-slate-800">
           {$projectsGql.data.project.name}

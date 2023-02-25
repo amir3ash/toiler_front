@@ -92,6 +92,7 @@ const en: BaseTranslation = {
 		EMPLOYEES: 'Employees',
 		BUDGET: 'Budget',
 		FETCHING: 'fetching',
+		SCHEDULE: 'Schedule',
 	},
 
 	taskView: {

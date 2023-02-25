@@ -93,6 +93,7 @@ const fa: Translation = {
 		EMPLOYEES: 'کارمندان',
 		BUDGET: 'بودجه',
 		FETCHING: 'در حال دریافت',
+		SCHEDULE: 'برنامه ریزی',
 	},
 
 	taskView: {
