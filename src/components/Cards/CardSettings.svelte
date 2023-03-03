@@ -2,14 +2,13 @@
 import { onMount } from "svelte";
 import { send_json_data, getCookie} from "../../utils/get_cookie"
 import { showAlert } from '../../utils/errors'
-import { user, darkTheme, dir } from '../../stores'
+import { user, darkTheme, dir, theme } from '../../stores'
+import type { Theme } from "../../stores";
 import type { UserUser } from "../../gql/graphql";
 import LL, { locale, setLocale } from '../../i18n/i18n-svelte'
 import Select from "svelte-select";
-import { locales } from "../../i18n/i18n-util";
 import type { Locales } from "../../i18n/i18n-types";
 import { derived } from 'svelte/store';
-import { loadLocale } from "../../i18n/i18n-util.sync";
   
   const TR = derived(LL, $LL => $LL.settings);
 
@@ -112,6 +111,11 @@ import { loadLocale } from "../../i18n/i18n-util.sync";
   const langs = [{value: 'en', label: 'English'}, {value: 'fa', label: 'Persian'}]
   let lang = langs.find(o=> o.value === $locale);
   $: if (lang) changeLocale(lang.value as Locales)
+
+  const themes = [{value: 'dark', label: 'Dark'}, {value: 'light', label: 'Light'}, {value: 'system', label: 'System Theme'}]
+  let choosenTheme = themes.find(o => o.value === $theme);
+  $: if (choosenTheme) $theme = choosenTheme.value as Theme
+  
 </script>
 
 <!-- {#key $TR} -->
@@ -331,19 +335,24 @@ import { loadLocale } from "../../i18n/i18n-util.sync";
 
       <hr class="mt-6 border-b-1 border-blueGray-300 dark:border-blueGray-700" />
 
-      <div class="w-full lg:w-6/12 px-4 flex mt-3">
-        <div class="w-1/2">
+      <div class="flex mt-3">
           <Select
               inputStyles="--tw-ring-color: transparent"
-              containerClasses="flex pl-1 p-1 pr-2 mr-2  text-xs dark:bg-slate-800"
+              containerClasses="flex w-full xl:w-1/4 pl-1 p-1 pr-2 mx-2  text-xs dark:bg-slate-800"
               containerStyles='{$darkTheme? 'background: #0f172a; border-color: #454545; --listBackground: #343434; --itemHoverBG: #505050; ': ''}; --height: 24px; --borderRadius: 12px; --selectedItemPadding: 0 0 0 4px; --padding: 0px 4px 0px 4px; --clearSelectBottom: 0px; --clearSelectTop: 0px'
               placeholder="Language"
               bind:value="{lang}"
               items="{langs}"
           />
-        </div>
 
-        
+          <Select
+              inputStyles="--tw-ring-color: transparent"
+              containerClasses="flex w-full xl:w-1/4 pl-1 p-1 pr-2 mx-2  text-xs dark:bg-slate-800"
+              containerStyles='{$darkTheme? 'background: #0f172a; border-color: #454545; --listBackground: #343434; --itemHoverBG: #505050; ': ''}; --height: 24px; --borderRadius: 12px; --selectedItemPadding: 0 0 0 4px; --padding: 0px 4px 0px 4px; --clearSelectBottom: 0px; --clearSelectTop: 0px'
+              placeholder="Theme"
+              bind:value="{choosenTheme}"
+              items="{themes}"
+          />
       </div>
       <!-- <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
         About Me
