@@ -9,7 +9,7 @@
     import Input from '../../utils/VariableSizedInput.svelte';
     import { onMount } from 'svelte';
     import { showAlert } from '../../utils/errors.js';
-    import { formatedD } from '../../utils/date_util';
+    import { formatedD, formatShortDate } from '../../utils/date_util';
     import { queryStore, getContextClient } from '@urql/svelte';
     import type { GetProjectForEditQuery } from '../../gql/graphql';
     import { getProjectQuery } from '../../gql/queries/editProjectQuery';
@@ -32,6 +32,13 @@
     let TR = $LL.editProject;
 
     export let id = null
+
+    let projectDates = {
+        plannedStartDate: '',
+        plannedEndDate: '',
+        actualStartDate: '',
+        actualEndDate: '',
+    }
     
     let name = ''
     let plannedStartDate = ''
@@ -40,16 +47,17 @@
 	let actualEndDate = ''
 	let description = '';
     
+    function changeProjectDate(e, field: keyof typeof projectDates){
+        const [ selectedDates ] = e.detail;
+        projectDates[field] = formatShortDate(selectedDates)
+    }
     
     function updateOrAdd(){
         let data: ProjectData = {
             id: id,
             name: name,
-            plannedStartDate: formatedD(plannedStartDate),
-            plannedEndDate: formatedD(plannedEndDate),
-            actualStartDate: formatedD(actualStartDate),
-            actualEndDate: formatedD(actualEndDate),
-            description: description
+            description: description,
+            ...projectDates
         };
 
         if (!isValidAndShowError(data))
@@ -217,6 +225,12 @@
         plannedEndDate = formatedD(p.plannedEndDate);
         actualStartDate = formatedD(p.actualStartDate);
         actualEndDate = formatedD(p.actualEndDate);
+        
+        projectDates.plannedStartDate = formatShortDate(p.plannedStartDate)
+        projectDates.plannedEndDate = formatShortDate(p.plannedEndDate)
+        projectDates.actualStartDate = formatShortDate(p.actualStartDate)
+        projectDates.actualEndDate = formatShortDate(p.actualEndDate)
+
         teams = p.teams;
         roles = p.roles;
         team_members = $projectGql.data.teammembers
@@ -261,6 +275,7 @@
                     placeholder="{TR.START_DATE()}"
                     label="{TR.PLANNED_START_DATE()}"
                     options="{{...date_options, maxDate: strDateToOption(plannedEndDate)}}"
+                    on:change="{e => changeProjectDate(e, 'plannedStartDate')}"
                     required
                 />
                {$LL.TO()} 
@@ -270,6 +285,7 @@
                     placeholder="{TR.END_DATE()}"
                     label="{TR.PLANNED_END_DATE()}"
                     options="{{...date_options, minDate: strDateToOption(plannedStartDate)}}"
+                    on:change="{e => changeProjectDate(e, 'plannedEndDate')}"
                     required
                 />
             </div>
@@ -283,6 +299,7 @@
                         placeholder="{TR.START_DATE()}"
                         label="{TR.ACTUAL_START_DATE()}"
                         options="{{...date_options, maxDate: strDateToOption('now', actualEndDate)}}"
+                        on:change="{e => changeProjectDate(e, 'actualStartDate')}"
                         />
                    {$LL.TO()} 
                    <FlatPickr
@@ -291,6 +308,7 @@
                         placeholder="{TR.END_DATE()}"
                         label="{TR.ACTUAL_END_DATE()}"
                         options="{{...date_options, minDate: strDateToOption(actualStartDate), maxDate: strDateToOption('now')}}"
+                        on:change="{e => changeProjectDate(e, 'actualEndDate')}"
                     />
                 </div>
           </div>
