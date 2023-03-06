@@ -41,16 +41,16 @@
       $LL.ganttView.BUDGET(),
     ];
 
-    let active_view: string;
+    let activeViewIndx: number;
 
 
     let selected_object: ActivityType | TaskType = null;
     let mode: 'activity' | 'task' = null;
 
     
-    $: if (!Gantt && active_view === views[1]) loadGantt();
-    $: if (!PerEmployee && active_view === views[3]) loadPerEmployee();
-    $: if (!Budget && active_view === views[4]) loadBudget();
+    $: if (!Gantt && activeViewIndx === 1) loadGantt();
+    $: if (!PerEmployee && activeViewIndx === 3) loadPerEmployee();
+    $: if (!Budget && activeViewIndx === 4) loadBudget();
 
 
     let projectsGql = queryStore({
@@ -59,9 +59,9 @@
       variables: {id: project_id}
     });
     
-    function changeActiveView(view: string){
-      active_view = view;
-      localStorage.setItem(activeKey, view)
+    function changeActiveView(viewInx: number){
+      activeViewIndx = viewInx;
+      localStorage.setItem(activeKey, viewInx.toString())
     }
 
     function autoSchedule(){
@@ -71,12 +71,13 @@
     }
 
     onMount(() => {
-      let storedView = localStorage.getItem(activeKey);
-      if (!storedView || !views.find(o => o===storedView)){
-        storedView = views[0];
-        localStorage.setItem(activeKey, storedView);
+      let viewIndex = parseInt(localStorage.getItem(activeKey))
+
+      if (isNaN(viewIndex)){
+        viewIndex = 0
+        localStorage.setItem(activeKey, viewIndex.toString());
       }
-      active_view = storedView;
+      activeViewIndx = viewIndex;
     })
 
 </script>
@@ -100,13 +101,14 @@
 {/if}
 
 <div class="inline-flex w-full">
-    {#each views as view}
+    {#each views as view, i}
+      {@const isSelected = i === activeViewIndx}
       <button
         class="py-1 px-2 mx-1 shadow bg-white rounded-lg border border-cyan-300 dark:border-cyan-600 dark:bg-slate-800 dark:hover:bg-slate-600 hover:bg-slate-100"
-        class:bg-cyan-100="{view === active_view}"
-        class:dark:bg-slate-700="{view === active_view}"
-        class:dark:text-cyan-500="{view === active_view}"
-        on:click="{() => changeActiveView(view)}"
+        class:bg-cyan-100="{isSelected}"
+        class:dark:bg-slate-700="{isSelected}"
+        class:dark:text-cyan-500="{isSelected}"
+        on:click="{() => changeActiveView(i)}"
       >
           {view}
       </button>
@@ -115,7 +117,7 @@
     {#if $projectsGql.data}
       {#if $projectsGql.data.project.projectManagerId === $user.id}
         <div class="flex ml-auto">
-          {#if active_view === views[1]}
+          {#if activeViewIndx === 1}
             <button
               class="w-fit py-1 px-2 mx-1 font-bold shadow-md bg-white rounded-lg border border-teal-200 dark:border-teal-600 dark:bg-slate-800 dark:hover:bg-slate-600 hover:bg-slate-100"
               on:click="{()=>autoSchedule()}"
@@ -140,15 +142,15 @@
     {/if}
 </div>
 {#if $projectsGql.data}
-  {#if active_view === views[0]}
+  {#if activeViewIndx === 0}
       <TaskView project_id="{project_id}" bind:mode bind:selected_object project_data="{$projectsGql.data.project}" />
-  {:else if active_view === views[1]}
+  {:else if activeViewIndx === 1}
       <svelte:component this={Gantt} project_data="{$projectsGql.data.project}" bind:mode bind:selected_object/>
-  {:else if active_view === views[2]}
+  {:else if activeViewIndx === 2}
       <Kanban project_data="{$projectsGql.data.project}" bind:mode bind:selected_object />
-  {:else if active_view === views[3]}
+  {:else if activeViewIndx === 3}
       <svelte:component this={PerEmployee} project_data="{$projectsGql.data.project}" bind:mode bind:selected_object/>
-  {:else if active_view === views[4]}
+  {:else if activeViewIndx === 4}
       <svelte:component this={Budget} project_data="{$projectsGql.data.project}"/>
   {/if}
 {:else if $projectsGql.fetching}
