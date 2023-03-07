@@ -74,7 +74,7 @@
         assignees = employees.filter(em => obj.assignees.find(o => (o.user && o.user.id || o.user)=== em.id));
     }
 
-    function patchObject(e, field: keyof (ActivityType&TaskType)=null){
+    function patchObject(e?, field: keyof (ActivityType&TaskType)=null){
         if (modal){
             editable = null
             return;
@@ -86,7 +86,7 @@
         field = field || editable;
         let data = {[field]: object[field]};
 
-        if (field.endsWith('Date')){
+        if (field.endsWith('Date') && e){
             const [ selectedDates ] = e.detail;
             data = {[field]: formatedDateTime(selectedDates)}
         }
@@ -326,14 +326,13 @@
    
     
     
-        <h6 class="text-blueGray-700 dark:text-blueGray-300 mb-1 px-1 text-xl font-medium hover:bg-slate-100 dark:hover:bg-slate-800">
-            {#if editable === 'name'}
-                <input class="dark:bg-slate-800" type="text" bind:value="{object.name}" on:change="{patchObject}">
-            {:else}
-                <button class="w-full text-left" on:click="{(e) => editable='name'}">
-                    {object.name || TR.ENTER_TO_EDIT()}
-                </button>
-            {/if}
+        <h6 class="text-blueGray-700 dark:text-blueGray-300 mb-1 px-1 text-xl font-medium">
+            <input class="border-none h-7 rounded-xl dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
+                type="text"
+                placeholder="Name"
+                bind:value="{object.name}"
+                on:change="{e => patchObject(null, 'name')}"
+            >
         </h6>
         {#if mode === 'activity'}
             <div class="w-1/3">
@@ -510,7 +509,7 @@
     <div class="w-full text-xs">
         {#if mode === 'activity'}
         <button 
-            class="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700" 
+            class="p-1 mt-2 rounded-md hover:bg-slate-100 dark:hover:bg-slate-700" 
             class:bg-slate-100="{detail_mode==='comment'}"
             class:dark:bg-slate-800="{detail_mode==='comment'}"
             on:click="{() => detail_mode='comment'}"
