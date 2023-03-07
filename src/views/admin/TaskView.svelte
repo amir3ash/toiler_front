@@ -33,8 +33,7 @@
     
 
     // for on_click_save of Modal 
-    function update(e){
-        // console.log(edit_object); return;
+    async function update(e){
         const method = create_mode ? 'POST' : 'PUT';
         const url_id = create_mode ? '' : `${edit_object.id}/`;
 
@@ -45,7 +44,7 @@
             if (edit_mode === 'activity' && edit_object.__typename == "GanttActivity"){
                 data.task = edit_object.taskId;
                 data.state = edit_object.state && edit_object.state.id || null;
-                data.assignees = edit_object.assignees;
+                data.assignees = edit_object.assignees.map(o => ({user: o.user.id}))
             }
             else if (edit_mode === 'task'){
                 data.project = project_data.id;
@@ -72,7 +71,10 @@
             const message = create_mode ? $LL.taskView.CREATED() : $LL.taskView.UPDATED();
             showAlert(message, 'success');
         })
-        .catch(e => showAlert(e))
+        .catch(e =>{
+            console.error(e)
+            showAlert(e)
+        })
     }
 
 
@@ -136,8 +138,6 @@
 
 <section class="w-full max-h-full overflow-auto">
     <div class="flex mt-4 pb-8 min-w-max flex-nowrap justify-start">
-    <!-- {#await awaitable then _} -->
-            
         
         {#each project_data.tasks as task(task.id)}
             <div class="text-left mx-2 p-2 w-72 rounded-lg bg-white shadow dark:bg-gray-900">
@@ -193,7 +193,6 @@
             </button>
         </div>
 
-    <!-- {/await} -->
     </div>
 </section>
 
