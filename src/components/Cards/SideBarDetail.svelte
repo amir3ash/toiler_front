@@ -25,8 +25,12 @@
     
     const TR = $LL.sidebar;
 
+    let closed = false
     const dispatch = createEventDispatcher()
-    const close = () => dispatch('close', {id: object.id});
+    const close = () => {
+        closed = true
+        dispatch('close', {id: object.id});
+    }
     
     export let object: ActivityType | TaskType;
     export let mode: 'activity' | 'task';
@@ -74,13 +78,8 @@
         assignees = employees.filter(em => obj.assignees.find(o => (o.user && o.user.id || o.user)=== em.id));
     }
 
-    function patchObject(e?, field: keyof (ActivityType&TaskType)=null){
-        if (modal){
-            editable = null
-            return;
-        }
-
-        if (!isDatesValidOrShowError())
+    function _patch(e?, field?: keyof (ActivityType&TaskType)){
+        if (closed || !isDatesValidOrShowError())
             return
 
         field = field || editable;
@@ -116,6 +115,15 @@
                 showAlert(`${field}: ${error}`, 'error', 5000)
             );  
         })
+    }
+
+    function patchObject(e?, field: keyof (ActivityType&TaskType)=null){
+        if (modal){
+            editable = null
+            return;
+        }
+         
+        setTimeout(() => _patch(e, field), 100)
     }
 
     function updateObjectFromRestData(data){
