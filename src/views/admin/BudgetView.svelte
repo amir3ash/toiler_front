@@ -10,6 +10,7 @@
   import * as Dark from '../../../node_modules/highcharts/themes/high-contrast-dark.src';
   import type { GetProjectQuery } from '../../gql/graphql';
   import { darkTheme } from '../../stores'
+  import { deepCopy } from '../../utils/copy_util';
 
   DraggablePoints.default(Highcharts);
   Exporting.default(Highcharts);
@@ -72,15 +73,6 @@
       actualData: actualData
     };
   }
-
-  function deepCopy<T>(obj: T): T{
-    try {
-      return structuredClone(obj)
-    } catch (error) {
-      return JSON.parse(JSON.stringify(obj))
-    }
-  }
-
 
   function showTaskBudget() {
     const { plannedData, actualData } = normalizeTaskData(project_data);
