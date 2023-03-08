@@ -8,12 +8,10 @@
   import * as ExportData from '../../../node_modules/highcharts/modules/export-data.src'
   import * as DraggablePoints  from '../../../node_modules/highcharts/modules/draggable-points.src';
   import * as Dark from '../../../node_modules/highcharts/themes/high-contrast-dark.src';
-  import type { GetProjectQuery, UserUser } from '../../gql/graphql';
+  import type { UserUser } from '../../gql/graphql';
   import { darkTheme } from '../../stores'
+  import type { ActivityType, ProjectType, TaskType } from '../../gql/ProjectQueryTypes';
 
-  type ProjectType = GetProjectQuery['project']
-  type TaskType = ProjectType['tasks'][0]
-  type ActivityType = TaskType['activities'][0]
   DraggablePoints.default(Highcharts);
   Exporting.default(Highcharts);
   OfflineExporting.default(Highcharts);

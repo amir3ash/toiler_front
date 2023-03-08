@@ -8,10 +8,7 @@
     import type { GetProjectQuery } from '../../gql/graphql';
     import LL from '../../i18n/i18n-svelte';
     import { isDatesValidOrShowError } from '../../utils/sidebar_util';
-
-    type ProjectType = GetProjectQuery['project']
-    type TaskType = ProjectType['tasks'][0]
-    type ActivityType = TaskType['activities'][0]
+    import type { TaskType, ActivityType, ProjectType } from '../../gql/ProjectQueryTypes';
 
     type Common<A, B> = {
         [P in keyof A & keyof B]: A[P] | B[P];

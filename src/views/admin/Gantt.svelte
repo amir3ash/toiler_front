@@ -10,13 +10,10 @@
     import * as DraggablePoints  from '../../../node_modules/highcharts/modules/draggable-points.src';
     import * as U from '../../../node_modules/highcharts/es-modules/Core/Utilities';
     import * as Dark from '../../../node_modules/highcharts/themes/high-contrast-dark.src';
-    import type { GetProjectQuery } from '../../gql/graphql';
     import { darkTheme, dir } from '../../stores'
     import LL from '../../i18n/i18n-svelte';
+    import type { ActivityType, ProjectType, TaskType } from '../../gql/ProjectQueryTypes';
 
-    type ProjectType = GetProjectQuery['project']
-    type TaskType = ProjectType['tasks'][0]
-    type ActivityType = TaskType['activities'][0]
     type CP =  { earlyStart:number, earlyFinal:number, latelyStart:number,
         latelyFinal:number, critical: boolean}
 

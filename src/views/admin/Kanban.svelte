@@ -1,17 +1,11 @@
 <script lang="ts">
     import VariableSizedInput from '../../utils/VariableSizedInput.svelte'
-    import { onMount } from 'svelte';
-    import { user, search_text } from '../../stores'
+    import { search_text } from '../../stores'
     import { send_json_data } from '../../utils/get_cookie'
     import { showAlert } from '../../utils/errors';
     import AvatarDropdown from '../../components/Dropdowns/AvatarDropdown.svelte'
-
-    import type { GetProjectQuery } from '../../gql/graphql';
     import LL from '../../i18n/i18n-svelte';
-
-    type ProjectType = GetProjectQuery['project']
-    type TaskType = ProjectType['tasks'][0]
-    type ActivityType = TaskType['activities'][0]
+    import type { ActivityType, ProjectType, TaskType } from '../../gql/ProjectQueryTypes';
 
     export let project_data: ProjectType;
     export let mode: "activity" | "task";

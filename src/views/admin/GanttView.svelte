@@ -11,10 +11,8 @@
     import { onMount } from 'svelte';
     import { send_json_data } from '../../utils/get_cookie';
     import { showAlert } from '../../utils/errors';
+    import type { ActivityType, TaskType } from '../../gql/ProjectQueryTypes';
 
-    type ProjectType = GetProjectQuery['project']
-    type TaskType = ProjectType['tasks'][0]
-    type ActivityType = TaskType['activities'][0]
     
     const activeKey = 'activeView'; // localStorege key
    

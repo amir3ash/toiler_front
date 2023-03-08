@@ -10,7 +10,7 @@
     import { showAlert } from '../../utils/errors'
     import { formatedDateTime } from '../../utils/date_util'
     import AssignedSelectionItem from './AssignedSelectionItem.svelte'
-    import type { UserUser, GanttAssigned, GetProjectQuery } from '../../gql/graphql'
+    import type { UserUser, GanttAssigned } from '../../gql/graphql'
     import { queryStore, gql, getContextClient } from '@urql/svelte';
     import LL, { locale } from '../../i18n/i18n-svelte';
     import fa from '../../../node_modules/flatpickr/dist/esm/l10n/fa'
@@ -19,11 +19,8 @@
     import { hijriCalendarPlugin } from '../../utils/persian_cal';
     import { deepCopy } from '../../utils/copy_util';
     import { isDatesValidOrShowError, strDateToOption } from '../../utils/sidebar_util';
+    import type { ActivityType, State, TaskType } from '../../gql/ProjectQueryTypes';
 
-    type ProjectType = GetProjectQuery['project']
-    type TaskType = ProjectType['tasks'][0]
-    type ActivityType = TaskType['activities'][0]
-    type State = ProjectType['states'][0]
     
     const TR = $LL.sidebar;
 

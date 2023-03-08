@@ -8,9 +8,9 @@
   import * as Drilldown from '../../../node_modules/highcharts/modules/drilldown.src';
   import * as Data from '../../../node_modules/highcharts/modules/data.src';
   import * as Dark from '../../../node_modules/highcharts/themes/high-contrast-dark.src';
-  import type { GetProjectQuery } from '../../gql/graphql';
   import { darkTheme } from '../../stores'
   import { deepCopy } from '../../utils/copy_util';
+  import type { ProjectType } from '../../gql/ProjectQueryTypes';
 
   DraggablePoints.default(Highcharts);
   Exporting.default(Highcharts);
@@ -22,7 +22,6 @@
   if ($darkTheme)
     Dark.default(Highcharts)
 
-  type ProjectType = GetProjectQuery['project']
   type ActivityData = {name: string, plannedBudget: number, actualBudget: number}
   type BudgetData = {name: string, y: number, drilldown: string, activities: ActivityData[]}
 
