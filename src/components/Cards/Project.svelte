@@ -67,7 +67,7 @@
               {$LL.PLAN()}:
             </div>
             <div class="flex text-slate-700 dark:text-slate-300">
-              <div class="rounded-lg px-1 mr-2 text-center text-xs border border-slate-300 dark:border-slate-600">
+              <div class="rounded-lg px-1 text-center text-xs border border-slate-300 dark:border-slate-600">
                 {TR.DATE({d: plannedStartDate})} <small class="mx-0.5">{$LL.TO()}</small> {TR.DATE({d:plannedEndDate})}
               </div>
             </div>
@@ -79,7 +79,7 @@
                 {TR.STARTED()}:
               </div>
             <div class="flex text-slate-700 dark:text-slate-300">
-              <div class="rounded-lg px-1 mr-2 text-center text-xs border border-slate-300 dark:border-slate-600">
+              <div class="rounded-lg px-1 text-center text-xs border border-slate-300 dark:border-slate-600">
                 {TR.DATE({d:actualStartDate})} 
               </div>
             </div>
@@ -99,7 +99,7 @@
               </div>
               
               <div class="flex text-slate-700 dark:text-slate-300">
-                <div class="rounded-lg px-1 mr-2 text-center text-xs border border-slate-300 dark:border-slate-600">
+                <div class="rounded-lg px-1 text-center text-xs border border-slate-300 dark:border-slate-600">
                   {TR.DATE({d:actualEndDate})}
                 </div>
               </div>
@@ -117,7 +117,7 @@
               {$LL.DESCRIPTION()}:
             </div>
             <div class="flex text-slate-700 dark:text-slate-300">
-              <div class="rounded-lg p-2 mr-2 w-full text-xs border border-slate-300 dark:border-slate-600">
+              <div class="rounded-lg p-2 w-full text-xs border border-slate-300 dark:border-slate-600">
                 {description}
               </div>
             </div>
@@ -126,7 +126,7 @@
 
           <hr class="my-2 dark:border-slate-700">
 
-          <div class="inline-flex text-sm items-center text-slate-700 dark:text-slate-200">
+          <div class="flex text-sm items-center text-slate-700 dark:text-slate-200">
             <span class="w-6 h-6 bg-blueGray-200 dark:bg-blueGray-700 inline-flex items-center justify-center rounded-full" aria-hidden="true">
               <img class="w-full rounded-full align-middle border-none shadow-lg" src="{projectManager.avatar}" alt="">
             </span>

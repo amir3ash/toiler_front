@@ -52,7 +52,7 @@
     }
 </script>
 
-<div class="py-0 pl-2 m-1 inline-flex rounded-xl w-fit border {border_color}">
+<div dir="ltr" class="py-0 pl-2 m-1 inline-flex rounded-xl w-fit border justify-center items-center {border_color}">
     {#if editable}
         <Input
             classes="px-1 rounded-md bg-transparent focus:outline-none"

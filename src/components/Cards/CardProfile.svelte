@@ -62,7 +62,7 @@
           <button class="absolute w-full h-full rounded-full text-lg font-medium opacity-0 hover:opacity-100 hover:bg-white dark:hover:bg-neutral-900 hover:bg-opacity-50"
             on:click="{e => e.target.children.avatar && e.target.children.avatar.click()}"
           >
-          <input name="avatar" hidden="hidden" type="file" accept="image/png, image/jpeg" bind:files/>
+          <input name="avatar" hidden="{true}" type="file" accept="image/png, image/jpeg" bind:files/>
             {TR.UPLOAD()}
           </button>
         </div>
@@ -98,11 +98,11 @@
       {#each team_members as {user, team, role}}
         {@const name = user.firstName + (' ' + user.lastName || '')}
 
-          <div class="flex content-center w-full mx-2 my-1.5 px-2 py-1 border border-fuchsia-300 dark:border-fuchsia-700 rounded-lg text-left text-base font-medium text-slate-800">
+          <div dir="ltr" class="flex content-center w-full mx-2 my-1.5 px-2 py-1 border border-fuchsia-300 dark:border-fuchsia-700 rounded-lg text-left text-base font-medium text-slate-800">
             <span class="w-8 h-8 text-sm text-white bg-blueGray-200 dark:bg-slate-800 inline-flex items-center justify-center rounded-full">
               <img alt="" aria-hidden="true" class="w-full rounded-full text-transparent align-middle border-none shadow-lg" src="{user.avatar}">
             </span>
-            <div class="pl-2 dark:text-slate-300">
+            <div class="px-2 dark:text-slate-300">
               <div>
                 {name}
               </div>

@@ -1,7 +1,7 @@
 <script>
   // library for creating dropdown menu appear on click
   import { createPopper } from "@popperjs/core";
-  import { user } from "../../stores"
+  import { dir, user } from "../../stores"
   import { clickOutside } from "../../utils/click_outside";
 	import { onDestroy } from 'svelte';
   import LL from "../../i18n/i18n-svelte";
@@ -33,7 +33,7 @@
   })
 </script>
 
-<div>
+<div dir="{$dir}">
   <button
     class="text-blueGray-500 block"
     bind:this="{btnDropdownRef}"
@@ -60,7 +60,7 @@
   >
     <Link
       to="/f/settings"
-      class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700  hover:bg-slate-100 dark:text-blueGray-300 dark:hover:bg-slate-800"
+      class="text-sm py-2 px-4 font-normal block rtl:text-right w-full whitespace-nowrap bg-transparent text-blueGray-700  hover:bg-slate-100 dark:text-blueGray-300 dark:hover:bg-slate-800"
     >
       {$LL.SETTINGS()}
     </Link>
@@ -68,7 +68,7 @@
     <div class="h-0 my-2 border border-solid border-blueGray-100 dark:border-blueGray-700" />
     <a
       href="/user/logout"
-      class="text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:text-red-700  hover:bg-slate-100 dark:hover:text-red-400 dark:text-blueGray-300 dark:hover:bg-slate-800"
+      class="text-sm py-2 px-4 font-normal rtl:text-right block w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:text-red-700  hover:bg-slate-100 dark:hover:text-red-400 dark:text-blueGray-300 dark:hover:bg-slate-800"
     >
       {$LL.LOGOUT()}
     </a>

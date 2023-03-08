@@ -2,7 +2,7 @@
   // core components
   import UserDropdown from "../Dropdowns/UserDropdown.svelte";
   import LL from "../../i18n/i18n-svelte";
-  import { show_sidebar, search_text } from "../../stores";
+  import { show_sidebar, search_text, dir } from "../../stores";
 </script>
 
 <!-- Navbar -->
@@ -33,6 +33,7 @@
           <i class="fas fa-search"></i>
         </span>
         <input
+          dir="{$dir}"
           type="text"
           bind:value="{$search_text}"
           placeholder="{$LL.mainTopbar.SEARCH_HERE()}"

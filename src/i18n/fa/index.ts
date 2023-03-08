@@ -128,7 +128,7 @@ const fa: Translation = {
 		BUDGET: 'بودجه',
 		ASSIGNEE: 'مامور',
 		EMPLOYEE_NAME: 'نام کارمند',
-		NOT_ASSIGNED: 'اختصتصاص داده نشده',
+		NOT_ASSIGNED: 'اختصاص داده نشده',
 		COMMENTS: 'نظر‌ها',
 		WRITE_YOUR_MESSAGE: 'پیامتان را بنویسید!',
 		SEND: 'ارسال'

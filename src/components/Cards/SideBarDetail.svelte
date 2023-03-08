@@ -345,7 +345,7 @@
     
     
         <h6 class="text-blueGray-700 dark:text-blueGray-300 mb-1 px-1 text-xl font-medium">
-            <input class="border-none h-7 rounded-xl dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
+            <input class="border-none h-7 rounded-xl bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800"
                 type="text"
                 placeholder="Name"
                 bind:value="{localObject.name}"
@@ -357,7 +357,7 @@
                 <Select
                     inputStyles="--tw-ring-color: transparent"
                     containerClasses="flex pl-1 p-1 pr-2 mr-2  text-xs dark:bg-slate-800"
-                    containerStyles='{$darkTheme? 'background: #121212; border-color: #454545; --listBackground: #343434; --itemHoverBG: #505050; ': ''}; --height: 24px; --borderRadius: 12px; --selectedItemPadding: 0 0 0 4px; --padding: 0px 4px 0px 4px; --clearSelectBottom: 0px; --clearSelectTop: 0px'
+                    containerStyles='{$darkTheme? 'background: #121212; border-color: #454545; --listBackground: #343434; --itemHoverBG: #505050; ': ''}; direction: ltr; --height: 24px; --borderRadius: 12px; --selectedItemPadding: 0 0 0 4px; --padding: 0px 4px 0px 4px; --clearSelectBottom: 0px; --clearSelectTop: 0px'
                     placeholder="{TR.STATE()}"
                     optionIdentifier="id"
                     getOptionLabel="{s => escape(s.name)}"

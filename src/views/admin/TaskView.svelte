@@ -1,6 +1,6 @@
 <script lang="ts">
     // export let location;
-    import { search_text } from '../../stores'
+    import { dir, search_text } from '../../stores'
     import {send_json_data} from '../../utils/get_cookie'
     import SideBarDetail from '../../components/Cards/SideBarDetail.svelte'
     import { showAlert } from '../../utils/errors';
@@ -197,8 +197,8 @@
 </section>
 
 {#if edit_mode}
-<Modal save="{true}" on:click_close="{() => {edit_mode=null; edit_object=null}}" on:click_save="{update}">
-    <h1 slot="header" class="px-2 font-extralight text-3xl">
+<Modal save="{true}" on:click_close="{() => {edit_mode=null;}}" on:click_save="{update}">
+    <h1 slot="header" class="px-2 font-extralight text-3xl" dir="{$dir}">
         {#if create_mode}
             {$LL.taskView.CREATE_OBJ({type: (edit_mode=='task'? $LL.taskView.TASK(): $LL.taskView.ACTIVITY())})}
         {:else}

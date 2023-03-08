@@ -117,8 +117,6 @@ import { derived } from 'svelte/store';
   $: if (choosenTheme) $theme = choosenTheme.value as Theme
   
 </script>
-
-<!-- {#key $TR} -->
   
 <div
   class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0 dark:bg-blueGray-900"
@@ -339,7 +337,7 @@ import { derived } from 'svelte/store';
           <Select
               inputStyles="--tw-ring-color: transparent"
               containerClasses="flex w-full xl:w-1/4 pl-1 p-1 pr-2 mx-2  text-xs dark:bg-slate-800"
-              containerStyles='{$darkTheme? 'background: #0f172a; border-color: #454545; --listBackground: #343434; --itemHoverBG: #505050; ': ''}; --height: 24px; --borderRadius: 12px; --selectedItemPadding: 0 0 0 4px; --padding: 0px 4px 0px 4px; --clearSelectBottom: 0px; --clearSelectTop: 0px'
+              containerStyles='{$darkTheme? 'background: #0f172a; border-color: #454545; --listBackground: #343434; --itemHoverBG: #505050; ': ''}; direction: ltr; --height: 24px; --borderRadius: 12px; --selectedItemPadding: 0 0 0 4px; --padding: 0px 4px 0px 4px; --clearSelectBottom: 0px; --clearSelectTop: 0px'
               placeholder="Language"
               bind:value="{lang}"
               items="{langs}"
@@ -348,36 +346,11 @@ import { derived } from 'svelte/store';
           <Select
               inputStyles="--tw-ring-color: transparent"
               containerClasses="flex w-full xl:w-1/4 pl-1 p-1 pr-2 mx-2  text-xs dark:bg-slate-800"
-              containerStyles='{$darkTheme? 'background: #0f172a; border-color: #454545; --listBackground: #343434; --itemHoverBG: #505050; ': ''}; --height: 24px; --borderRadius: 12px; --selectedItemPadding: 0 0 0 4px; --padding: 0px 4px 0px 4px; --clearSelectBottom: 0px; --clearSelectTop: 0px'
+              containerStyles='{$darkTheme? 'background: #0f172a; border-color: #454545; --listBackground: #343434; --itemHoverBG: #505050; ': ''}; direction: ltr; --height: 24px; --borderRadius: 12px; --selectedItemPadding: 0 0 0 4px; --padding: 0px 4px 0px 4px; --clearSelectBottom: 0px; --clearSelectTop: 0px'
               placeholder="Theme"
               bind:value="{choosenTheme}"
               items="{themes}"
           />
       </div>
-      <!-- <h6 class="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
-        About Me
-      </h6>
-      <div class="flex flex-wrap">
-        <div class="w-full lg:w-12/12 px-4">
-          <div class="relative w-full mb-3">
-            <label
-              class="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-              for="grid-about-me"
-            >
-              About me
-            </label>
-            <textarea
-              id="grid-about-me"
-              type="text"
-              class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-              rows="4"
-              value="A beautiful UI Kit and Admin for Svelte & Tailwind CSS. It is Free
-                and Open Source."
-            />
-          </div>
-        </div>
-      </div> -->
-    
   </div>
 </div>
-<!-- {/key} -->

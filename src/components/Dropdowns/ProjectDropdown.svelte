@@ -3,6 +3,7 @@
   import { createPopper } from "@popperjs/core";
 	import { createEventDispatcher, onDestroy } from 'svelte';
   import LL from "../../i18n/i18n-svelte";
+  import { dir } from "../../stores";
   import { clickOutside } from "../../utils/click_outside";
 
   const dispatch = createEventDispatcher();
@@ -49,6 +50,7 @@
 
   <div
     class="w-fit ml-auto"
+    dir="{$dir}"
     use:clickOutside
     on:outclick="{()=>{if(dropdownPopoverShow) dropdownPopoverShow = false}}"
   >
@@ -66,14 +68,14 @@
     >
       <button
         on:click={on_edit}
-        class="text-sm py-2 px-4 font-normal text-left w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-slate-50 dark:text-blueGray-300 dark:hover:bg-slate-700"
+        class="flex text-sm py-2 px-4 font-normal w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-slate-50 dark:text-blueGray-300 dark:hover:bg-slate-700"
       >
         {edit_btn_name}
       </button>
       
       <button
         on:click={on_delete}
-        class="text-sm py-2 px-4 font-normal text-left w-full whitespace-nowrap bg-transparent text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900"
+        class="flex text-sm py-2 px-4 font-normal w-full whitespace-nowrap bg-transparent text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900"
       >
         {$LL.DELETE()}
       </button>
