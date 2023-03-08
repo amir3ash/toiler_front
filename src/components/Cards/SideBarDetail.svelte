@@ -17,6 +17,7 @@
     import type { BaseOptions } from 'flatpickr/dist/types/options';
     import {darkTheme, dir} from '../../stores'
     import { hijriCalendarPlugin } from '../../utils/persian_cal';
+    import { deepCopy } from '../../utils/copy_util';
 
     type ProjectType = GetProjectQuery['project']
     type TaskType = ProjectType['tasks'][0]
@@ -31,11 +32,17 @@
         closed = true
         dispatch('close', {id: object.id});
     }
+
+    const copyLocalObject = () => localObject = deepCopy(object);
     
     export let object: ActivityType | TaskType;
     export let mode: 'activity' | 'task';
     export let modal = false;
     export let project_id: number;
+
+    let localObject = object;
+
+    $: if (object) copyLocalObject()
 
     function deleteObj(){
         send_json_data(`/gantt/${mode}/${object.id}/`, 'DELETE', '', true)
@@ -83,7 +90,7 @@
             return
 
         field = field || editable;
-        let data = {[field]: object[field]};
+        let data = {[field]: localObject[field]};
 
         if (field.endsWith('Date') && e){
             const [ selectedDates ] = e.detail;
@@ -122,8 +129,10 @@
             editable = null
             return;
         }
-         
-        setTimeout(() => _patch(e, field), 100)
+        if (field !==  'plannedBudget' && field !== 'actualBudget')
+            setTimeout(() => _patch(e, field), 100)
+        else 
+            _patch(e, field)
     }
 
     function updateObjectFromRestData(data){
@@ -132,6 +141,7 @@
             if ((typeof value) === 'string')
                 object[field] = value;
         })
+        object = object
     }
 
     
@@ -178,28 +188,28 @@
         updateAssignees()
     }
 
-    $: if ($dataGql.data) loadGqlInto($dataGql.data)
+    $: if (object.id && $dataGql.data) loadGqlInto($dataGql.data)
     
     function updateState(){
-        if (object.__typename !== "GanttActivity")
+        if (localObject.__typename !== "GanttActivity")
             return
 
-        if (state === undefined && object.state !== null){
-            object.state = null;
+        if (state === undefined && localObject.state !== null){
+            localObject.state = null;
             patchObject(null, 'state')
         }
-        else if(state && state.id !== (object.state && object.state.id || object.state)){
-            object.state = state;
+        else if(state && state.id !== (localObject.state && localObject.state.id || localObject.state)){
+            localObject.state = state;
             patchObject(null, 'state');
         }
     }
 
     function updateAssignees(){
-        if (object.__typename != "GanttActivity")
+        if (localObject.__typename != "GanttActivity")
             return
         
-        if (assignees === undefined && object.assignees.length > 0){
-            object.assignees = [];
+        if (assignees === undefined && localObject.assignees.length > 0){
+            localObject.assignees = [];
             patchObject(null, 'assignees');
             return;
         }
@@ -214,14 +224,14 @@
         //     return;
         // }
 
-        const oldUsers = object.assignees.map(o => o.user).sort((a,b) => b.id - a.id);
+        const oldUsers = localObject.assignees.map(o => o.user).sort((a,b) => b.id - a.id);
         const newUsers = assignees.sort((a, b) => b.id - a.id);
 
         const updateObjectAssignees = function(){
-            (object as ActivityType).assignees = newUsers.map(user_id => ({
+            (localObject as ActivityType).assignees = newUsers.map(user_id => ({
                 user: user_id,
-                activityId: object.id,
-                activity: object as ActivityType
+                activityId: localObject.id,
+                activity: localObject as ActivityType
             }));
         }
 
@@ -251,7 +261,7 @@
     function isDatesValidOrShowError(): boolean {
         let errors: string[] = []
 
-        const o = Object.entries(object)
+        const o = Object.entries(localObject)
         .map(([field, value]) => { // convert string dates to Date
             if (field.endsWith("Date")){
                 return {[field]: strDateToOption(value)}
@@ -338,7 +348,7 @@
             <input class="border-none h-7 rounded-xl dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800"
                 type="text"
                 placeholder="Name"
-                bind:value="{object.name}"
+                bind:value="{localObject.name}"
                 on:change="{e => patchObject(null, 'name')}"
             >
         </h6>
@@ -364,10 +374,10 @@
         <div class="flex w-1/2 pr-4 flex-row-reverse text-slate-700 font-normal">
             <FlatPickr
                 class="rounded-lg p-0 w-32  focus:outline-none text-center text-xs border-slate-300 hover:bg-slate-100 dark:text-slate-300 dark:bg-slate-900 dark:border-slate-600 dark:hover:bg-slate-700"
-                bind:value="{object.plannedStartDate}"
+                bind:value="{localObject.plannedStartDate}"
                 placeholder="{TR.START_DATE()}"
                 label="{TR.PLANNED_START_DATE()}"
-                options="{{...flatpickr_options, maxDate: strDateToOption(object.plannedEndDate)}}" 
+                options="{{...flatpickr_options, maxDate: strDateToOption(localObject.plannedEndDate)}}" 
                 on:change="{e => patchObject(e, 'plannedStartDate')}"
                 required
             />
@@ -380,10 +390,10 @@
         <div class="flex w-1/2 pr-4 flex-row-reverse text-slate-700 font-normal">
             <FlatPickr
                 class="rounded-lg p-0 w-32  focus:outline-none text-center text-xs border-slate-300 hover:bg-slate-100 dark:text-slate-300 dark:bg-slate-900 dark:border-slate-600 dark:hover:bg-slate-700"
-                bind:value="{object.plannedEndDate}"
+                bind:value="{localObject.plannedEndDate}"
                 placeholder="{TR.END_DATE()}"
                 label="{TR.PLANNED_END_DATE()}"
-                options="{{...flatpickr_options, minDate: strDateToOption(object.plannedStartDate)}}"
+                options="{{...flatpickr_options, minDate: strDateToOption(localObject.plannedStartDate)}}"
                 on:change="{e => patchObject(e, 'plannedEndDate')}"
                 required
             />
@@ -396,10 +406,10 @@
         <div class="flex w-1/2 pr-4 flex-row-reverse text-slate-700 font-normal">
             <FlatPickr
                 class="rounded-lg p-0 w-32  focus:outline-none text-center text-xs border-slate-300 hover:bg-slate-100 dark:text-slate-300 dark:bg-slate-900 dark:border-slate-600 dark:hover:bg-slate-700"
-                bind:value="{object.actualStartDate}"
+                bind:value="{localObject.actualStartDate}"
                 placeholder="{TR.START_DATE()}"
                 label="{TR.START_DATE()}"
-                options="{{...flatpickr_options, maxDate: strDateToOption('now', object.actualEndDate)}}"
+                options="{{...flatpickr_options, maxDate: strDateToOption('now', localObject.actualEndDate)}}"
                 on:change="{e => patchObject(e, 'actualStartDate')}"
             />
         </div>
@@ -411,10 +421,10 @@
         <div class="flex w-1/2 pr-4 flex-row-reverse text-slate-700 font-normal">
             <FlatPickr
                 class="rounded-lg p-0 w-32  focus:outline-none text-center text-xs border-slate-300 hover:bg-slate-100 dark:text-slate-300 dark:bg-slate-900 dark:border-slate-600 dark:hover:bg-slate-700"
-                bind:value="{object.actualEndDate}"
+                bind:value="{localObject.actualEndDate}"
                 placeholder="{TR.END_DATE()}"
                 label="{TR.END_DATE()}"
-                options="{{...flatpickr_options, minDate: strDateToOption(object.actualStartDate), maxDate: strDateToOption('now')}}"
+                options="{{...flatpickr_options, minDate: strDateToOption(localObject.actualStartDate), maxDate: strDateToOption('now')}}"
                 on:change="{e => patchObject(e, 'actualEndDate')}"
             />
         </div>
@@ -425,8 +435,8 @@
         </div>
         <VariableSizedInput 
             classes="ml-4 px-2 text-slate-700 dark:text-slate-300 font-normal bg-transparent rounded-lg border border-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 dark:border-slate-600"    
-            bind:value="{object.plannedBudget}"
-            on:click_enter="{e => {object.plannedBudget=e.detail.value; patchObject(e, 'plannedBudget')}}"
+            bind:value="{localObject.plannedBudget}"
+            on:click_enter="{e => patchObject(null, 'plannedBudget')}"
             placeholder="{TR.BUDGET()}"
             min_width="70px"
         />
@@ -437,8 +447,8 @@
         </div>
         <VariableSizedInput 
             classes="ml-4 px-2 text-slate-700 dark:text-slate-300 font-normal bg-transparent rounded-lg border border-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 dark:border-slate-600"    
-            bind:value="{object.actualBudget}"
-            on:click_enter="{e => {object.actualBudget=e.detail.value; patchObject(e, 'actualBudget')}}"
+            bind:value="{localObject.actualBudget}"
+            on:click_enter="{e => patchObject(null, 'actualBudget')}"
             placeholder="{TR.BUDGET()}"
             min_width="70px"
         />
@@ -449,7 +459,7 @@
         {#if editable === 'description'}
             <textarea 
                 class="rounded-lg p-2 focus:outline-none text-sm text-slate-700 border-slate-300  dark:text-slate-300 dark:bg-slate-800 "
-                bind:value="{object.description}"
+                bind:value="{localObject.description}"
                 on:change="{e => patchObject(null, 'description')}"
             />
         {:else}
@@ -486,12 +496,12 @@
             />
         {:else}
         <button class="inline-flex" on:click="{() => editable='assignees'}">
-            {#if object.__typename == "GanttActivity" && object.assignees && assignees}
+            {#if localObject.__typename == "GanttActivity" && localObject.assignees && assignees}
                 <!-- <span class="w-6 h-6 bg-blueGray-200 inline-flex items-center justify-center rounded-full">
                     <img class="w-full rounded-full align-middle border-none shadow-lg" src="{assignee.avatar}" aria-hidden="true">
                 </span> -->
                 
-                
+
                 {#each assignees as assigned}
                     <UserIcon avatar="{assigned.avatar}"/>
                     <div class="p-1">
