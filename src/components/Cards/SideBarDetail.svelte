@@ -18,6 +18,7 @@
     import {darkTheme, dir} from '../../stores'
     import { hijriCalendarPlugin } from '../../utils/persian_cal';
     import { deepCopy } from '../../utils/copy_util';
+    import { isDatesValidOrShowError, strDateToOption } from '../../utils/sidebar_util';
 
     type ProjectType = GetProjectQuery['project']
     type TaskType = ProjectType['tasks'][0]
@@ -86,7 +87,7 @@
     }
 
     function _patch(e?, field?: keyof (ActivityType&TaskType)){
-        if (closed || !isDatesValidOrShowError())
+        if (closed || !isDatesValidOrShowError(localObject))
             return
 
         field = field || editable;
@@ -126,9 +127,11 @@
 
     function patchObject(e?, field: keyof (ActivityType&TaskType)=null){
         if (modal){
+            object = localObject
             editable = null
             return;
         }
+
         if (field !==  'plannedBudget' && field !== 'actualBudget')
             setTimeout(() => _patch(e, field), 100)
         else 
@@ -188,7 +191,7 @@
         updateAssignees()
     }
 
-    $: if (object.id && $dataGql.data) loadGqlInto($dataGql.data)
+    $: if ((modal || object.id) && $dataGql.data) loadGqlInto($dataGql.data)
     
     function updateState(){
         if (localObject.__typename !== "GanttActivity")
@@ -256,68 +259,8 @@
         }
     }
 
-    let detail_mode: "comment" | "history";
+    let detail_mode: "comment";
 
-    function isDatesValidOrShowError(): boolean {
-        let errors: string[] = []
-
-        const o = Object.entries(localObject)
-        .map(([field, value]) => { // convert string dates to Date
-            if (field.endsWith("Date")){
-                return {[field]: strDateToOption(value)}
-            }
-        })
-        .reduce((a, b) => ({...a, ...b}))
-        
-        const now = strDateToOption('now')
-
-        if (o.plannedStartDate > o.plannedEndDate)
-            errors.push('Planned start date should be before Planned end date.')
-        
-        if (o.actualStartDate && o.actualEndDate && o.actualStartDate > o.actualEndDate)
-            errors.push('Actual start date should be before Actual end date.')
-        
-        if (o.actualStartDate && (o.actualStartDate > now))
-            errors.push('Actual start date should be before now.')
-        
-        if (o.actualEndDate){
-            if (o.actualEndDate > now)
-                errors.push('Actual start date should be before now.')
-            
-            if (!o.actualStartDate)
-                errors.push('If you specified ActualEndDate, you should specify ActualStartDate.')
-        }
-
-        errors.map(error => showAlert(error))
-
-        return errors.length == 0
-    }
-
-    /**
-     * @returns date in milliseconds or `null`.
-     * 
-     * if `date` is `"now"` then returns now in milliseconds.
-     * if `date` is `null`, returns `null`.
-     * if date2 is not null, returns min of them
-     */
-    function strDateToOption(date?: string | "now", date2?: string){
-        if (date === null)
-            return null
-
-        let res: number = null;
-        if (date !== 'now')
-            res =  new Date(date).getTime()
-        else
-            res = new Date().getTime()
-        
-        if (date2){
-            let d2 = new Date(date2).getTime()
-            res = d2 >= res ? res : d2;
-        }
-        
-        return res
-    }
-    
 </script>
 
 <div class="p-2 bg-white dark:bg-black" dir="{$dir}">

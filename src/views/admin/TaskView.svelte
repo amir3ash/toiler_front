@@ -7,6 +7,7 @@
     import Modal from '../../components/Cards/Modal.svelte'
     import type { GetProjectQuery } from '../../gql/graphql';
     import LL from '../../i18n/i18n-svelte';
+    import { isDatesValidOrShowError } from '../../utils/sidebar_util';
 
     type ProjectType = GetProjectQuery['project']
     type TaskType = ProjectType['tasks'][0]
@@ -34,6 +35,9 @@
 
     // for on_click_save of Modal 
     async function update(e){
+        if (!isDatesValidOrShowError(edit_object))
+            return
+
         const method = create_mode ? 'POST' : 'PUT';
         const url_id = create_mode ? '' : `${edit_object.id}/`;
 
@@ -197,7 +201,7 @@
 </section>
 
 {#if edit_mode}
-<Modal save="{true}" on:click_close="{() => {edit_mode=null;}}" on:click_save="{update}">
+<Modal save="{true}" on:click_close="{() => {edit_mode=null; edit_object=null}}" on:click_save="{update}">
     <h1 slot="header" class="px-2 font-extralight text-3xl" dir="{$dir}">
         {#if create_mode}
             {$LL.taskView.CREATE_OBJ({type: (edit_mode=='task'? $LL.taskView.TASK(): $LL.taskView.ACTIVITY())})}
