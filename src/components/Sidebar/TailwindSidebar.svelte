@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Link, link } from "svelte-routing";
+    import { Link } from "svelte-routing";
     import type { RouteLocation } from "svelte-routing/types/Route";
     import LL from "../../i18n/i18n-svelte";
     import { show_sidebar } from "../../stores";
@@ -34,15 +34,12 @@
             return o
         })
         // The object returned here is spread on the anchor element's attributes
-        // if (isActive) {
-        //     // return { style: "color: #121212;" };
-        // }
         return {};
     }
 </script>
 
 <aside 
-  class="fixed  lg:static z-2 lg:h-auto h-full w-64 bg-gray-100 dark:bg-gray-800 shadow-xl transition-all -translate-x-full lg:translate-x-0"
+  class="fixed lg:hover:fixed lg:static z-2 lg:h-auto h-full lg:w-16 hover:w-auto top-0 bottom-0 bg-gray-100 dark:bg-gray-800 shadow-xl transition-all -translate-x-full lg:translate-x-0"
   aria-label="{$LL.navigationSidebar.SIDEBAR()}"
   class:-translate-x-full="{!$show_sidebar}"
 >
@@ -61,9 +58,10 @@
                     <Link to="{url.url}" getProps="{getProps}" class="flex items-center p-2 uppercase text-sm font-normal text-blueGray-600 rounded-lg dark:text-blueGray-400 hover:bg-gray-300 dark:hover:bg-gray-600">
                         <i class="fa {url.icon} flex flex-shrink-0 w-6 h-6 text-gray-500  items-center transition duration-75   group-hover:text-gray-900"
                             aria-hidden="true"
-                            class:dark:text-slate-400="{url.isActive}"
+                            class:dark:text-slate-300="{url.isActive}"
+                            class:text-blue-900="{url.isActive}"
                         ></i>
-                        <span class="flex-1 ml-3 whitespace-nowrap"
+                        <span class="flex-1 ml-3 whitespace-nowrap overflow-hidden"
                             class:dark:text-slate-200="{url.isActive}"
                         >
                             {url.renderedTitle()}
@@ -77,7 +75,7 @@
                     <i class="fa fa-door-closed flex flex-shrink-0 w-6 h-6 text-gray-500  items-center transition duration-75   group-hover:text-gray-900"
                         aria-hidden="true"
                     ></i>
-                    <span class="flex-1 ml-3 whitespace-nowrap">
+                    <span class="flex-1 ml-3 whitespace-nowrap overflow-hidden">
                         {$LL.navigationSidebar.LOG_OUT()}
                     </span>
                 </a>
@@ -86,4 +84,21 @@
         </ul>
     </div>
 </aside>
+
+<style>
+    @media (min-width: 1024px){
+        :global(aside:hover + div){
+            margin-left: 4rem;
+        }
+    
+        aside {
+            max-width: 4rem;
+            transition: max-width 0.5s;
+        }
+        aside:hover {
+            max-width: 16rem;
+            transition: max-width 0.5s;
+        }
+    }
+</style>
    
