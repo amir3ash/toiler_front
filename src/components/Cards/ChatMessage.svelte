@@ -64,7 +64,7 @@
                 </div>
             {/each}
         </div> 
-        <img class="w-6 h-6 rounded-full sticky bottom-1 overflow-hidden text-transparent bg-blueGray-200 dark:bg-blueGray-700 {isMine ? 'order-2' : 'order-1'}"
+        <img class="w-6 h-6 rounded-full sticky bottom-1 overflow-hidden text-transparent bg-slate-200 dark:bg-slate-700 {isMine ? 'order-2' : 'order-1'}"
             src="{isMine ? $user.avatar : author.avatar}"   
             alt="{isMine ? 'my avatar' : `${author.username}'s avatar`}"
         >

@@ -58,7 +58,7 @@
 >
     <button
         on:click={on_remove_dep}
-        class="text-sm py-2 px-4 font-normal text-left w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-slate-50"
+        class="text-sm py-2 px-4 font-normal text-left w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-50"
     >
         Remove Dependency
     </button>

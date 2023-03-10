@@ -119,11 +119,11 @@ import { derived } from 'svelte/store';
 </script>
   
 <div
-  class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0 dark:bg-blueGray-900"
+  class="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-slate-100 border-0 dark:bg-slate-900"
 >
   <div class="rounded-t bg-white mb-0 px-6 py-6 dark:bg-gray-900">
     <div class="text-center flex justify-between">
-      <h6 class="text-blueGray-700 text-xl font-bold dark:text-slate-300">{$TR.MyAccount()}</h6>
+      <h6 class="text-slate-700 text-xl font-bold dark:text-slate-300">{$TR.MyAccount()}</h6>
       <button
         class="bg-red-400 dark:bg-red-700 text-white active:bg-red-500 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
         type="button"
@@ -150,7 +150,7 @@ import { derived } from 'svelte/store';
         </button>
       </div>
     </div>
-      <h6 class="text-blueGray-400 dark:text-slate-500 text-sm mt-3 mb-6 font-bold uppercase">
+      <h6 class="text-slate-400 dark:text-slate-500 text-sm mt-3 mb-6 font-bold uppercase">
         {$TR.USER_INFORMATION()}
         <!-- @{username} -->
       </h6>
@@ -159,7 +159,7 @@ import { derived } from 'svelte/store';
           <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
-                class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
+                class="block uppercase text-slate-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-username"
               >
                 {$TR.USERNAME()}
@@ -167,7 +167,7 @@ import { derived } from 'svelte/store';
               <input
                 id="grid-username"
                 type="text"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                class="border-0 px-3 py-3 placeholder-slate-300 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{username}"
                 disabled
               />
@@ -176,7 +176,7 @@ import { derived } from 'svelte/store';
           <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
-                class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
+                class="block uppercase text-slate-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-email"
               >
                 {$TR.EMAIL_ADDRESS()}
@@ -185,7 +185,7 @@ import { derived } from 'svelte/store';
                 id="grid-email"
                 placeholder="{$TR.EMAIL_PLACEHOLDER()}"
                 type="email"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 dark:placeholder-slate-400 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                class="border-0 px-3 py-3 placeholder-slate-300 dark:placeholder-slate-400 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{email}"
                 on:change="{() => updated_values = {email: email, ...updated_values}}"
                 required
@@ -195,7 +195,7 @@ import { derived } from 'svelte/store';
           <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
-                class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
+                class="block uppercase text-slate-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-first-name"
               >
                 {$TR.FIRSTNAME()}
@@ -204,7 +204,7 @@ import { derived } from 'svelte/store';
                 id="grid-first-name"
                 placeholder="{$TR.FIRSTNAME_PLACEHOLDER()}"
                 type="text"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 dark:placeholder-slate-400 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                class="border-0 px-3 py-3 placeholder-slate-300 dark:placeholder-slate-400 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{firstName}"
                 on:change="{() => updated_values = {firstName: firstName, ...updated_values}}"
                 minlength="1"
@@ -215,7 +215,7 @@ import { derived } from 'svelte/store';
           <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
-                class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
+                class="block uppercase text-slate-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-last-name"
               >
                 {$TR.LASTNAME()}
@@ -224,7 +224,7 @@ import { derived } from 'svelte/store';
                 id="grid-last-name"
                 placeholder="{$TR.LASTNAME_PLACEHOLDER()}"
                 type="text"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 dark:placeholder-slate-400 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                class="border-0 px-3 py-3 placeholder-slate-300 dark:placeholder-slate-400 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{lastName}"
                 on:change="{() => updated_values = {lastName: lastName, ...updated_values}}"
               />
@@ -242,9 +242,9 @@ import { derived } from 'svelte/store';
       </form>
       
       
-      <hr class="mt-6 border-b-1 border-blueGray-300 dark:border-blueGray-700" />
+      <hr class="mt-6 border-b-1 border-slate-300 dark:border-slate-700" />
 
-      <h6 class="text-blueGray-400 dark:text-slate-500 text-sm mt-3 mb-6 font-bold uppercase">
+      <h6 class="text-slate-400 dark:text-slate-500 text-sm mt-3 mb-6 font-bold uppercase">
         <!-- Contact Information -->
         {$TR.SECURITY()}
       </h6>
@@ -253,7 +253,7 @@ import { derived } from 'svelte/store';
           <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
-                class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
+                class="block uppercase text-slate-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-current-password"
               >
                 {$TR.CURRENT_PASSWORD()}
@@ -262,7 +262,7 @@ import { derived } from 'svelte/store';
                 id="grid-current-password"
                 placeholder="{$TR.CURRENT_PASSWORD()}"
                 type="password"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 dark:placeholder-slate-400 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                class="border-0 px-3 py-3 placeholder-slate-300 dark:placeholder-slate-400 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{currentPassword}"
                 required
               />
@@ -279,7 +279,7 @@ import { derived } from 'svelte/store';
           <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
-                class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
+                class="block uppercase text-slate-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-new-password"
               >
                 {$TR.NEW_PASSWORD()}
@@ -288,7 +288,7 @@ import { derived } from 'svelte/store';
                 id="grid-new-password"
                 placeholder="{$TR.NEW_PASSWORD()}"
                 type="password"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 dark:placeholder-slate-400 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                class="border-0 px-3 py-3 placeholder-slate-300 dark:placeholder-slate-400 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{newPassword1}"
                 minlength="8"
                 required
@@ -304,7 +304,7 @@ import { derived } from 'svelte/store';
           <div class="w-full lg:w-6/12 px-4">
             <div class="relative w-full mb-3">
               <label
-                class="block uppercase text-blueGray-600 dark:text-slate-400 text-xs font-bold mb-2"
+                class="block uppercase text-slate-600 dark:text-slate-400 text-xs font-bold mb-2"
                 for="grid-confirm-password"
               >
                 {$TR.CONFIRM_PASSWORD()}
@@ -313,7 +313,7 @@ import { derived } from 'svelte/store';
                 id="grid-new_password"
                 placeholder="{$TR.CONFIRM_PASSWORD()}"
                 type="password"
-                class="border-0 px-3 py-3 placeholder-blueGray-300 dark:placeholder-slate-400 text-blueGray-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
+                class="border-0 px-3 py-3 placeholder-slate-300 dark:placeholder-slate-400 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                 bind:value="{newPassword2}"
                 required
               />
@@ -331,7 +331,7 @@ import { derived } from 'svelte/store';
         </div>
       </form>
 
-      <hr class="mt-6 border-b-1 border-blueGray-300 dark:border-blueGray-700" />
+      <hr class="mt-6 border-b-1 border-slate-300 dark:border-slate-700" />
 
       <div class="flex mt-3">
           <Select

@@ -55,7 +55,7 @@
 
             {#each urls as url}
                 <li>
-                    <Link to="{url.url}" getProps="{getProps}" class="flex items-center p-2 uppercase text-sm font-normal text-blueGray-600 rounded-lg dark:text-blueGray-400 hover:bg-gray-300 dark:hover:bg-gray-600">
+                    <Link to="{url.url}" getProps="{getProps}" class="flex items-center p-2 uppercase text-sm font-normal text-slate-600 rounded-lg dark:text-slate-400 hover:bg-gray-300 dark:hover:bg-gray-600">
                         <i class="fa {url.icon} flex flex-shrink-0 w-6 h-6 text-gray-500  items-center transition duration-75   group-hover:text-gray-900"
                             aria-hidden="true"
                             class:dark:text-slate-300="{url.isActive}"
@@ -71,7 +71,7 @@
             {/each}
 
             <li>
-                <a href="/user/logout" class="flex items-center p-2 uppercase text-sm font-normal text-blueGray-600 rounded-lg dark:text-blueGray-400 hover:bg-gray-300 dark:hover:bg-gray-600">
+                <a href="/user/logout" class="flex items-center p-2 uppercase text-sm font-normal text-slate-600 rounded-lg dark:text-slate-400 hover:bg-gray-300 dark:hover:bg-gray-600">
                     <i class="fa fa-door-closed flex flex-shrink-0 w-6 h-6 text-gray-500  items-center transition duration-75   group-hover:text-gray-900"
                         aria-hidden="true"
                     ></i>

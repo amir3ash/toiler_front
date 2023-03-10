@@ -50,7 +50,7 @@
     <div class="flex flex-wrap items-center">
       <div class="relative w-full max-w-full flex-grow flex-1">
         <div class="flex">
-          <h6 class="mb-1 mr-1 w-full text-blueGray-700 dark:text-blueGray-300 text-xl font-medium ">
+          <h6 class="mb-1 mr-1 w-full text-slate-700 dark:text-slate-300 text-xl font-medium ">
             <button class="w-full rounded-md text-left hover:bg-slate-100 dark:hover:bg-slate-700" on:click="{() => navigate(`view/${id}/`)}">
               {name}
             </button>
@@ -127,7 +127,7 @@
           <hr class="my-2 dark:border-slate-700">
 
           <div class="flex text-sm items-center text-slate-700 dark:text-slate-200">
-            <span class="w-6 h-6 bg-blueGray-200 dark:bg-blueGray-700 inline-flex items-center justify-center rounded-full" aria-hidden="true">
+            <span class="w-6 h-6 bg-slate-200 dark:bg-slate-700 inline-flex items-center justify-center rounded-full" aria-hidden="true">
               <img class="w-full rounded-full align-middle border-none shadow-lg" src="{projectManager.avatar}" alt="">
             </span>
             <div class="p-1">{projectManager.firstName} {projectManager.lastName}</div>

@@ -11,7 +11,7 @@
   let popperInstance = null;
 
   export let edit_btn_name = $LL.EDIT();
-  export let toggle_classes = 'text-blueGray-500 py-1 px-3';
+  export let toggle_classes = 'text-slate-500 py-1 px-3';
 
 	function on_delete() {
 		dispatch('click_delete');
@@ -68,7 +68,7 @@
     >
       <button
         on:click={on_edit}
-        class="flex text-sm py-2 px-4 font-normal w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:bg-slate-50 dark:text-blueGray-300 dark:hover:bg-slate-700"
+        class="flex text-sm py-2 px-4 font-normal w-full whitespace-nowrap bg-transparent text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-700"
       >
         {edit_btn_name}
       </button>

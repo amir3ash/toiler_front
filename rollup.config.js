@@ -61,7 +61,7 @@ const indexTemplate = `
     <script defer nomodule src="<<live-preview-link>>/build/bundle.js"></script>
   </head>
 
-  <body class="text-blueGray-700 antialiased">
+  <body class="text-slate-700 antialiased">
     <noscript>
       <strong
         >We're sorry but it doesn't work properly without

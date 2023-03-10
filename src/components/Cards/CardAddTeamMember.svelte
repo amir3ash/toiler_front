@@ -145,7 +145,7 @@ import {darkTheme} from '../../stores'
                 {#each uniqBy(team_members.filter(o => selected_team==null || o.team.id === selected_team.id), o => o.user.id) as {user}}
 
                 <div class=" pl-1 m-1 inline-flex rounded-xl text w-fit border border-teal-400">
-                  <span class="my-1 mr-1 w-5 h-5 bg-blueGray-200 dark:bg-blueGray-700 inline-flex items-center justify-center rounded-full">
+                  <span class="my-1 mr-1 w-5 h-5 bg-slate-200 dark:bg-slate-700 inline-flex items-center justify-center rounded-full">
                     <img class="w-full rounded-full align-middle border-none shadow-lg" src="{user.avatar}" alt="">
                   </span>
                     <div class="py-1">

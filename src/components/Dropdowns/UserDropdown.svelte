@@ -35,14 +35,14 @@
 
 <div dir="{$dir}">
   <button
-    class="text-blueGray-500 block"
+    class="text-slate-500 block"
     bind:this="{btnDropdownRef}"
     on:click="{toggleDropdown}"
     aria-label="show popover"
   >
     <div class="items-center flex">
       <span
-        class="w-12 h-12 text-sm text-white bg-blueGray-200 dark:text-black dark:bg-blueGray-700 inline-flex items-center justify-center rounded-full"
+        class="w-12 h-12 text-sm text-white bg-slate-200 dark:text-black dark:bg-slate-700 inline-flex items-center justify-center rounded-full"
       >
         <img
           alt="..."
@@ -60,15 +60,15 @@
   >
     <Link
       to="/f/settings"
-      class="text-sm py-2 px-4 font-normal block rtl:text-right w-full whitespace-nowrap bg-transparent text-blueGray-700  hover:bg-slate-100 dark:text-blueGray-300 dark:hover:bg-slate-800"
+      class="text-sm py-2 px-4 font-normal block rtl:text-right w-full whitespace-nowrap bg-transparent text-slate-700  hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
     >
       {$LL.SETTINGS()}
     </Link>
     
-    <div class="h-0 my-2 border border-solid border-blueGray-100 dark:border-blueGray-700" />
+    <div class="h-0 my-2 border border-solid border-slate-100 dark:border-slate-700" />
     <a
       href="/user/logout"
-      class="text-sm py-2 px-4 font-normal rtl:text-right block w-full whitespace-nowrap bg-transparent text-blueGray-700 hover:text-red-700  hover:bg-slate-100 dark:hover:text-red-400 dark:text-blueGray-300 dark:hover:bg-slate-800"
+      class="text-sm py-2 px-4 font-normal rtl:text-right block w-full whitespace-nowrap bg-transparent text-slate-700 hover:text-red-700  hover:bg-slate-100 dark:hover:text-red-400 dark:text-slate-300 dark:hover:bg-slate-800"
     >
       {$LL.LOGOUT()}
     </a>

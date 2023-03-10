@@ -70,7 +70,7 @@ export let location
 
   <div class="w-full lg:w-4/12 px-4">
     <button 
-      class="p-4 break-words w-full mb-6 shadow-lg rounded-lg bg-slate-50 dark:bg-gray-900 text-blueGray-700 dark:text-blueGray-400 text-xl font-medium border-2 border-slate-500 border-dashed hover:bg-slate-100 dark:hover:bg-slate-900"
+      class="p-4 break-words w-full mb-6 shadow-lg rounded-lg bg-slate-50 dark:bg-gray-900 text-slate-700 dark:text-slate-400 text-xl font-medium border-2 border-slate-500 border-dashed hover:bg-slate-100 dark:hover:bg-slate-900"
       on:click="{() => navigate('/f/projects/new')}"
       >
       {$LL.project.ADD_PROJECT()} 
@@ -79,7 +79,7 @@ export let location
 
 </div>
 
-<hr class="mt-6 border-b-1 border-blueGray-300 dark:border-blueGray-600" />
+<hr class="mt-6 border-b-1 border-slate-300 dark:border-slate-600" />
 
 <div class="mt-6 flex flex-wrap" dir="{$dir}">
   

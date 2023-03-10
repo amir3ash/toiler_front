@@ -284,7 +284,7 @@
    
     
     
-        <h6 class="text-blueGray-700 dark:text-blueGray-300 mb-1 px-1 text-xl font-medium">
+        <h6 class="text-slate-700 dark:text-slate-300 mb-1 px-1 text-xl font-medium">
             <input class="border-none h-7 rounded-xl bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800"
                 type="text"
                 placeholder="Name"
@@ -437,7 +437,7 @@
         {:else}
         <button class="inline-flex" on:click="{() => editable='assignees'}">
             {#if localObject.__typename == "GanttActivity" && localObject.assignees && assignees}
-                <!-- <span class="w-6 h-6 bg-blueGray-200 inline-flex items-center justify-center rounded-full">
+                <!-- <span class="w-6 h-6 bg-slate-200 inline-flex items-center justify-center rounded-full">
                     <img class="w-full rounded-full align-middle border-none shadow-lg" src="{assignee.avatar}" aria-hidden="true">
                 </span> -->
                 

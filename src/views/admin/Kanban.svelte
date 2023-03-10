@@ -74,7 +74,7 @@
                             <div class="min-w-max p-0">
                                 {#each activity.assignees as {user: assignee}}
                                     <AvatarDropdown  user="{assignee}"/>
-                                    <!-- <span class="w-8 h-8 ml-auto bg-blueGray-200 inline-flex items-center justify-center rounded-full">
+                                    <!-- <span class="w-8 h-8 ml-auto bg-slate-200 inline-flex items-center justify-center rounded-full">
                                         {#if assignee.avatar}
                                             <img class="w-full rounded-full align-middle border-none shadow-lg" src="{assignee.avatar}" alt="{assignee.username}'s avatar">
                                         {/if}

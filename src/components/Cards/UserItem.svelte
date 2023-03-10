@@ -23,7 +23,7 @@
 </script>
 
 <div class="flex items-center h-12 px-4 text-ellipsis overflow-hidden whitespace-nowrap {itemClasses}">
-    <span class="w-6 h-6 bg-blueGray-200 dark:bg-blueGray-700 inline-flex items-center justify-center rounded-full">
+    <span class="w-6 h-6 bg-slate-200 dark:bg-slate-700 inline-flex items-center justify-center rounded-full">
         <img class="w-full rounded-full align-middle border-none shadow-lg" src="{item.avatar}">
     </span>
     <div class="overflow-hidden text-ellipsis whitespace-nowrap">

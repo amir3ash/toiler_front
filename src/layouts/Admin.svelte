@@ -90,7 +90,7 @@
 
 <div class="flex flex-1">
   <TailwindSidebar {location}/>
-  <div class="w-full lg:w-[calc(100%-4rem)] bg-blueGray-100 dark:bg-blueGray-800">
+  <div class="w-full lg:w-[calc(100%-4rem)] bg-slate-100 dark:bg-slate-800">
     <AdminNavbar />
     <div class="min-h-screen">
       <div class="px-4 md:px-10 mx-auto w-full mt-24">

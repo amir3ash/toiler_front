@@ -70,7 +70,7 @@
       
     </div>
     <div class="mt-4 lg:mt-20">
-      <h3 class="text-xl font-semibold leading-normal mb-2 text-blueGray-700 dark:text-neutral-400">
+      <h3 class="text-xl font-semibold leading-normal mb-2 text-slate-700 dark:text-neutral-400">
         {TR.PROJECTS_IN_SETTINGS()}
       </h3>
       {#await getProjects()}
@@ -87,8 +87,8 @@
 
       {/await}
     </div>
-    <div class="mt-8 py-7 border-t border-blueGray-200 dark:border-slate-600">
-      <h3 class="text-xl font-semibold leading-normal mb-2 text-blueGray-700 dark:text-neutral-400">
+    <div class="mt-8 py-7 border-t border-slate-200 dark:border-slate-600">
+      <h3 class="text-xl font-semibold leading-normal mb-2 text-slate-700 dark:text-neutral-400">
         {TR.TEAMMATES_IN_SETTINGS()}
       </h3>
       {#await get_team_members()}
@@ -99,7 +99,7 @@
         {@const name = user.firstName + (' ' + user.lastName || '')}
 
           <div dir="ltr" class="flex content-center w-full mx-2 my-1.5 px-2 py-1 border border-fuchsia-300 dark:border-fuchsia-700 rounded-lg text-left text-base font-medium text-slate-800">
-            <span class="w-8 h-8 text-sm text-white bg-blueGray-200 dark:bg-slate-800 inline-flex items-center justify-center rounded-full">
+            <span class="w-8 h-8 text-sm text-white bg-slate-200 dark:bg-slate-800 inline-flex items-center justify-center rounded-full">
               <img alt="" aria-hidden="true" class="w-full rounded-full text-transparent align-middle border-none shadow-lg" src="{user.avatar}">
             </span>
             <div class="px-2 dark:text-slate-300">
