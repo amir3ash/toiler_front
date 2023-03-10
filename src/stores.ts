@@ -31,10 +31,14 @@ export const [theme, darkTheme] = function(defaultThme: Theme){
         setDarkStore(isDark)
     });
 
-    const storedValue = localStorage.getItem(storageKey)
-    if (storedValue === 'dark' || storedValue === 'light' || storedValue === 'system')
-        set(storedValue);
-    
+    function loadStoredTheme(){
+        const storedValue = localStorage.getItem(storageKey)
+        if (storedValue === 'dark' || storedValue === 'light' || storedValue === 'system')
+            setTheme(storedValue);
+        else
+            setTheme('system')
+    }
+
     function setTheme(t: Theme){
         localStorage.setItem(storageKey, t);
         set(t);
@@ -46,7 +50,9 @@ export const [theme, darkTheme] = function(defaultThme: Theme){
         else
             setDarkStore(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
     }
-    
+
+    loadStoredTheme()
+
     const theme: Writable<Theme> = {
         subscribe,
         set: setTheme,
