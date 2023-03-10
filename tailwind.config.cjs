@@ -1,26 +1,16 @@
 const plugin = require("tailwindcss/plugin");
-const colors = require("tailwindcss/colors");
 
 module.exports = {
   darkMode: 'class',
-  purge: {
-    enabled: true,
-    content: [
-      "./**/*.html",
-      "./*.html",
-      "./src/**/*.js",
-      "./src/*.js",
-      "./src/**/*.svelte",
-      "./src/*.svelte",
-    ],
-    options: {
-      safelist: [],
-    },
-  },
+  content: [
+    "./**/*.html",
+    "./*.html",
+    "./src/**/*.js",
+    "./src/*.js",
+    "./src/**/*.svelte",
+    "./src/*.svelte",
+  ],
   theme: {
-    colors: {
-      ...colors,
-    },
     extend: {
       minHeight: {
         "screen-75": "75vh",
