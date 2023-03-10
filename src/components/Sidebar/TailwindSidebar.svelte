@@ -39,7 +39,7 @@
 </script>
 
 <aside 
-  class="fixed lg:hover:fixed lg:static z-2 lg:h-auto h-full lg:w-16 hover:w-auto top-0 bottom-0 bg-gray-100 dark:bg-gray-800 shadow-xl transition-all -translate-x-full lg:translate-x-0"
+  class="fixed lg:hover:fixed lg:static z-2 lg:h-auto h-full lg:w-16 hover:w-auto top-0 bottom-0 bg-opacity-95 bg-gray-100 dark:bg-slate-900  shadow-xl transition-all -translate-x-full lg:translate-x-0"
   aria-label="{$LL.navigationSidebar.SIDEBAR()}"
   class:-translate-x-full="{!$show_sidebar}"
 >
