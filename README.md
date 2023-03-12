@@ -14,6 +14,8 @@ Start your scheduling with a Free web app. Let Toiler amaze you with its cool fe
 - Exporting data as PNG, Excel, PDF
 
 
+![example](docs/screenshot.png)
+
 ### Building Frontend
 
 1. Install NodeJS **LTS** version from <a href="https://nodejs.org/en/">NodeJs Official Page</a>
