@@ -39,8 +39,9 @@
     export let project_id: number;
 
     let localObject = object;
+    let id: number
 
-    $: if (object) copyLocalObject()
+    $: if (object.id !== id) {id = object.id; copyLocalObject();}
 
     function deleteObj(){
         send_json_data(`/gantt/${mode}/${object.id}/`, 'DELETE', '', true)
@@ -73,14 +74,12 @@
       pause: true
     });
 
-    function loadGqlInto(data: {employees: UserUser[], states: State[]}){
-        const obj = object as ActivityType
-
+    function loadGqlInto(activity: ActivityType, data: {employees: UserUser[], states: State[]}){
         states = data.states;
         employees = data.employees;
 
-        state = states.find(s => s.id === (obj.state && obj.state.id || obj.state));
-        assignees = employees.filter(em => obj.assignees.find(o => (o.user && o.user.id || o.user)=== em.id));
+        state = states.find(s => s.id === (activity.state && activity.state.id || activity.state));
+        assignees = employees.filter(em => activity.assignees.find(o => (o.user && o.user.id || o.user)=== em.id));
     }
 
     function _patch(e?, field?: keyof (ActivityType&TaskType)){
@@ -103,7 +102,7 @@
         
         send_json_data(`/gantt/${mode}/${object.id}/`, 'PATCH', data, true).then(res => res.json())
         .then(data => {
-            updateObjectFromRestData(data)
+            updateObjectFromRestData(data, field)
 
             dispatch('update', {mode: mode, field: field, object: object}) 
             showAlert($LL.UPDATED(), 'success')
@@ -129,18 +128,30 @@
             return;
         }
 
-        if (field !==  'plannedBudget' && field !== 'actualBudget')
+        if (field !==  'plannedBudget' && field !== 'actualBudget' && field !== 'assignees')
             setTimeout(() => _patch(e, field), 100)
         else 
             _patch(e, field)
     }
 
-    function updateObjectFromRestData(data){
+    function updateObjectFromRestData(data, updatedField?: keyof (ActivityType&TaskType)){
         Object.entries(data)
         .map(([field, value]) => {
             if ((typeof value) === 'string')
                 object[field] = value;
         })
+
+        if (updatedField === 'assignees'){
+            const newAssignees = data.assignees.map(o => ({id:o.id, activityId: object.id, user: employees.find(em => em.id === o.user)}));
+            object[updatedField] = newAssignees
+            assignees = employees.filter(em => data.assignees.find(o => o.user === em.id));
+        }
+
+        else if (updatedField === 'state'){
+            object[updatedField] = states.find(s => s.id == data.state)
+        }
+        
+        copyLocalObject()
         object = object
     }
 
@@ -188,7 +199,8 @@
         updateAssignees()
     }
 
-    $: if ((modal || object.id) && $dataGql.data) loadGqlInto($dataGql.data)
+    $: if (mode === 'activity' && (modal || object.id) && $dataGql.data) 
+        loadGqlInto(object as ActivityType, $dataGql.data)
     
     function updateState(){
         if (localObject.__typename !== "GanttActivity")
@@ -205,7 +217,7 @@
     }
 
     function updateAssignees(){
-        if (localObject.__typename != "GanttActivity")
+        if (localObject.__typename != "GanttActivity" || object.__typename != 'GanttActivity')
             return
         
         if (assignees === undefined && localObject.assignees.length > 0){
@@ -218,39 +230,32 @@
             return;
         }
 
-        // if (!object.assignees){
-        //     object.assignees = assignees.map(user_id => ({user: user_id}));
-        //     patchObject(null, 'assignees');
-        //     return;
-        // }
-
-        const oldUsers = localObject.assignees.map(o => o.user).sort((a,b) => b.id - a.id);
-        const newUsers = assignees.sort((a, b) => b.id - a.id);
+        const oldUsersIds = localObject.assignees.map(o => o.user.id || o.user as number).sort();
+        const newUsersIds = assignees.map(o=>o.id).sort();
 
         const updateObjectAssignees = function(){
-            (localObject as ActivityType).assignees = newUsers.map(user_id => ({
-                user: user_id,
+            (localObject as ActivityType).assignees = newUsersIds.map(userId => ({
+                user: {id: userId},
                 activityId: localObject.id,
-                activity: localObject as ActivityType
-            }));
+            })) as any;
         }
 
-        if (oldUsers.length !== newUsers.length){
+        if (oldUsersIds.length !== newUsersIds.length){
             updateObjectAssignees()
             patchObject(null, 'assignees');
             return;
         }
 
         let is_equal = true;
-        for (let i = 0; i < oldUsers.length; ++i) {
-            if (oldUsers[i].id !== newUsers[i].id){
+        for (let i = 0; i < oldUsersIds.length; ++i) {
+            if (oldUsersIds[i] !== newUsersIds[i]){
                 is_equal = false;
                 break;
             }
         }
 
         if(!is_equal){
-            updateAssignees();
+            updateObjectAssignees();
             patchObject(null, 'assignees');
             return;
         }
