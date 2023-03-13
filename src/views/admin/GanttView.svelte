@@ -92,8 +92,10 @@
             bind:object="{selected_object}"
             on:close="{() => selected_object=null}"
             on:delete="{e => console.log(e.detail)}"
+            on:update="{e => projectsGql = projectsGql}"
             mode="{mode}"
             project_id="{project_id}"
+            states="{$projectsGql.data.project.states}"
         />
     </div>
 {/if}

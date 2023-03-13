@@ -37,6 +37,8 @@
     export let mode: 'activity' | 'task';
     export let modal = false;
     export let project_id: number;
+    export let states: State[];
+
 
     let localObject = object;
     let id: number
@@ -53,7 +55,7 @@
         }) 
     }
 
-    let dataGql = queryStore<{employees: UserUser[], states: State[]}>({
+    let dataGql = queryStore<{employees: UserUser[]}>({
       client:getContextClient(),
       query: gql(`
       query getStatesAndEmployees($id: Int!) {
@@ -64,18 +66,13 @@
             username
             avatar
         }
-        states: projectStates(projPk: $id) {
-            id
-            name
-        }
       }
       `),
       variables: {id: project_id},
       pause: true
     });
 
-    function loadGqlInto(activity: ActivityType, data: {employees: UserUser[], states: State[]}){
-        states = data.states;
+    function loadGqlInto(activity: ActivityType, data: {employees: UserUser[]}){
         employees = data.employees;
 
         state = states.find(s => s.id === (activity.state && activity.state.id || activity.state));
@@ -150,25 +147,13 @@
         else if (updatedField === 'state'){
             object[updatedField] = states.find(s => s.id == data.state)
         }
-        
+
         copyLocalObject()
         object = object
     }
 
     
-
-    if (!object.name && object.id){
-        const url = `/gantt/${mode}/${object['id']}/`;
-        const load = async () => {
-            object = await fetch(url).then(res => res.json())
-        }; 
-        load()
-    };
-    
-
-    
     let state: State = null;
-    let states: State[] = [];
     let employees: UserUser[] = [];
     let assignees: UserUser[] = null;
 

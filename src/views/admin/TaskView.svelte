@@ -214,6 +214,7 @@
         mode="{edit_mode}"
         modal="{true}"
         project_id="{project_id}"
+        states="{project_data.states}"
     />
 </Modal>
 {/if}
