@@ -1,8 +1,8 @@
 <script>
   import { Link } from "svelte-routing";
   import { user } from '../../stores';
-  import { getCookie } from '../../utils/get_cookie'
   import LL from '../../i18n/i18n-svelte'
+  import { uploadAvatar } from "../../utils/img_uploading";
 
   $: TR = $LL.settings;
 
@@ -10,25 +10,7 @@
   let team_members = [];
   let files = null;
 
-  $: if (files) try {
-        const formData = new FormData();
-        formData.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-        formData.append('avatar', files[0])
-
-        fetch('/user/avatar', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-          response.json().then(data => {$user.avatar=data.avatar; $user=$user});
-          // showAlert('Avatar changed', 'success')
-          files=null;
-        });
-
-    } catch (error) {
-        console.error(error);
-        files=null;
-    }
+  $: if (files) uploadAvatar(files[0]).finally(() => files=null)
 
   async function getProjects(){
     const url='/gantt/project/'

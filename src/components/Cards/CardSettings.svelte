@@ -1,6 +1,6 @@
 <script lang="ts">
 import { onMount } from "svelte";
-import { send_json_data, getCookie} from "../../utils/get_cookie"
+import { send_json_data } from "../../utils/get_cookie"
 import { showAlert } from '../../utils/errors'
 import { user, darkTheme, dir, theme } from '../../stores'
 import type { Theme } from "../../stores";
@@ -9,6 +9,7 @@ import LL, { locale, setLocale } from '../../i18n/i18n-svelte'
 import Select from "svelte-select";
 import type { Locales } from "../../i18n/i18n-types";
 import { derived } from 'svelte/store';
+import { uploadAvatar } from "../../utils/img_uploading";
   
   const TR = derived(LL, $LL => $LL.settings);
 
@@ -18,27 +19,9 @@ import { derived } from 'svelte/store';
   let lastName = "";
   let email = "";
   let updated_values: UserUser|{'email': string} = {};
-  let files = null;
+  let files: FileList = null; 
 
-  $: if (files) try {
-        const formData = new FormData();
-        formData.append('csrfmiddlewaretoken', getCookie('csrftoken'))
-        formData.append('avatar', files[0])
-
-        fetch('/user/avatar', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-          response.json().then(data => {$user.avatar=data.avatar; $user=$user});
-          // showAlert('Avatar changed', 'success')
-          files = null;
-        });
-
-    } catch (error) {
-        console.error(error);
-        files = null;
-    }
+  $: if (files) uploadAvatar(files[0]).finally(() => files=null);
 
   onMount(() => {
     fetch(account_url)
