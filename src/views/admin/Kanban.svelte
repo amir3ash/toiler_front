@@ -8,9 +8,8 @@
     import type { ActivityType, ProjectType, TaskType } from '../../gql/ProjectQueryTypes';
 
     export let project_data: ProjectType;
-    export let mode: "activity" | "task";
+    export let mode: 'task' | 'activity';
     export let selected_object: ActivityType | TaskType;
-    mode = 'activity'
 
     $: TR = $LL.kanban;
 
@@ -64,21 +63,16 @@
                 </div>
                 
                 
-                {#each project_data.tasks as task}
+                {#each project_data.tasks as task(task.id)}
                     
                     {#each task.activities.filter(o => (o.state && o.state.id || o.state) === state.id).filter(o=>o.name.includes($search_text)) as activity(activity.id)}
                         <div class="flex justify-between mx-1 p-2 text-left shadow-md border rounded border-lime-200 dark:border-lime-800">
-                            <button on:click="{() =>{selected_object=activity}}">
+                            <button on:click="{() =>{mode='activity'; selected_object=activity;}}">
                                 {activity.name}
                             </button>
                             <div class="min-w-max p-0">
-                                {#each activity.assignees as {user: assignee}}
+                                {#each activity.assignees as {user: assignee, id} (id)}
                                     <AvatarDropdown  user="{assignee}"/>
-                                    <!-- <span class="w-8 h-8 ml-auto bg-slate-200 inline-flex items-center justify-center rounded-full">
-                                        {#if assignee.avatar}
-                                            <img class="w-full rounded-full align-middle border-none shadow-lg" src="{assignee.avatar}" alt="{assignee.username}'s avatar">
-                                        {/if}
-                                    </span> -->
                                 {/each}
                             </div>
                         </div>
